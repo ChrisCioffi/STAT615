@@ -1,21 +1,68 @@
 ---
-title: "Quantile_Slides"
+title: "Quantile Regression"
+author: "Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry"
 format: revealjs
 editor: visual
 ---
 
-## Quarto
+## Quantile Regression
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+- A useful alternative to Ordinary Least Squares (OLS).
 
-## Bullets
+- Produces estimated regression coefficients for specific quantiles of the response variable.
+
+  - As a result, the coefficients will change as the specified quantile of the response variable changes.
+  
+## Sample Density
+  
+```{r}
+# Load libraries
+library(tidyverse)
+
+# Generate random normal data
+df_rnd <- as.tibble(rnorm(10000))
+
+df_rnd |>
+  ggplot(aes(value)) +
+  geom_density() +
+  geom_vline(xintercept = quantile(df_rnd$value, prob = 0.25), color = "red") +
+  geom_vline(xintercept = quantile(df_rnd$value, prob = 0.50), color = "black") +
+  geom_vline(xintercept = quantile(df_rnd$value, prob = 0.99), color = "blue") +
+  labs(title = "Sample Density Plot",
+       x = "",
+       y = "") +
+  theme_bw()
+```
+
+  
+## Why Use Quantile Regression?
+
+- The relationship between the predictor and response variables may vary across the distribution, making it useful to allow the estimates to change.
+
+- More robust to outliers.
+
+- If OLS assumptions are violated.
+
+  - Nonconstant variance, nonnormality, indpendence, nonlinearity.
+  
+## General Form of the Model
+
+- $Q_\tau(Y) = \beta_0(\tau) + \beta_1(\tau)X_1 + ... + \beta_p(\tau)X_p$
+
+  - Where $\tau$ is a specific quantile value.
+
+- The objective of quantile regression is to minimize the median absolute deviations.
+
+## Model Assumptions
+
+## Quantreg
 
 When you click the **Render** button a document will be generated that includes:
 
 -   Content authored with markdown
 -   Output from executable code
 
-## Code
+## References
 
 When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
 

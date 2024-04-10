@@ -10,7 +10,8 @@
 <link href="Quantile_Slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.3.450">
 
-  <title>Quantile_Slides</title>
+  <meta name="author" content="Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry">
+  <title>Quantile Regression</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -324,26 +325,65 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Quantile_Slides</h1>
+  <h1 class="title">Quantile Regression</h1>
 
 <div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry 
+</div>
+</div>
 </div>
 
 </section>
-<section id="quarto" class="slide level2">
-<h2>Quarto</h2>
-<p>Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <a href="https://quarto.org/docs/presentations/" class="uri">https://quarto.org/docs/presentations/</a>.</p>
+<section id="quantile-regression" class="slide level2">
+<h2>Quantile Regression</h2>
+<ul>
+<li><p>A useful alternative to Ordinary Least Squares (OLS).</p></li>
+<li><p>Produces estimated regression coefficients for specific quantiles of the response variable.</p>
+<ul>
+<li>As a result, the coefficients will change as the specified quantile of the response variable changes.</li>
+</ul></li>
+</ul>
 </section>
-<section id="bullets" class="slide level2">
-<h2>Bullets</h2>
+<section id="sample-density" class="slide level2">
+<h2>Sample Density</h2>
+
+<img data-src="Quantile_Slides_files/figure-revealjs/unnamed-chunk-1-1.png" width="960" class="r-stretch"></section>
+<section id="why-use-quantile-regression" class="slide level2">
+<h2>Why Use Quantile Regression?</h2>
+<ul>
+<li><p>The relationship between the predictor and response variables may vary across the distribution, making it useful to allow the estimates to change.</p></li>
+<li><p>More robust to outliers.</p></li>
+<li><p>If OLS assumptions are violated.</p>
+<ul>
+<li>Nonconstant variance, nonnormality, indpendence, nonlinearity.</li>
+</ul></li>
+</ul>
+</section>
+<section id="general-form-of-the-model" class="slide level2">
+<h2>General Form of the Model</h2>
+<ul>
+<li><p><span class="math inline">\(Q_\tau(Y) = \beta_0(\tau) + \beta_1(\tau)X_1 + ... + \beta_p(\tau)X_p\)</span></p>
+<ul>
+<li>Where <span class="math inline">\(\tau\)</span> is a specific quantile value.</li>
+</ul></li>
+<li><p>The objective of quantile regression is to minimize the median absolute deviations.</p></li>
+</ul>
+</section>
+<section id="model-assumptions" class="slide level2">
+<h2>Model Assumptions</h2>
+</section>
+<section id="quantreg" class="slide level2">
+<h2>Quantreg</h2>
 <p>When you click the <strong>Render</strong> button a document will be generated that includes:</p>
 <ul>
 <li>Content authored with markdown</li>
 <li>Output from executable code</li>
 </ul>
 </section>
-<section id="code" class="slide level2">
-<h2>Code</h2>
+<section id="references" class="slide level2">
+<h2>References</h2>
 <p>When you click the <strong>Render</strong> button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
