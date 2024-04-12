@@ -7,14 +7,14 @@ editor: visual
 
 ## Quantile Regression
 
-- A useful alternative to Ordinary Least Squares (OLS).
+-   A useful alternative to Ordinary Least Squares (OLS).
 
-- Produces estimated regression coefficients for specific quantiles of the response variable.
+-   Produces estimated regression coefficients for specific quantiles of the response variable.
 
-  - As a result, the coefficients will change as the specified quantile of the response variable changes.
-  
+    -   As a result, the coefficients will change as the specified quantile of the response variable changes.
+
 ## Sample Density
-  
+
 ```{r}
 # Load libraries
 library(tidyverse)
@@ -34,24 +34,23 @@ df_rnd |>
   theme_bw()
 ```
 
-  
 ## Why Use Quantile Regression?
 
-- The relationship between the predictor and response variables may vary across the distribution, making it useful to allow the estimates to change.
+-   The relationship between the predictor and response variables may vary across the distribution, making it useful to allow the estimates to change.
 
-- More robust to outliers.
+-   More robust to outliers.
 
-- If OLS assumptions are violated.
+-   If OLS assumptions are violated.
 
-  - Nonconstant variance, nonnormality, indpendence, nonlinearity.
-  
+    -   Nonconstant variance, nonnormality, indpendence, nonlinearity.
+
 ## General Form of the Model
 
-- $Q_\tau(Y) = \beta_0(\tau) + \beta_1(\tau)X_1 + ... + \beta_p(\tau)X_p$
+-   $Q_\tau(Y) = \beta_0(\tau) + \beta_1(\tau)X_1 + ... + \beta_p(\tau)X_p$
 
-  - Where $\tau$ is a specific quantile value.
+    -   Where $\tau$ is a specific quantile value.
 
-- The objective of quantile regression is to minimize the median absolute deviations.
+-   The objective of quantile regression is to minimize the median absolute deviations.
 
 ## Model Assumptions
 
