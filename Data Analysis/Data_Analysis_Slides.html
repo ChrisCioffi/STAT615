@@ -336,26 +336,121 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 </div>
 
 </section>
-<section id="quarto" class="slide level2">
-<h2>Quarto</h2>
-<p>Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <a href="https://quarto.org/docs/presentations/" class="uri">https://quarto.org/docs/presentations/</a>.</p>
+<section id="overview" class="slide level2">
+<h2>Overview</h2>
+<ol type="1">
+<li>Introduction and Question</li>
+<li>Background and Related Literature</li>
+<li>Data</li>
+<li>Exploratory Analysis</li>
+<li>Modeling</li>
+<li>Diagnostic Tools</li>
+<li>Remedial Measures</li>
+<li>Conclusion</li>
+</ol>
 </section>
-<section id="bullets" class="slide level2">
-<h2>Bullets</h2>
-<p>When you click the <strong>Render</strong> button a document will be generated that includes:</p>
+<section id="what-do-you-want-to-be-when-you-grow-up" class="slide level2">
+<h2>What Do You Want to Be When You Grow Up?</h2>
 <ul>
-<li>Content authored with markdown</li>
-<li>Output from executable code</li>
+<li><p>Decisions made at a young age may have a profound and lasting impact on individuals for many years into the future.</p></li>
+<li><p>We investigate what factors in high school impact future academic performance.</p></li>
+<li><p>In particular, we ask: how is college GPA impacted by thoughts about prospective career path in high school and what drives decisions about future occupation?</p>
+<ul>
+<li>Originally considered using earnings as our response variable.</li>
+</ul></li>
 </ul>
 </section>
-<section id="code" class="slide level2">
-<h2>Code</h2>
-<p>When you click the <strong>Render</strong> button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:</p>
+<section id="literature-reviewbackground" class="slide level2">
+<h2>Literature Review/Background</h2>
+</section>
+<section id="data" class="slide level2">
+<h2>Data</h2>
+<ul>
+<li>High School Longitudinal Study of 2009 (HSLS:09) from the National Center for Education Statistics.
+<ul>
+<li>Interviewed 9th graders across the United States in 2009.</li>
+<li>Followed up with subjects in three subsequent interview rounds.</li>
+<li>Offers a variety of information on students, parents, and school.</li>
+</ul></li>
+</ul>
+</section>
+<section id="key-variables" class="slide level2">
+<h2>Key Variables</h2>
+<ul>
+<li><p>Response Variable: College GPA</p></li>
+<li><p>Predictor of Interest: Desired occupation at age 30.</p>
+<ul>
+<li>A categorical variable with 22 occupation groups.</li>
+</ul></li>
+<li><p>Additional predictors:</p>
+<ul>
+<li>Academic: High school GPA, credits earned for AP/IB courses, School engagement, Stem/non-stem desired occupation</li>
+<li>Demographic: Student race, Family Income</li>
+<li>School Features: High School urbanicity, High School type</li>
+</ul></li>
+</ul>
+</section>
+<section id="a-look-at-desired-occupation" class="slide level2">
+<h2>A Look at Desired Occupation</h2>
+
+<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"></section>
+<section id="desired-occupation-and-academic-performance" class="slide level2">
+<h2>Desired Occupation and Academic Performance</h2>
+
+<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
+<section id="model-simple-linear-regression" class="slide level2">
+<h2>Model: Simple Linear Regression</h2>
+<ul>
+<li><p>Set reference group to those students who answered “Don’t Know”.</p></li>
+<li><p>Model takes the form of <span class="math inline">\(College\_GPA = \beta_0 + \beta_1future\_job + \epsilon\)</span>.</p></li>
+</ul>
+</section>
+<section id="results-simple-linear-regression" class="slide level2">
+<h2>Results: Simple Linear Regression</h2>
+<ul>
+<li>Showing only results with a p-value &lt; 0.10.</li>
+</ul>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<pre><code># A tibble: 7 × 5
+  term                                      estimate std.error statistic p.value
+  &lt;chr&gt;                                        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 (Intercept)                                  2.72     0.0170    160.   0      
+2 Education, Training, and Library Occupat…    0.192    0.0454      4.24 2.28e-5
+3 Arts, Design, Entertainment, Sports, and…   -0.109    0.0303     -3.60 3.16e-4
+4 Protective Service Occupations              -0.317    0.0595     -5.33 1.00e-7
+5 Food Preparation and Serving Related Occ…   -0.329    0.0878     -3.75 1.79e-4
+6 Installation, Maintenance, and Repair Oc…   -0.271    0.104      -2.62 8.84e-3
+7 Military Specific Occupations               -0.358    0.0725     -4.94 8.08e-7</code></pre>
 </div>
 </div>
+<ul>
+<li>Adjusted <span class="math inline">\(R^2\)</span> is less than 1%.</li>
+</ul>
+</section>
+<section id="additional-variables-to-add" class="slide level2">
+<h2>Additional Variables to Add</h2>
+</section>
+<section id="multiple-linear-regression" class="slide level2">
+<h2>Multiple Linear Regression</h2>
+</section>
+<section id="variable-selection" class="slide level2">
+<h2>Variable Selection</h2>
+</section>
+<section id="diagnostic-tools" class="slide level2">
+<h2>Diagnostic Tools</h2>
+</section>
+<section id="remedial-measures" class="slide level2">
+<h2>Remedial Measures</h2>
+</section>
+<section id="mlr-results" class="slide level2">
+<h2>MLR Results</h2>
+</section>
+<section id="slide-for-additional-ideas" class="slide level2">
+<h2>Slide for Additional Ideas</h2>
+<ul>
+<li>If our model assumptions are violated we could try bootstrapping or quantile regression?</li>
+</ul>
 <div class="footer footer-default">
 
 </div>

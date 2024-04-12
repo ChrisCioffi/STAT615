@@ -5,21 +5,149 @@ format: revealjs
 editor: visual
 ---
 
-## Quarto
+## Overview
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+1) Introduction and Question
+2) Background and Related Literature
+3) Data
+4) Exploratory Analysis
+5) Modeling
+6) Diagnostic Tools
+7) Remedial Measures
+8) Conclusion
 
-## Bullets
+## What Do You Want to Be When You Grow Up?
 
-When you click the **Render** button a document will be generated that includes:
+- Decisions made at a young age may have a profound and lasting impact on individuals for many years into the future.
 
--   Content authored with markdown
--   Output from executable code
+- We investigate what factors in high school impact future academic performance.
+  
+- In particular, we ask: how is college GPA impacted by thoughts about prospective career path in high school and what drives decisions about future occupation?
+  - Originally considered using earnings as our response variable.
 
-## Code
+## Literature Review/Background
 
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+## Data
+
+- High School Longitudinal Study of 2009 (HSLS:09) from the National Center for Education Statistics.
+  - Interviewed 9th graders across the United States in 2009.
+  - Followed up with subjects in three subsequent interview rounds.
+  - Offers a variety of information on students, parents, and school.
+
+## Key Variables
+
+- Response Variable: College GPA
+
+- Predictor of Interest: Desired occupation at age 30.
+  - A categorical variable with 22 occupation groups.
+  
+- Additional predictors:
+  - Academic: High school GPA, credits earned for AP/IB courses, School engagement, Stem/non-stem desired occupation
+  - Demographic: Student race, Family Income
+  - School Features: High School urbanicity, High School type
+
+## A Look at Desired Occupation
 
 ```{r}
-1 + 1
+#| include: false
+library(tidyverse)
+library(broom)
+load("../Data/HSLS_Data.rdata")
 ```
+
+```{r}
+#| echo: false
+HSLS_Data |>
+  filter(X5GPAALL >= 0,
+         X1STU30OCC2 != "Unit non-response") |>
+  filter(X1STU30OCC2 != "Uncodeable") |>
+  filter(X1STU30OCC2 != "Missing") |>
+  select(X5GPAALL, X1STU30OCC2) |>
+  ggplot(aes(x = X5GPAALL, y = X1STU30OCC2)) +
+  geom_boxplot() +
+  labs(title = "College GPA by Desired Occupation",
+       x = "College GPA",
+       y = "Desired Occupation") +
+  theme_bw()
+
+# NOTE: Try to sort this by Median GPA
+```
+## Desired Occupation and Academic Performance
+
+```{r}
+#| echo: false
+HSLS_Data |>
+  filter(X5GPAALL >= 0,
+         X3TGPAACAD >= 0,
+         X1STU30OCC2 != "Unit non-response") |>
+  filter(X1STU30OCC2 != "Uncodeable") |>
+  filter(X1STU30OCC2 != "Missing") |>
+  select(X5GPAALL, X3TGPAACAD, X1STU30OCC2) |>
+  ggplot(aes(x = X3TGPAACAD, y = X5GPAALL, color = X1STU30OCC2)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme(legend.position = "none") +
+  labs(title = "HS GPA vs. College GPA",
+       x = "High School GPA",
+       y = "College GPA") +
+  theme_bw() +
+  theme(legend.position = "none")
+```
+
+## Model: Simple Linear Regression
+
+- Set reference group to those students who answered "Don't Know".
+
+- Model takes the form of $College\_GPA = \beta_0 + \beta_1future\_job + \epsilon$.
+
+## Results: Simple Linear Regression
+
+- Showing only results with a p-value < 0.10.
+
+```{r}
+#| echo: false
+# Build df
+SLR_GPA_Job <- HSLS_Data |>
+  filter(X5GPAALL >= 0,
+         X1STU30OCC2 != "Unit non-response") |>
+  filter(X1STU30OCC2 != "Uncodeable") |>
+  filter(X1STU30OCC2 != "Missing") |>
+  select(X5GPAALL, X1STU30OCC2)
+
+# Set reference group to "Don't know"
+SLR_GPA_Job$X1STU30OCC2 <- relevel(SLR_GPA_Job$X1STU30OCC2, ref = "Don't know")
+
+# Regression
+SLR_GPA_Job_reg <- lm(X5GPAALL~X1STU30OCC2, data = SLR_GPA_Job)
+summary(SLR_GPA_Job_reg) |> broom::tidy() |>
+  filter(p.value <= 0.01) |>
+  mutate(term = str_remove(term, "X1STU30OCC2"))
+
+# For the sake of reducing the output, just show results that are significant at alpha = 0.10.
+```
+
+- Adjusted $R^2$ is less than 1%.
+
+## Additional Variables to Add
+
+## Multiple Linear Regression
+
+## Variable Selection
+
+## Diagnostic Tools
+
+## Remedial Measures
+
+## MLR Results
+
+## Slide for Additional Ideas
+
+- If our model assumptions are violated we could try bootstrapping or quantile regression?
+
+
+
+
+
+
+
+
