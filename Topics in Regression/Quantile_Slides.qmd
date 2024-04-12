@@ -18,7 +18,9 @@ editor: visual
 ```{r}
 # Load libraries
 library(tidyverse)
+library(quantreg)
 
+set.seed(17)
 # Generate random normal data
 df_rnd <- as.tibble(rnorm(10000))
 
@@ -33,6 +35,21 @@ df_rnd |>
        y = "") +
   theme_bw()
 ```
+## Example of Linear and Quantile Trend Lines
+
+```{r}
+set.seed(16)
+eps <- rnorm(500,0,2)
+df_trends <- tibble(x = rnorm(500), y = 2*x + eps)
+
+df_trends |>
+  ggplot(aes(x, y)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  #geom_quantile(quantiles = 0.25, y~x,data = df_trends) +
+  theme_bw()
+```
+
 
 ## Why Use Quantile Regression?
 
@@ -48,11 +65,19 @@ df_rnd |>
 
 -   $Q_\tau(Y) = \beta_0(\tau) + \beta_1(\tau)X_1 + ... + \beta_p(\tau)X_p$
 
-    -   Where $\tau$ is a specific quantile value.
+  -   Where $\tau$ is a specific quantile value.
 
--   The objective of quantile regression is to minimize the median absolute deviations.
+-   The objective of quantile regression is to minimize the median absolute deviations (Quantile Loss).
+
+  -   Rather than minimizing the sum of squares in OLS.
 
 ## Model Assumptions
+
+- Large sample size.
+
+- Response variable is continuous.
+
+- No strict distribution to adhere to.
 
 ## Quantreg
 
@@ -63,8 +88,4 @@ When you click the **Render** button a document will be generated that includes:
 
 ## References
 
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
-```
+https://www.voxco.com/blog/quantile-regression/

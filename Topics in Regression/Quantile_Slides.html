@@ -350,6 +350,10 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 <h2>Sample Density</h2>
 
 <img data-src="Quantile_Slides_files/figure-revealjs/unnamed-chunk-1-1.png" width="960" class="r-stretch"></section>
+<section id="example-of-linear-and-quantile-trend-lines" class="slide level2">
+<h2>Example of Linear and Quantile Trend Lines</h2>
+
+<img data-src="Quantile_Slides_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"></section>
 <section id="why-use-quantile-regression" class="slide level2">
 <h2>Why Use Quantile Regression?</h2>
 <ul>
@@ -364,15 +368,19 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 <section id="general-form-of-the-model" class="slide level2">
 <h2>General Form of the Model</h2>
 <ul>
-<li><p><span class="math inline">\(Q_\tau(Y) = \beta_0(\tau) + \beta_1(\tau)X_1 + ... + \beta_p(\tau)X_p\)</span></p>
-<ul>
-<li>Where <span class="math inline">\(\tau\)</span> is a specific quantile value.</li>
-</ul></li>
-<li><p>The objective of quantile regression is to minimize the median absolute deviations.</p></li>
+<li><p><span class="math inline">\(Q_\tau(Y) = \beta_0(\tau) + \beta_1(\tau)X_1 + ... + \beta_p(\tau)X_p\)</span></p></li>
+<li><p>Where <span class="math inline">\(\tau\)</span> is a specific quantile value.</p></li>
+<li><p>The objective of quantile regression is to minimize the median absolute deviations (Quantile Loss).</p></li>
+<li><p>Rather than minimizing the sum of squares in OLS.</p></li>
 </ul>
 </section>
 <section id="model-assumptions" class="slide level2">
 <h2>Model Assumptions</h2>
+<ul>
+<li><p>Large sample size.</p></li>
+<li><p>Response variable is continuous.</p></li>
+<li><p>No strict distribution to adhere to.</p></li>
+</ul>
 </section>
 <section id="quantreg" class="slide level2">
 <h2>Quantreg</h2>
@@ -384,12 +392,7 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 </section>
 <section id="references" class="slide level2">
 <h2>References</h2>
-<p>When you click the <strong>Render</strong> button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
-</div>
-</div>
+<p>https://www.voxco.com/blog/quantile-regression/</p>
 <div class="footer footer-default">
 
 </div>
