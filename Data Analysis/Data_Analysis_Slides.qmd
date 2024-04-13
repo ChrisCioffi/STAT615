@@ -276,7 +276,28 @@ step(MLR_all.reg.reduced,
 - Stepwise selection did not remove any variables
 
 
-## Diagnostic Tools
+## Diagnostics: Constant Variance
+
+```{r}
+residuals <- residuals(MLR_all.reg.reduced)
+predicted <- predict(MLR_all.reg.reduced)
+
+# Plot residuals vs predicted values
+plot(predicted, residuals, pch = 19, col = "blue", xlab = "Predicted Values (Y-Hat)", ylab = "Residuals",
+     main = "Residuals vs Predicted Values")
+abline(h = 0, col = "red")  # Add a horizontal line at y = 0 for reference
+```
+
+
+## Diagnostics: Normality
+
+
+```{r}
+par(mfrow=c(1,2))
+hist(MLR_all.reg.reduced$resi)
+qqnorm(MLR_all.reg.reduced$resi)
+qqline(MLR_all.reg.reduced$resi)
+```
 
 
 
