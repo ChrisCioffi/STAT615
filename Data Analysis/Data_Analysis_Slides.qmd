@@ -19,11 +19,11 @@ format:
 
 ## What Do You Want to Be When You Grow Up?
 
--   During their high school years, young adults are often asked to make decisions regarding post-secondary education that can have a profound and lasting impact on their lives in the future.
+-   During high school, young adults are often asked to make decisions regarding post-secondary education that can have a profound and lasting impact on their lives in the future.
 
 -   We investigate what factors in high school may be related to future academic performance.
 
--   In particular, we ask: how is college GPA related to thought about prospective career path in high school? How are other characteristics about the students themselves, their background, and their high school enviromental related to their college GPA?
+-   Research Question: How is college GPA related to thoughts about prospective career path in high school? How are other characteristics about a student's background and high school enviroment related to their college GPA?
 
 ## Literature Review/Background
 
@@ -53,6 +53,7 @@ format:
 #| include: false
 library(tidyverse)
 library(broom)
+library(patchwork)
 load("../Data/HSLS_Data.rdata")
 ```
 
@@ -61,8 +62,6 @@ load("../Data/HSLS_Data.rdata")
 
 # X5GPAALL: Postsecondary Transcript: GPA at all known institutions attended
 # X1STU30OCC2: Planned student occupation at age 30
-
-
 
 HSLS_Data |>
   filter(
@@ -167,14 +166,126 @@ summary(SLR_GPA_Job_reg) |>
 
 -   Adjusted $R^2$ is less than 1%.
 
-## Additional Variables to Add
+## Additional Variables
 
-- College Major Considering (X4ENTRYMAJ23) (23 categories)
-- Urbanicity (X1LOCALE)
-- Total family income from all sources 2008 (X1FAMINCOME)
-- Credits earned in: AP/IB combined (X3TCREDAPIB)
-- Public, Catholic, or Other Private School (X1CONTROL)
-- Scale of student’s sense of school belonging (X1SCHOOLBEL)
+
+```{r}
+HSLS_Data |>
+  filter(
+    X5GPAALL >= 0,
+    X4ENTRYMAJ23 != "Missing",
+    X4ENTRYMAJ23 != "Unit non-response",
+    X4ENTRYMAJ23 != "Item legitimate skip/NA"
+  ) |>
+  select(X4ENTRYMAJ23, X5GPAALL) |>
+  ggplot(aes(x = X4ENTRYMAJ23, y = X5GPAALL)) +
+  geom_boxplot() +
+  coord_flip() +
+  labs(
+    title = "College GPA by College Major Considering",
+    x = "College GPA",
+    y = "College Major Considering"
+  ) +
+  theme_bw() -> major
+
+major
+```
+
+
+## Additional Variables
+
+```{r}
+HSLS_Data |>
+  filter(
+    X5GPAALL >= 0,
+    X1FAMINCOME != "Item legitimate skip/NA",
+    X1FAMINCOME != "Unit non-response",
+    X1FAMINCOME != "Missing"
+  ) |>
+  select(X5GPAALL, X1FAMINCOME) |>
+  mutate(X1FAMINCOME = factor(X1FAMINCOME, levels = unique(X1FAMINCOME))) |>
+  ggplot(aes(x = X5GPAALL, y = X1FAMINCOME)) +
+  geom_boxplot() +
+  labs(title = "College GPA by Family Income",
+       x = "College GPA", 
+       y = "Total family income from all sources 2008") +
+  theme_bw() -> income
+
+income
+```
+
+
+## Additional Variables
+
+```{r}
+HSLS_Data |>
+  filter(
+    X5GPAALL >= 0,
+    X1LOCALE != "Item legitimate skip/NA",
+    X1LOCALE != "Unit non-response",
+    X1LOCALE != "Missing"
+  ) |>
+  select(X5GPAALL, X1LOCALE) |>
+  mutate(X1LOCALE = factor(X1LOCALE, levels = unique(X1LOCALE))) |>
+  ggplot(aes(x = X5GPAALL, y = X1LOCALE)) +
+  geom_boxplot() +
+  coord_flip() +
+  labs(title = "College GPA by Urbanicity",
+       x = "College GPA", 
+       y = "Urbanicity") +
+  theme_bw() -> urbanicity
+
+HSLS_Data |>
+  filter(
+    X5GPAALL >= 0,
+    X3TCREDAPIB >= 0,
+    X1LOCALE != "Item legitimate skip/NA",
+    X1LOCALE != "Unit non-response",
+    X1LOCALE != "Missing"
+  ) |>
+  select(X5GPAALL, X3TCREDAPIB) |>
+  ggplot(aes(x = X3TCREDAPIB, y = X5GPAALL)) +
+  geom_point() +
+  labs(title = "College GPA by AP/IB Credits",
+       x = "College GPA", 
+       y = "AP/IB Credits") +
+  theme_bw() -> credits
+
+urbanicity /
+credits
+```
+
+## Additional Variables
+
+```{r}
+HSLS_Data |>
+  filter( X5GPAALL >= 0
+  ) |>
+  select(X5GPAALL, X1CONTROL) |>
+  mutate(X1CONTROL = factor(X1CONTROL, levels = unique(X1CONTROL))) |>
+  ggplot(aes(x = X5GPAALL, y = X1CONTROL)) +
+  geom_boxplot() +
+  coord_flip() +
+  labs(title = "College GPA by School Type",
+       x = "College GPA", 
+       y = " School Type") +
+  theme_bw() -> type
+
+HSLS_Data |>
+  filter(X5GPAALL >= 0) |>
+  select(X5GPAALL, X1SCHOOLBEL) |>
+  ggplot(aes(x = X5GPAALL, y = X1SCHOOLBEL)) +
+  geom_point() +
+  labs(title = "College GPA by Student’s Sense of School Belonging",
+       x = "College GPA", 
+       y = "School Belonging") +
+  theme_bw() -> belonging
+
+type /
+belonging
+```
+
+
 
 ## Multiple Linear Regression
 
@@ -186,6 +297,7 @@ MLR_all <- HSLS_Data |>
   filter(
     X5GPAALL >= 0,
     X3TGPAACAD >= 0,
+    X3TCREDAPIB >= 0,
     X1STU30OCC2 != "Unit non-response",
     X1STU30OCC2 != "Uncodeable",
     X1STU30OCC2 != "Missing",
@@ -221,16 +333,15 @@ MLR_all$X1LOCALE <- relevel(MLR_all$X1LOCALE, ref = "Rural")
 ```
 
 
-
 - MLR Model: $College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4family\_income + \beta_5credits + \beta_6school\_type + \beta_7urbanicity + \beta_8school\_belonging + \epsilon$.
 
 
 ```{r}
 MLR_all.reg <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1LOCALE + X1FAMINCOME + X3TCREDAPIB + X1CONTROL + X1SCHOOLBEL, data = MLR_all)
 
-summary(MLR_all.reg) |> 
-  broom::tidy() |> 
-  select(term,p.value) |> 
+summary(MLR_all.reg) |>
+  broom::tidy() |>
+  select(term, p.value) |>
   mutate(p.value = sprintf("%.2f", p.value))
 # filter(p.value >= 0.01)
 ```
@@ -251,8 +362,7 @@ summary(MLR_all.reg) |>
 ```{r}
 #| echo: false
 MLR_all.reg.reduced <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all)
-anova(MLR_all.reg.reduced,MLR_all.reg)
-
+anova(MLR_all.reg.reduced, MLR_all.reg)
 ```
 
 - Anova table comparing the reduced model removing Urbanicity & School Belonging results in a p-value of 0.331. This value confirms insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.
@@ -269,23 +379,31 @@ anova(MLR_all.reg.reduced,MLR_all.reg)
 
 ```{r}
 step(MLR_all.reg.reduced,
-     direction="both",
-     scope = list(lower = ~ X5GPAALL ~ X1STU30OCC2)) # force inclusion of Planned occupation (X1STU30OCC2)
-
+  direction = "both",
+  scope = list(lower = ~X5GPAALL ~ X1STU30OCC2)
+) # force inclusion of Planned occupation (X1STU30OCC2)
 ```
 - Stepwise selection did not remove any variables
 
+## Diagnostics: Outliers
+
+
+
 
 ## Diagnostics: Constant Variance
+
+Very obvious pattern here
 
 ```{r}
 residuals <- residuals(MLR_all.reg.reduced)
 predicted <- predict(MLR_all.reg.reduced)
 
 # Plot residuals vs predicted values
-plot(predicted, residuals, pch = 19, col = "blue", xlab = "Predicted Values (Y-Hat)", ylab = "Residuals",
-     main = "Residuals vs Predicted Values")
-abline(h = 0, col = "red")  # Add a horizontal line at y = 0 for reference
+plot(predicted, residuals,
+  pch = 19, col = "blue", xlab = "Predicted Values (Y-Hat)", ylab = "Residuals",
+  main = "Residuals vs Predicted Values"
+)
+abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
 ```
 
 
@@ -293,16 +411,16 @@ abline(h = 0, col = "red")  # Add a horizontal line at y = 0 for reference
 
 
 ```{r}
-par(mfrow=c(1,2))
+par(mfrow = c(1, 2))
 hist(MLR_all.reg.reduced$resi)
 qqnorm(MLR_all.reg.reduced$resi)
 qqline(MLR_all.reg.reduced$resi)
 ```
 
 
-
-
 ## Remedial Measures
+
+- Need to address non-constant variance first, and then recheck normality assumption
 
 ## MLR Results
 

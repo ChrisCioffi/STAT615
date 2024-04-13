@@ -352,9 +352,9 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 <section id="what-do-you-want-to-be-when-you-grow-up" class="slide level2">
 <h2>What Do You Want to Be When You Grow Up?</h2>
 <ul>
-<li><p>During their high school years, young adults are often asked to make decisions regarding post-secondary education that can have a profound and lasting impact on their lives in the future.</p></li>
+<li><p>During high school, young adults are often asked to make decisions regarding post-secondary education that can have a profound and lasting impact on their lives in the future.</p></li>
 <li><p>We investigate what factors in high school may be related to future academic performance.</p></li>
-<li><p>In particular, we ask: how is college GPA related to thought about prospective career path in high school? How are other characteristics about the students themselves, their background, and their high school enviromental related to their college GPA?</p></li>
+<li><p>Research Question: How is college GPA related to thoughts about prospective career path in high school? How are other characteristics about a student’s background and high school enviroment related to their college GPA?</p></li>
 </ul>
 </section>
 <section id="literature-reviewbackground" class="slide level2">
@@ -431,16 +431,23 @@ HS_GPA        0.5630064 1.0000000</code></pre>
 <li>Adjusted <span class="math inline">\(R^2\)</span> is less than 1%.</li>
 </ul>
 </section>
-<section id="additional-variables-to-add" class="slide level2">
-<h2>Additional Variables to Add</h2>
-<ul>
-<li>College Major Considering (X4ENTRYMAJ23) (23 categories)</li>
-<li>Urbanicity (X1LOCALE)</li>
-<li>Total family income from all sources 2008 (X1FAMINCOME)</li>
-<li>Credits earned in: AP/IB combined (X3TCREDAPIB)</li>
-<li>Public, Catholic, or Other Private School (X1CONTROL)</li>
-<li>Scale of student’s sense of school belonging (X1SCHOOLBEL)</li>
-</ul>
+<section id="additional-variables" class="slide level2">
+<h2>Additional Variables</h2>
+
+<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section>
+<section id="additional-variables-urbanicity-x1locale" class="slide level2">
+<h2>Additional Variables: Urbanicity (X1LOCALE) &amp;</h2>
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-7-1.png" width="960"></p>
+</div>
+<div class="cell-output-display">
+<p><img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-7-2.png" width="960"></p>
+</div>
+</div>
+</section>
+<section id="additional-variables-credits-earned-in-apib-combined-x3tcredapib-public-catholic-or-other-private-school-x1control-scale-of-students-sense-of-school-belonging-x1schoolbel" class="slide level2">
+<h2>Additional Variables: Credits earned in: AP/IB combined (X3TCREDAPIB), Public, Catholic, or Other Private School (X1CONTROL), Scale of student’s sense of school belonging (X1SCHOOLBEL)</h2>
 </section>
 <section id="multiple-linear-regression" class="slide level2">
 <h2>Multiple Linear Regression</h2>
@@ -646,16 +653,23 @@ X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations
 <li>Stepwise selection did not remove any variables</li>
 </ul>
 </section>
+<section id="diagnostics-outliers" class="slide level2">
+<h2>Diagnostics: Outliers</h2>
+</section>
 <section id="diagnostics-constant-variance" class="slide level2">
 <h2>Diagnostics: Constant Variance</h2>
+<p>Very obvious pattern here</p>
 
-<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
+<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
 <section id="diagnostics-normality" class="slide level2">
 <h2>Diagnostics: Normality</h2>
 
-<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
+<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section>
 <section id="remedial-measures" class="slide level2">
 <h2>Remedial Measures</h2>
+<ul>
+<li>Need to address non-constant variance first, and then recheck normality assumption</li>
+</ul>
 </section>
 <section id="mlr-results" class="slide level2">
 <h2>MLR Results</h2>
