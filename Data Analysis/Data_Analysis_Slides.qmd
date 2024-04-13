@@ -333,16 +333,26 @@ MLR_all$X1LOCALE <- relevel(MLR_all$X1LOCALE, ref = "Rural")
 ```
 
 
-- MLR Model: $College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4family\_income + \beta_5credits + \beta_6school\_type + \beta_7urbanicity + \beta_8school\_belonging + \epsilon$.
+Initial MLR Model: 
+$$College\_GPA = \\
+\beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \\ \beta_4family\_income + \beta_5credits + \beta_6school\_type + \beta_7urbanicity + \\ \beta_8school\_belonging + \epsilon$$
+
+- Adjusted $R^2$: 0.3563
+- F-statistic: 66.59 on 62 and 7286 DF,  p-value: < 2.2e-16
+
+```{r}
+#| echo: false
+MLR_all.reg <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1LOCALE + X1FAMINCOME + X3TCREDAPIB + X1CONTROL + X1SCHOOLBEL, data = MLR_all)
+```
+
 
 
 ```{r}
-MLR_all.reg <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1LOCALE + X1FAMINCOME + X3TCREDAPIB + X1CONTROL + X1SCHOOLBEL, data = MLR_all)
-
-summary(MLR_all.reg) |>
-  broom::tidy() |>
-  select(term, p.value) |>
-  mutate(p.value = sprintf("%.2f", p.value))
+#| include: false
+summary(MLR_all.reg)
+  # broom::tidy() |>
+  # select(term, p.value) |>
+  # mutate(p.value = sprintf("%.2f", p.value))
 # filter(p.value >= 0.01)
 ```
 
@@ -356,7 +366,9 @@ summary(MLR_all.reg) |>
 **Lack of Fit Test**
 
 - Null Hypothesis: $\beta_7urbanicity$ = $\beta_8school\_belonging$ = 0
+
 - Alternative hypothesis: either of the betas for these variables is a non-zero value
+
 - Use alpha = 0.10
 
 ```{r}
@@ -367,15 +379,15 @@ anova(MLR_all.reg.reduced, MLR_all.reg)
 
 - Anova table comparing the reduced model removing Urbanicity & School Belonging results in a p-value of 0.331. This value confirms insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.
 
+- In any case, the lack of significant relationship between Urbanicity & School Belonging was previously seen in earlier plots as well
+
 
 
 
 ## Variable Selection
 
 - New MLR Model: $$College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4family\_income + \beta_5credits + \beta_6school\_type + \epsilon$$.
-
-
-- Stepwise selection in both directions
+- Stepwise selection did not remove additional variables
 
 ```{r}
 step(MLR_all.reg.reduced,
@@ -383,13 +395,17 @@ step(MLR_all.reg.reduced,
   scope = list(lower = ~X5GPAALL ~ X1STU30OCC2)
 ) # force inclusion of Planned occupation (X1STU30OCC2)
 ```
-- Stepwise selection did not remove any variables
+- Stepwise selection did not remove additional variables
 
-## Diagnostics: Outliers
+## Diagnostics: 
 
+Linearity
 
+```{r}
 
+summary(MLR_all.reg.reduced)
 
+```
 ## Diagnostics: Constant Variance
 
 Very obvious pattern here

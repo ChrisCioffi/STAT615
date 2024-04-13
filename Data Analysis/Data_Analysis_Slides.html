@@ -435,43 +435,26 @@ HS_GPA        0.5630064 1.0000000</code></pre>
 <h2>Additional Variables</h2>
 
 <img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section>
-<section id="additional-variables-urbanicity-x1locale" class="slide level2">
-<h2>Additional Variables: Urbanicity (X1LOCALE) &amp;</h2>
-<div class="cell">
-<div class="cell-output-display">
-<p><img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-7-1.png" width="960"></p>
-</div>
-<div class="cell-output-display">
-<p><img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-7-2.png" width="960"></p>
-</div>
-</div>
-</section>
-<section id="additional-variables-credits-earned-in-apib-combined-x3tcredapib-public-catholic-or-other-private-school-x1control-scale-of-students-sense-of-school-belonging-x1schoolbel" class="slide level2">
-<h2>Additional Variables: Credits earned in: AP/IB combined (X3TCREDAPIB), Public, Catholic, or Other Private School (X1CONTROL), Scale of student’s sense of school belonging (X1SCHOOLBEL)</h2>
-</section>
+<section id="additional-variables-1" class="slide level2">
+<h2>Additional Variables</h2>
+
+<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"></section>
+<section id="additional-variables-2" class="slide level2">
+<h2>Additional Variables</h2>
+
+<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section>
+<section id="additional-variables-3" class="slide level2">
+<h2>Additional Variables</h2>
+
+<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
 <section id="multiple-linear-regression" class="slide level2">
 <h2>Multiple Linear Regression</h2>
+<p>Initial MLR Model: <span class="math display">\[College\_GPA = \\
+\beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \\ \beta_4family\_income + \beta_5credits + \beta_6school\_type + \beta_7urbanicity + \\ \beta_8school\_belonging + \epsilon\]</span></p>
 <ul>
-<li>MLR Model: <span class="math inline">\(College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4family\_income + \beta_5credits + \beta_6school\_type + \beta_7urbanicity + \beta_8school\_belonging + \epsilon\)</span>.</li>
+<li>Adjusted <span class="math inline">\(R^2\)</span>: 0.3563</li>
+<li>F-statistic: 66.59 on 62 and 7286 DF, p-value: &lt; 2.2e-16</li>
 </ul>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 63 × 2
-   term                                                                  p.value
-   &lt;chr&gt;                                                                 &lt;chr&gt;  
- 1 (Intercept)                                                           0.00   
- 2 X1STU30OCC2Management Occupations                                     0.77   
- 3 X1STU30OCC2Business and Financial Operations Occupations              0.27   
- 4 X1STU30OCC2Computer and Mathematical Occupations                      0.57   
- 5 X1STU30OCC2Architecture and Engineering Occupations                   0.13   
- 6 X1STU30OCC2Life, Physical, and Social Science Occupations             0.40   
- 7 X1STU30OCC2Community and Social Services Occupations                  0.11   
- 8 X1STU30OCC2Legal Occupations                                          0.09   
- 9 X1STU30OCC2Education, Training, and Library Occupations               0.11   
-10 X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations 0.85   
-# ℹ 53 more rows</code></pre>
-</div>
-</div>
 </section>
 <section id="remove-urbanicity-school-belonging" class="slide level2">
 <h2>Remove Urbanicity &amp; School Belonging?</h2>
@@ -481,9 +464,9 @@ HS_GPA        0.5630064 1.0000000</code></pre>
 </ul>
 <p><strong>Lack of Fit Test</strong></p>
 <ul>
-<li>Null Hypothesis: <span class="math inline">\(\beta_7urbanicity\)</span> = <span class="math inline">\(\beta_8school\_belonging\)</span> = 0</li>
-<li>Alternative hypothesis: either of the betas for these variables is a non-zero value</li>
-<li>Use alpha = 0.10</li>
+<li><p>Null Hypothesis: <span class="math inline">\(\beta_7urbanicity\)</span> = <span class="math inline">\(\beta_8school\_belonging\)</span> = 0</p></li>
+<li><p>Alternative hypothesis: either of the betas for these variables is a non-zero value</p></li>
+<li><p>Use alpha = 0.10</p></li>
 </ul>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -499,14 +482,15 @@ Model 2: X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1LOCALE +
 </div>
 </div>
 <ul>
-<li>Anova table comparing the reduced model removing Urbanicity &amp; School Belonging results in a p-value of 0.331. This value confirms insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.</li>
+<li><p>Anova table comparing the reduced model removing Urbanicity &amp; School Belonging results in a p-value of 0.331. This value confirms insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.</p></li>
+<li><p>In any case, the lack of significant relationship between Urbanicity &amp; School Belonging was previously seen in earlier plots as well</p></li>
 </ul>
 </section>
 <section id="variable-selection" class="slide level2">
 <h2>Variable Selection</h2>
 <ul>
-<li><p>New MLR Model: <span class="math display">\[College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4family\_income + \beta_5credits + \beta_6school\_type + \epsilon\]</span>.</p></li>
-<li><p>Stepwise selection in both directions</p></li>
+<li>New MLR Model: <span class="math display">\[College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4family\_income + \beta_5credits + \beta_6school\_type + \epsilon\]</span>.</li>
+<li>Stepwise selection did not remove additional variables</li>
 </ul>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -650,21 +634,342 @@ X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations
 </div>
 </div>
 <ul>
-<li>Stepwise selection did not remove any variables</li>
+<li>Stepwise selection did not remove additional variables</li>
 </ul>
 </section>
-<section id="diagnostics-outliers" class="slide level2">
-<h2>Diagnostics: Outliers</h2>
+<section id="diagnostics" class="slide level2">
+<h2>Diagnostics:</h2>
+<p>Linearity</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + 
+    X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-3.11365 -0.34477  0.09234  0.43827  2.75491 
+
+Coefficients:
+                                                                        Estimate
+(Intercept)                                                            0.4541565
+X1STU30OCC2Management Occupations                                      0.0153304
+X1STU30OCC2Business and Financial Operations Occupations               0.0782835
+X1STU30OCC2Computer and Mathematical Occupations                      -0.0370277
+X1STU30OCC2Architecture and Engineering Occupations                   -0.0585375
+X1STU30OCC2Life, Physical, and Social Science Occupations             -0.0304988
+X1STU30OCC2Community and Social Services Occupations                   0.1392815
+X1STU30OCC2Legal Occupations                                          -0.0737682
+X1STU30OCC2Education, Training, and Library Occupations                0.0670447
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations -0.0050668
+X1STU30OCC2Healthcare Practitioners and Technical Occupations         -0.0302980
+X1STU30OCC2Healthcare Support Occupations                              0.0869059
+X1STU30OCC2Protective Service Occupations                             -0.0524724
+X1STU30OCC2Food Preparation and Serving Related Occupations           -0.2356375
+X1STU30OCC2Personal Care and Service Occupations                       0.0982343
+X1STU30OCC2Sales and Related Occupations                               0.0434307
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                  0.1171752
+X1STU30OCC2Construction and Extraction Occupations                     0.0705477
+X1STU30OCC2Installation, Maintenance, and Repair Occupations           0.1269173
+X1STU30OCC2Production Occupations                                      0.1494096
+X1STU30OCC2Transportation and Material Moving Occupations              0.1271622
+X1STU30OCC2Military Specific Occupations                              -0.1665261
+X3TGPAACAD                                                             0.6807046
+X4ENTRYMAJ23Computer and information sciences                         -0.0041207
+X4ENTRYMAJ23Engineering and engineering technology                     0.0002693
+X4ENTRYMAJ23Biological and physical science, science tech              0.0805061
+X4ENTRYMAJ23Mathematics                                                0.0729173
+X4ENTRYMAJ23Agriculture and natural resources                          0.1474664
+X4ENTRYMAJ23General studies and other                                  0.1499260
+X4ENTRYMAJ23Social sciences                                            0.1688093
+X4ENTRYMAJ23Psychology                                                 0.1377309
+X4ENTRYMAJ23Humanities                                                 0.2607402
+X4ENTRYMAJ23History                                                    0.1475859
+X4ENTRYMAJ23Personal and consumer services                             0.1386387
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation        0.4337423
+X4ENTRYMAJ23Military technology and protective services                0.1482326
+X4ENTRYMAJ23Health care fields                                         0.1591009
+X4ENTRYMAJ23Business                                                   0.1194903
+X4ENTRYMAJ23Education                                                  0.2294671
+X4ENTRYMAJ23Architecture                                               0.2198331
+X4ENTRYMAJ23Communications                                             0.2830411
+X4ENTRYMAJ23Public administration and human services                   0.1670796
+X4ENTRYMAJ23Design and applied arts                                    0.2517047
+X4ENTRYMAJ23Law and legal studies                                      0.2328264
+X4ENTRYMAJ23Theology and religious vocations                           0.3499678
+X1FAMINCOMEFamily income &gt; $15,000 and &lt;= $35,000                      0.0097161
+X1FAMINCOMEFamily income &gt; $35,000 and &lt;= $55,000                      0.0542806
+X1FAMINCOMEFamily income &gt; $55,000 and &lt;= $75,000                      0.1061207
+X1FAMINCOMEFamily income &gt; $75,000 and &lt;= $95,000                      0.0811145
+X1FAMINCOMEFamily income &gt; $95,000 and &lt;= $115,000                     0.1507057
+X1FAMINCOMEFamily income &gt; $115,000 and &lt;= $135,000                    0.1707281
+X1FAMINCOMEFamily income &gt; $135,000 and &lt;= $155,000                    0.1262002
+X1FAMINCOMEFamily income &gt; $155,000 and &lt;=$175,000                     0.0952562
+X1FAMINCOMEFamily income &gt; $175,000 and &lt;= $195,000                    0.1803418
+X1FAMINCOMEFamily income &gt; $195,000 and &lt;= $215,000                    0.2102978
+X1FAMINCOMEFamily income &gt; $215,000 and &lt;= $235,000                    0.1432016
+X1FAMINCOMEFamily income &gt; $235,000                                    0.1595624
+X3TCREDAPIB                                                            0.0292806
+X1CONTROLCatholic or other private                                     0.0861247
+                                                                      Std. Error
+(Intercept)                                                            0.0618736
+X1STU30OCC2Management Occupations                                      0.0575649
+X1STU30OCC2Business and Financial Operations Occupations               0.0717997
+X1STU30OCC2Computer and Mathematical Occupations                       0.0645507
+X1STU30OCC2Architecture and Engineering Occupations                    0.0374192
+X1STU30OCC2Life, Physical, and Social Science Occupations              0.0369491
+X1STU30OCC2Community and Social Services Occupations                   0.0866033
+X1STU30OCC2Legal Occupations                                           0.0430488
+X1STU30OCC2Education, Training, and Library Occupations                0.0419590
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations  0.0290267
+X1STU30OCC2Healthcare Practitioners and Technical Occupations          0.0236654
+X1STU30OCC2Healthcare Support Occupations                              0.2132309
+X1STU30OCC2Protective Service Occupations                              0.0596469
+X1STU30OCC2Food Preparation and Serving Related Occupations            0.0864662
+X1STU30OCC2Personal Care and Service Occupations                       0.0832071
+X1STU30OCC2Sales and Related Occupations                               0.1296512
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                  0.2244406
+X1STU30OCC2Construction and Extraction Occupations                     0.1517391
+X1STU30OCC2Installation, Maintenance, and Repair Occupations           0.1039421
+X1STU30OCC2Production Occupations                                      0.1767864
+X1STU30OCC2Transportation and Material Moving Occupations              0.1132055
+X1STU30OCC2Military Specific Occupations                               0.0686630
+X3TGPAACAD                                                             0.0136806
+X4ENTRYMAJ23Computer and information sciences                          0.0569549
+X4ENTRYMAJ23Engineering and engineering technology                     0.0469181
+X4ENTRYMAJ23Biological and physical science, science tech              0.0450795
+X4ENTRYMAJ23Mathematics                                                0.0965082
+X4ENTRYMAJ23Agriculture and natural resources                          0.0708381
+X4ENTRYMAJ23General studies and other                                  0.0700379
+X4ENTRYMAJ23Social sciences                                            0.0589234
+X4ENTRYMAJ23Psychology                                                 0.0548070
+X4ENTRYMAJ23Humanities                                                 0.0522431
+X4ENTRYMAJ23History                                                    0.0951975
+X4ENTRYMAJ23Personal and consumer services                             0.0608408
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation        0.0726747
+X4ENTRYMAJ23Military technology and protective services                0.0581589
+X4ENTRYMAJ23Health care fields                                         0.0424604
+X4ENTRYMAJ23Business                                                   0.0434976
+X4ENTRYMAJ23Education                                                  0.0506218
+X4ENTRYMAJ23Architecture                                               0.1211585
+X4ENTRYMAJ23Communications                                             0.0602309
+X4ENTRYMAJ23Public administration and human services                   0.0927785
+X4ENTRYMAJ23Design and applied arts                                    0.0832168
+X4ENTRYMAJ23Law and legal studies                                      0.1223645
+X4ENTRYMAJ23Theology and religious vocations                           0.1661350
+X1FAMINCOMEFamily income &gt; $15,000 and &lt;= $35,000                      0.0424455
+X1FAMINCOMEFamily income &gt; $35,000 and &lt;= $55,000                      0.0416326
+X1FAMINCOMEFamily income &gt; $55,000 and &lt;= $75,000                      0.0416099
+X1FAMINCOMEFamily income &gt; $75,000 and &lt;= $95,000                      0.0425920
+X1FAMINCOMEFamily income &gt; $95,000 and &lt;= $115,000                     0.0438472
+X1FAMINCOMEFamily income &gt; $115,000 and &lt;= $135,000                    0.0467359
+X1FAMINCOMEFamily income &gt; $135,000 and &lt;= $155,000                    0.0492487
+X1FAMINCOMEFamily income &gt; $155,000 and &lt;=$175,000                     0.0596338
+X1FAMINCOMEFamily income &gt; $175,000 and &lt;= $195,000                    0.0714790
+X1FAMINCOMEFamily income &gt; $195,000 and &lt;= $215,000                    0.0635681
+X1FAMINCOMEFamily income &gt; $215,000 and &lt;= $235,000                    0.0904840
+X1FAMINCOMEFamily income &gt; $235,000                                    0.0503627
+X3TCREDAPIB                                                            0.0034555
+X1CONTROLCatholic or other private                                     0.0199546
+                                                                      t value
+(Intercept)                                                             7.340
+X1STU30OCC2Management Occupations                                       0.266
+X1STU30OCC2Business and Financial Operations Occupations                1.090
+X1STU30OCC2Computer and Mathematical Occupations                       -0.574
+X1STU30OCC2Architecture and Engineering Occupations                    -1.564
+X1STU30OCC2Life, Physical, and Social Science Occupations              -0.825
+X1STU30OCC2Community and Social Services Occupations                    1.608
+X1STU30OCC2Legal Occupations                                           -1.714
+X1STU30OCC2Education, Training, and Library Occupations                 1.598
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations  -0.175
+X1STU30OCC2Healthcare Practitioners and Technical Occupations          -1.280
+X1STU30OCC2Healthcare Support Occupations                               0.408
+X1STU30OCC2Protective Service Occupations                              -0.880
+X1STU30OCC2Food Preparation and Serving Related Occupations            -2.725
+X1STU30OCC2Personal Care and Service Occupations                        1.181
+X1STU30OCC2Sales and Related Occupations                                0.335
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                   0.522
+X1STU30OCC2Construction and Extraction Occupations                      0.465
+X1STU30OCC2Installation, Maintenance, and Repair Occupations            1.221
+X1STU30OCC2Production Occupations                                       0.845
+X1STU30OCC2Transportation and Material Moving Occupations               1.123
+X1STU30OCC2Military Specific Occupations                               -2.425
+X3TGPAACAD                                                             49.757
+X4ENTRYMAJ23Computer and information sciences                          -0.072
+X4ENTRYMAJ23Engineering and engineering technology                      0.006
+X4ENTRYMAJ23Biological and physical science, science tech               1.786
+X4ENTRYMAJ23Mathematics                                                 0.756
+X4ENTRYMAJ23Agriculture and natural resources                           2.082
+X4ENTRYMAJ23General studies and other                                   2.141
+X4ENTRYMAJ23Social sciences                                             2.865
+X4ENTRYMAJ23Psychology                                                  2.513
+X4ENTRYMAJ23Humanities                                                  4.991
+X4ENTRYMAJ23History                                                     1.550
+X4ENTRYMAJ23Personal and consumer services                              2.279
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation         5.968
+X4ENTRYMAJ23Military technology and protective services                 2.549
+X4ENTRYMAJ23Health care fields                                          3.747
+X4ENTRYMAJ23Business                                                    2.747
+X4ENTRYMAJ23Education                                                   4.533
+X4ENTRYMAJ23Architecture                                                1.814
+X4ENTRYMAJ23Communications                                              4.699
+X4ENTRYMAJ23Public administration and human services                    1.801
+X4ENTRYMAJ23Design and applied arts                                     3.025
+X4ENTRYMAJ23Law and legal studies                                       1.903
+X4ENTRYMAJ23Theology and religious vocations                            2.107
+X1FAMINCOMEFamily income &gt; $15,000 and &lt;= $35,000                       0.229
+X1FAMINCOMEFamily income &gt; $35,000 and &lt;= $55,000                       1.304
+X1FAMINCOMEFamily income &gt; $55,000 and &lt;= $75,000                       2.550
+X1FAMINCOMEFamily income &gt; $75,000 and &lt;= $95,000                       1.904
+X1FAMINCOMEFamily income &gt; $95,000 and &lt;= $115,000                      3.437
+X1FAMINCOMEFamily income &gt; $115,000 and &lt;= $135,000                     3.653
+X1FAMINCOMEFamily income &gt; $135,000 and &lt;= $155,000                     2.563
+X1FAMINCOMEFamily income &gt; $155,000 and &lt;=$175,000                      1.597
+X1FAMINCOMEFamily income &gt; $175,000 and &lt;= $195,000                     2.523
+X1FAMINCOMEFamily income &gt; $195,000 and &lt;= $215,000                     3.308
+X1FAMINCOMEFamily income &gt; $215,000 and &lt;= $235,000                     1.583
+X1FAMINCOMEFamily income &gt; $235,000                                     3.168
+X3TCREDAPIB                                                             8.474
+X1CONTROLCatholic or other private                                      4.316
+                                                                      Pr(&gt;|t|)
+(Intercept)                                                           2.37e-13
+X1STU30OCC2Management Occupations                                     0.790004
+X1STU30OCC2Business and Financial Operations Occupations              0.275615
+X1STU30OCC2Computer and Mathematical Occupations                      0.566241
+X1STU30OCC2Architecture and Engineering Occupations                   0.117775
+X1STU30OCC2Life, Physical, and Social Science Occupations             0.409157
+X1STU30OCC2Community and Social Services Occupations                  0.107820
+X1STU30OCC2Legal Occupations                                          0.086646
+X1STU30OCC2Education, Training, and Library Occupations               0.110117
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations 0.861432
+X1STU30OCC2Healthcare Practitioners and Technical Occupations         0.200493
+X1STU30OCC2Healthcare Support Occupations                             0.683603
+X1STU30OCC2Protective Service Occupations                             0.379042
+X1STU30OCC2Food Preparation and Serving Related Occupations           0.006442
+X1STU30OCC2Personal Care and Service Occupations                      0.237801
+X1STU30OCC2Sales and Related Occupations                              0.737649
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                 0.601633
+X1STU30OCC2Construction and Extraction Occupations                    0.641997
+X1STU30OCC2Installation, Maintenance, and Repair Occupations          0.222111
+X1STU30OCC2Production Occupations                                     0.398059
+X1STU30OCC2Transportation and Material Moving Occupations             0.261353
+X1STU30OCC2Military Specific Occupations                              0.015321
+X3TGPAACAD                                                             &lt; 2e-16
+X4ENTRYMAJ23Computer and information sciences                         0.942325
+X4ENTRYMAJ23Engineering and engineering technology                    0.995420
+X4ENTRYMAJ23Biological and physical science, science tech             0.074162
+X4ENTRYMAJ23Mathematics                                               0.449940
+X4ENTRYMAJ23Agriculture and natural resources                         0.037401
+X4ENTRYMAJ23General studies and other                                 0.032336
+X4ENTRYMAJ23Social sciences                                           0.004183
+X4ENTRYMAJ23Psychology                                                0.011992
+X4ENTRYMAJ23Humanities                                                6.15e-07
+X4ENTRYMAJ23History                                                   0.121110
+X4ENTRYMAJ23Personal and consumer services                            0.022713
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation       2.51e-09
+X4ENTRYMAJ23Military technology and protective services               0.010831
+X4ENTRYMAJ23Health care fields                                        0.000180
+X4ENTRYMAJ23Business                                                  0.006028
+X4ENTRYMAJ23Education                                                 5.91e-06
+X4ENTRYMAJ23Architecture                                              0.069653
+X4ENTRYMAJ23Communications                                            2.66e-06
+X4ENTRYMAJ23Public administration and human services                  0.071769
+X4ENTRYMAJ23Design and applied arts                                   0.002498
+X4ENTRYMAJ23Law and legal studies                                     0.057115
+X4ENTRYMAJ23Theology and religious vocations                          0.035193
+X1FAMINCOMEFamily income &gt; $15,000 and &lt;= $35,000                     0.818947
+X1FAMINCOMEFamily income &gt; $35,000 and &lt;= $55,000                     0.192342
+X1FAMINCOMEFamily income &gt; $55,000 and &lt;= $75,000                     0.010781
+X1FAMINCOMEFamily income &gt; $75,000 and &lt;= $95,000                     0.056891
+X1FAMINCOMEFamily income &gt; $95,000 and &lt;= $115,000                    0.000591
+X1FAMINCOMEFamily income &gt; $115,000 and &lt;= $135,000                   0.000261
+X1FAMINCOMEFamily income &gt; $135,000 and &lt;= $155,000                   0.010412
+X1FAMINCOMEFamily income &gt; $155,000 and &lt;=$175,000                    0.110231
+X1FAMINCOMEFamily income &gt; $175,000 and &lt;= $195,000                   0.011657
+X1FAMINCOMEFamily income &gt; $195,000 and &lt;= $215,000                   0.000943
+X1FAMINCOMEFamily income &gt; $215,000 and &lt;= $235,000                   0.113552
+X1FAMINCOMEFamily income &gt; $235,000                                   0.001540
+X3TCREDAPIB                                                            &lt; 2e-16
+X1CONTROLCatholic or other private                                    1.61e-05
+                                                                         
+(Intercept)                                                           ***
+X1STU30OCC2Management Occupations                                        
+X1STU30OCC2Business and Financial Operations Occupations                 
+X1STU30OCC2Computer and Mathematical Occupations                         
+X1STU30OCC2Architecture and Engineering Occupations                      
+X1STU30OCC2Life, Physical, and Social Science Occupations                
+X1STU30OCC2Community and Social Services Occupations                     
+X1STU30OCC2Legal Occupations                                          .  
+X1STU30OCC2Education, Training, and Library Occupations                  
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations    
+X1STU30OCC2Healthcare Practitioners and Technical Occupations            
+X1STU30OCC2Healthcare Support Occupations                                
+X1STU30OCC2Protective Service Occupations                                
+X1STU30OCC2Food Preparation and Serving Related Occupations           ** 
+X1STU30OCC2Personal Care and Service Occupations                         
+X1STU30OCC2Sales and Related Occupations                                 
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                    
+X1STU30OCC2Construction and Extraction Occupations                       
+X1STU30OCC2Installation, Maintenance, and Repair Occupations             
+X1STU30OCC2Production Occupations                                        
+X1STU30OCC2Transportation and Material Moving Occupations                
+X1STU30OCC2Military Specific Occupations                              *  
+X3TGPAACAD                                                            ***
+X4ENTRYMAJ23Computer and information sciences                            
+X4ENTRYMAJ23Engineering and engineering technology                       
+X4ENTRYMAJ23Biological and physical science, science tech             .  
+X4ENTRYMAJ23Mathematics                                                  
+X4ENTRYMAJ23Agriculture and natural resources                         *  
+X4ENTRYMAJ23General studies and other                                 *  
+X4ENTRYMAJ23Social sciences                                           ** 
+X4ENTRYMAJ23Psychology                                                *  
+X4ENTRYMAJ23Humanities                                                ***
+X4ENTRYMAJ23History                                                      
+X4ENTRYMAJ23Personal and consumer services                            *  
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation       ***
+X4ENTRYMAJ23Military technology and protective services               *  
+X4ENTRYMAJ23Health care fields                                        ***
+X4ENTRYMAJ23Business                                                  ** 
+X4ENTRYMAJ23Education                                                 ***
+X4ENTRYMAJ23Architecture                                              .  
+X4ENTRYMAJ23Communications                                            ***
+X4ENTRYMAJ23Public administration and human services                  .  
+X4ENTRYMAJ23Design and applied arts                                   ** 
+X4ENTRYMAJ23Law and legal studies                                     .  
+X4ENTRYMAJ23Theology and religious vocations                          *  
+X1FAMINCOMEFamily income &gt; $15,000 and &lt;= $35,000                        
+X1FAMINCOMEFamily income &gt; $35,000 and &lt;= $55,000                        
+X1FAMINCOMEFamily income &gt; $55,000 and &lt;= $75,000                     *  
+X1FAMINCOMEFamily income &gt; $75,000 and &lt;= $95,000                     .  
+X1FAMINCOMEFamily income &gt; $95,000 and &lt;= $115,000                    ***
+X1FAMINCOMEFamily income &gt; $115,000 and &lt;= $135,000                   ***
+X1FAMINCOMEFamily income &gt; $135,000 and &lt;= $155,000                   *  
+X1FAMINCOMEFamily income &gt; $155,000 and &lt;=$175,000                       
+X1FAMINCOMEFamily income &gt; $175,000 and &lt;= $195,000                   *  
+X1FAMINCOMEFamily income &gt; $195,000 and &lt;= $215,000                   ***
+X1FAMINCOMEFamily income &gt; $215,000 and &lt;= $235,000                      
+X1FAMINCOMEFamily income &gt; $235,000                                   ** 
+X3TCREDAPIB                                                           ***
+X1CONTROLCatholic or other private                                    ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.7035 on 7290 degrees of freedom
+Multiple R-squared:  0.3613,    Adjusted R-squared:  0.3562 
+F-statistic:  71.1 on 58 and 7290 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
 </section>
 <section id="diagnostics-constant-variance" class="slide level2">
 <h2>Diagnostics: Constant Variance</h2>
 <p>Very obvious pattern here</p>
 
-<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
+<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
 <section id="diagnostics-normality" class="slide level2">
 <h2>Diagnostics: Normality</h2>
 
-<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section>
+<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
 <section id="remedial-measures" class="slide level2">
 <h2>Remedial Measures</h2>
 <ul>
