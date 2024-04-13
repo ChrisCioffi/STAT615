@@ -7,7 +7,7 @@
 <link href="Data_Analysis_Slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="Data_Analysis_Slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="Data_Analysis_Slides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="Data_Analysis_Slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<link href="Data_Analysis_Slides_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.3.450">
 
   <meta name="author" content="Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry">
@@ -320,7 +320,7 @@
     }
   </style>
 </head>
-<body class="quarto-light">
+<body class="quarto-dark">
   <div class="reveal">
     <div class="slides">
 
@@ -352,12 +352,9 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 <section id="what-do-you-want-to-be-when-you-grow-up" class="slide level2">
 <h2>What Do You Want to Be When You Grow Up?</h2>
 <ul>
-<li><p>Decisions made at a young age may have a profound and lasting impact on individuals for many years into the future.</p></li>
-<li><p>We investigate what factors in high school impact future academic performance.</p></li>
-<li><p>In particular, we ask: how is college GPA impacted by thoughts about prospective career path in high school and what drives decisions about future occupation?</p>
-<ul>
-<li>Originally considered using earnings as our response variable.</li>
-</ul></li>
+<li><p>During their high school years, young adults are often asked to make decisions regarding post-secondary education that can have a profound and lasting impact on their lives in the future.</p></li>
+<li><p>We investigate what factors in high school may be related to future academic performance.</p></li>
+<li><p>In particular, we ask: how is college GPA related to thought about prospective career path in high school? How are other characteristics about the students themselves, their background, and their high school enviromental related to their college GPA?</p></li>
 </ul>
 </section>
 <section id="literature-reviewbackground" class="slide level2">
@@ -378,7 +375,7 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 <h2>Key Variables</h2>
 <ul>
 <li><p>Response Variable: College GPA</p></li>
-<li><p>Predictor of Interest: Desired occupation at age 30.</p>
+<li><p>Primary Predictor of Interest: Desired occupation at age 30.</p>
 <ul>
 <li>A categorical variable with 22 occupation groups.</li>
 </ul></li>
@@ -397,7 +394,14 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 <section id="desired-occupation-and-academic-performance" class="slide level2">
 <h2>Desired Occupation and Academic Performance</h2>
 
-<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
+<img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"><div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>            College_GPA    HS_GPA
+College_GPA   1.0000000 0.5630064
+HS_GPA        0.5630064 1.0000000</code></pre>
+</div>
+</div>
+</section>
 <section id="model-simple-linear-regression" class="slide level2">
 <h2>Model: Simple Linear Regression</h2>
 <ul>
@@ -430,6 +434,15 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 </section>
 <section id="additional-variables-to-add" class="slide level2">
 <h2>Additional Variables to Add</h2>
+<ul>
+<li>X4ENTRYMAJ23: Major considering upon postsecondary entry- 23 categories</li>
+<li>X1LOCALE: School locale (urbanicity)</li>
+<li>X1RACE: Student’s race/ethnicity-composite</li>
+<li>X1FAMINCOME # Total family income from all sources 2008</li>
+<li>X3TCREDAPIB #X3 Credits earned in: AP/IB combined - in Carnegie units</li>
+<li>X1CONTROL #identifies the base year school as being a Public, Catholic, or Other Private School</li>
+<li>X1SCHOOLBEL: Scale of student’s sense of school belonging</li>
+</ul>
 </section>
 <section id="multiple-linear-regression" class="slide level2">
 <h2>Multiple Linear Regression</h2>

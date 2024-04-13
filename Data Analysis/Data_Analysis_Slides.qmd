@@ -1,8 +1,9 @@
 ---
 title: "Career Choice and Academic Performance"
 author: "Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry"
-format: revealjs
-editor: visual
+format:
+  revealjs:
+    theme: "league"
 ---
 
 ## Overview
@@ -18,13 +19,11 @@ editor: visual
 
 ## What Do You Want to Be When You Grow Up?
 
--   Decisions made at a young age may have a profound and lasting impact on individuals for many years into the future.
+-   During their high school years, young adults are often asked to make decisions regarding post-secondary education that can have a profound and lasting impact on their lives in the future.
 
--   We investigate what factors in high school impact future academic performance.
+-   We investigate what factors in high school may be related to future academic performance.
 
--   In particular, we ask: how is college GPA impacted by thoughts about prospective career path in high school and what drives decisions about future occupation?
-
-    -   Originally considered using earnings as our response variable.
+-   In particular, we ask: how is college GPA related to thought about prospective career path in high school? How are other characteristics about the students themselves, their background, and their high school enviromental related to their college GPA?
 
 ## Literature Review/Background
 
@@ -39,7 +38,7 @@ editor: visual
 
 -   Response Variable: College GPA
 
--   Predictor of Interest: Desired occupation at age 30.
+-   Primary Predictor of Interest: Desired occupation at age 30.
 
     -   A categorical variable with 22 occupation groups.
 
@@ -60,6 +59,12 @@ load("../Data/HSLS_Data.rdata")
 
 ```{r}
 #| echo: false
+
+# X5GPAALL: Postsecondary Transcript: GPA at all known institutions attended
+# X1STU30OCC2: Planned student occupation at age 30
+
+
+
 HSLS_Data |>
   filter(X5GPAALL >= 0,
          X1STU30OCC2 != "Unit non-response") |>
@@ -80,6 +85,9 @@ HSLS_Data |>
 
 ```{r}
 #| echo: false
+
+# X3TGPAACAD: GPA for all academic courses
+
 HSLS_Data |>
   filter(X5GPAALL >= 0,
          X3TGPAACAD >= 0,
@@ -97,6 +105,21 @@ HSLS_Data |>
   theme_bw() +
   theme(legend.position = "none")
 ```
+
+```{r}
+#| echo: false
+HSLS_Data |>
+  filter(X5GPAALL >= 0,
+         X3TGPAACAD >= 0,
+         X1STU30OCC2 != "Unit non-response") |>
+  filter(X1STU30OCC2 != "Uncodeable") |>
+  filter(X1STU30OCC2 != "Missing") |>
+  rename(College_GPA = X5GPAALL,  HS_GPA = X3TGPAACAD) |> 
+  select(College_GPA, HS_GPA) |> 
+  cor()
+```
+
+
 
 ## Model: Simple Linear Regression
 
@@ -134,7 +157,34 @@ summary(SLR_GPA_Job_reg) |> broom::tidy() |>
 
 ## Additional Variables to Add
 
+**(KF going to clean up this slide)**
+
+- X4ENTRYMAJ23: Major considering upon postsecondary entry- 23 categories
+- X1LOCALE: School locale (urbanicity)
+- X1RACE: Student’s race/ethnicity-composite
+- X1FAMINCOME # Total family income from all sources 2008 
+- X3TCREDAPIB #X3 Credits earned in: AP/IB combined - in Carnegie units 
+- X1CONTROL #identifies the base year school as being a Public, Catholic, or Other Private School
+- X1SCHOOLBEL: Scale of student’s sense of school belonging
+
 ## Multiple Linear Regression
+
+```{r}
+#| echo: false
+
+MLR_all <- HSLS_Data |>
+  filter(X5GPAALL >= 0,
+         X3TGPAACAD >= 0,
+         X1STU30OCC2 != "Unit non-response") |>
+  filter(X1STU30OCC2 != "Uncodeable") |>
+  filter(X1STU30OCC2 != "Missing") |>
+
+# Reset reference groups
+MLR_all$X1STU30OCC2 <- relevel(SLR_GPA_Job$X1STU30OCC2, ref = "Don't know")
+MLR_all$X4ENTRYMAJ23 <- relevel(df$X4ENTRYMAJ23, ref = "Undeclared/undecided")
+
+```
+
 
 ## Variable Selection
 
