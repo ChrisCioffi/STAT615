@@ -222,7 +222,7 @@ MLR_all$X1LOCALE <- relevel(MLR_all$X1LOCALE, ref = "Rural")
 
 
 
-- MLR Model: $College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4urbanicity + \beta_5family\_income + \beta_6credits + \beta_7school\_type + \beta_8school\_belonging + \epsilon$.
+- MLR Model: $College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4family\_income + \beta_5credits + \beta_6school\_type + \beta_7urbanicity + \beta_8school\_belonging + \epsilon$.
 
 
 ```{r}
@@ -244,28 +244,38 @@ summary(MLR_all.reg) |>
 
 **Lack of Fit Test**
 
-- Null Hypothesis: $\beta_4urbanicity$ = $\beta_8school\_belonging$ = 0
+- Null Hypothesis: $\beta_7urbanicity$ = $\beta_8school\_belonging$ = 0
 - Alternative hypothesis: either of the betas for these variables is a non-zero value
+- Use alpha = 0.10
 
 ```{r}
+#| echo: false
+MLR_all.reg.reduced <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all)
+anova(MLR_all.reg.reduced,MLR_all.reg)
 
 ```
 
+- Anova table comparing the reduced model removing Urbanicity & School Belonging results in a p-value of 0.331. This value confirms insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.
 
 
 
 
 ## Variable Selection
 
+- New MLR Model: $College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4family\_income + \beta_5credits + \beta_6school\_type + \epsilon$.
+
+
 - Stepwise selection in both directions
 
 ```{r}
-step(MLR_all.reg, direction="both")
+step(MLR_all.reg.reduced, direction="both")
 ```
-
+- Stepwise selection removed 
 
 
 ## Diagnostic Tools
+
+
 
 
 ## Remedial Measures
