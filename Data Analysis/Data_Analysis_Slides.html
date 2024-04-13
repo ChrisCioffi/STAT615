@@ -445,7 +445,7 @@ HS_GPA        0.5630064 1.0000000</code></pre>
 <section id="multiple-linear-regression" class="slide level2">
 <h2>Multiple Linear Regression</h2>
 <ul>
-<li>MLR Model: <span class="math inline">\(College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4urbanicity + \beta_5family\_income + \beta_6credits + \beta_7school\_type + \beta_8school\_belonging + \epsilon\)</span>.</li>
+<li>MLR Model: <span class="math inline">\(College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4family\_income + \beta_5credits + \beta_6school\_type + \beta_7urbanicity + \beta_8school\_belonging + \epsilon\)</span>.</li>
 </ul>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -466,170 +466,185 @@ HS_GPA        0.5630064 1.0000000</code></pre>
 </div>
 </div>
 </section>
-<section id="lack-of-fit-test-remove-urbanicity-school-belonging" class="slide level2">
-<h2>Lack of Fit Test: Remove Urbanicity &amp; School Belonging?</h2>
+<section id="remove-urbanicity-school-belonging" class="slide level2">
+<h2>Remove Urbanicity &amp; School Belonging?</h2>
 <ul>
 <li>Urbanicity (X1LOCALE): Betas for all 4 categories (City, Rural, Suburb, &amp; Town) are insignificant at alpha = 0.10</li>
 <li>School Belonging (X1SCHOOLBEL): P-value for beta is 0.80</li>
 </ul>
 <p><strong>Lack of Fit Test</strong></p>
 <ul>
-<li>Null Hypothesis: <span class="math inline">\(\beta_4urbanicity\)</span> = <span class="math inline">\(\beta_8school\_belonging\)</span> = 0</li>
+<li>Null Hypothesis: <span class="math inline">\(\beta_7urbanicity\)</span> = <span class="math inline">\(\beta_8school\_belonging\)</span> = 0</li>
 <li>Alternative hypothesis: either of the betas for these variables is a non-zero value</li>
+<li>Use alpha = 0.10</li>
+</ul>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + 
+    X3TCREDAPIB + X1CONTROL
+Model 2: X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1LOCALE + 
+    X1FAMINCOME + X3TCREDAPIB + X1CONTROL + X1SCHOOLBEL
+  Res.Df    RSS Df Sum of Sq    F Pr(&gt;F)
+1   7290 3608.0                         
+2   7286 3605.7  4    2.2764 1.15  0.331</code></pre>
+</div>
+</div>
+<ul>
+<li>Anova table comparing the reduced model removing Urbanicity &amp; School Belonging results in a p-value of 0.331. This value confirms insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.</li>
 </ul>
 </section>
 <section id="variable-selection" class="slide level2">
 <h2>Variable Selection</h2>
 <ul>
-<li>Stepwise selection in both directions</li>
+<li><p>New MLR Model: <span class="math display">\[College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4family\_income + \beta_5credits + \beta_6school\_type + \epsilon\]</span>.</p></li>
+<li><p>Stepwise selection in both directions</p></li>
 </ul>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Start:  AIC=-5106.88
-X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1LOCALE + 
-    X1FAMINCOME + X3TCREDAPIB + X1CONTROL + X1SCHOOLBEL
-
-               Df Sum of Sq    RSS     AIC
-- X1STU30OCC2  21     17.34 3623.0 -5113.6
-- X1SCHOOLBEL   1      0.03 3605.7 -5108.8
-- X1LOCALE      3      2.24 3607.9 -5108.3
-&lt;none&gt;                      3605.7 -5106.9
-- X1CONTROL     1      7.92 3613.6 -5092.8
-- X1FAMINCOME  12     20.46 3626.1 -5089.3
-- X3TCREDAPIB   1     31.62 3637.3 -5044.7
-- X4ENTRYMAJ23 22     54.71 3660.4 -5040.2
-- X3TGPAACAD    1   1208.83 4814.5 -2984.1
-
-Step:  AIC=-5113.63
-X5GPAALL ~ X3TGPAACAD + X4ENTRYMAJ23 + X1LOCALE + X1FAMINCOME + 
-    X3TCREDAPIB + X1CONTROL + X1SCHOOLBEL
-
-               Df Sum of Sq    RSS     AIC
-- X1SCHOOLBEL   1      0.03 3623.0 -5115.6
-- X1LOCALE      3      2.32 3625.3 -5114.9
-&lt;none&gt;                      3623.0 -5113.6
-+ X1STU30OCC2  21     17.34 3605.7 -5106.9
-- X1CONTROL     1      7.65 3630.7 -5100.1
-- X1FAMINCOME  12     20.66 3643.7 -5095.9
-- X3TCREDAPIB   1     30.85 3653.9 -5053.3
-- X4ENTRYMAJ23 22     63.41 3686.4 -5030.1
-- X3TGPAACAD    1   1233.63 4856.6 -2962.1
-
-Step:  AIC=-5115.57
-X5GPAALL ~ X3TGPAACAD + X4ENTRYMAJ23 + X1LOCALE + X1FAMINCOME + 
+<pre><code>Start:  AIC=-5110.25
+X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + 
     X3TCREDAPIB + X1CONTROL
 
                Df Sum of Sq    RSS     AIC
-- X1LOCALE      3      2.32 3625.4 -5116.9
-&lt;none&gt;                      3623.0 -5115.6
-+ X1SCHOOLBEL   1      0.03 3623.0 -5113.6
-+ X1STU30OCC2  21     17.33 3605.7 -5108.8
-- X1CONTROL     1      7.79 3630.8 -5101.8
-- X1FAMINCOME  12     20.66 3643.7 -5097.8
-- X3TCREDAPIB   1     30.91 3654.0 -5055.1
-- X4ENTRYMAJ23 22     63.39 3686.4 -5032.1
-- X3TGPAACAD    1   1242.81 4865.9 -2950.1
-
-Step:  AIC=-5116.87
-X5GPAALL ~ X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + 
-    X1CONTROL
-
-               Df Sum of Sq    RSS     AIC
-&lt;none&gt;                      3625.4 -5116.9
-+ X1LOCALE      3      2.32 3623.0 -5115.6
-+ X1SCHOOLBEL   1      0.03 3625.3 -5114.9
-+ X1STU30OCC2  21     17.41 3608.0 -5110.2
-- X1CONTROL     1      8.76 3634.1 -5101.1
-- X1FAMINCOME  12     21.78 3647.1 -5096.9
-- X3TCREDAPIB   1     34.59 3660.0 -5049.1
-- X4ENTRYMAJ23 22     62.93 3688.3 -5034.4
-- X3TGPAACAD    1   1251.50 4876.9 -2939.5</code></pre>
+&lt;none&gt;                      3608.0 -5110.2
+- X1CONTROL     1      9.22 3617.2 -5093.5
+- X1FAMINCOME  12     21.53 3629.5 -5090.5
+- X4ENTRYMAJ23 22     54.19 3662.1 -5044.7
+- X3TCREDAPIB   1     35.54 3643.5 -5040.2
+- X3TGPAACAD    1   1225.29 4833.2 -2963.6</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-lm(formula = X5GPAALL ~ X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + 
-    X3TCREDAPIB + X1CONTROL, data = MLR_all)
+lm(formula = X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + 
+    X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all)
 
 Coefficients:
-                                                    (Intercept)  
-                                                       0.443203  
-                                                     X3TGPAACAD  
-                                                       0.683010  
-                  X4ENTRYMAJ23Computer and information sciences  
-                                                      -0.017292  
-             X4ENTRYMAJ23Engineering and engineering technology  
-                                                      -0.016695  
-      X4ENTRYMAJ23Biological and physical science, science tech  
-                                                       0.067915  
-                                        X4ENTRYMAJ23Mathematics  
-                                                       0.068393  
-                  X4ENTRYMAJ23Agriculture and natural resources  
-                                                       0.146998  
-                          X4ENTRYMAJ23General studies and other  
-                                                       0.145168  
-                                    X4ENTRYMAJ23Social sciences  
-                                                       0.151396  
-                                         X4ENTRYMAJ23Psychology  
-                                                       0.135522  
-                                         X4ENTRYMAJ23Humanities  
-                                                       0.263394  
-                                            X4ENTRYMAJ23History  
-                                                       0.137828  
-                     X4ENTRYMAJ23Personal and consumer services  
-                                                       0.131323  
-X4ENTRYMAJ23Manufacturing, construction, repair, transportation  
-                                                       0.439606  
-        X4ENTRYMAJ23Military technology and protective services  
-                                                       0.131886  
-                                 X4ENTRYMAJ23Health care fields  
-                                                       0.148122  
-                                           X4ENTRYMAJ23Business  
-                                                       0.118377  
-                                          X4ENTRYMAJ23Education  
-                                                       0.244333  
-                                       X4ENTRYMAJ23Architecture  
-                                                       0.180348  
-                                     X4ENTRYMAJ23Communications  
-                                                       0.280983  
-           X4ENTRYMAJ23Public administration and human services  
-                                                       0.165207  
-                            X4ENTRYMAJ23Design and applied arts  
-                                                       0.252739  
-                              X4ENTRYMAJ23Law and legal studies  
-                                                       0.208269  
-                   X4ENTRYMAJ23Theology and religious vocations  
-                                                       0.359985  
-              X1FAMINCOMEFamily income &gt; $15,000 and &lt;= $35,000  
-                                                       0.008572  
-              X1FAMINCOMEFamily income &gt; $35,000 and &lt;= $55,000  
-                                                       0.052885  
-              X1FAMINCOMEFamily income &gt; $55,000 and &lt;= $75,000  
-                                                       0.103142  
-              X1FAMINCOMEFamily income &gt; $75,000 and &lt;= $95,000  
-                                                       0.076603  
-             X1FAMINCOMEFamily income &gt; $95,000 and &lt;= $115,000  
-                                                       0.151101  
-            X1FAMINCOMEFamily income &gt; $115,000 and &lt;= $135,000  
-                                                       0.171650  
-            X1FAMINCOMEFamily income &gt; $135,000 and &lt;= $155,000  
-                                                       0.122828  
-             X1FAMINCOMEFamily income &gt; $155,000 and &lt;=$175,000  
-                                                       0.095757  
-            X1FAMINCOMEFamily income &gt; $175,000 and &lt;= $195,000  
-                                                       0.184796  
-            X1FAMINCOMEFamily income &gt; $195,000 and &lt;= $215,000  
-                                                       0.205389  
-            X1FAMINCOMEFamily income &gt; $215,000 and &lt;= $235,000  
-                                                       0.147294  
-                            X1FAMINCOMEFamily income &gt; $235,000  
-                                                       0.155075  
-                                                    X3TCREDAPIB  
-                                                       0.028796  
-                             X1CONTROLCatholic or other private  
-                                                       0.083667  </code></pre>
+                                                          (Intercept)  
+                                                            0.4541565  
+                                    X1STU30OCC2Management Occupations  
+                                                            0.0153304  
+             X1STU30OCC2Business and Financial Operations Occupations  
+                                                            0.0782835  
+                     X1STU30OCC2Computer and Mathematical Occupations  
+                                                           -0.0370277  
+                  X1STU30OCC2Architecture and Engineering Occupations  
+                                                           -0.0585375  
+            X1STU30OCC2Life, Physical, and Social Science Occupations  
+                                                           -0.0304988  
+                 X1STU30OCC2Community and Social Services Occupations  
+                                                            0.1392815  
+                                         X1STU30OCC2Legal Occupations  
+                                                           -0.0737682  
+              X1STU30OCC2Education, Training, and Library Occupations  
+                                                            0.0670447  
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations  
+                                                           -0.0050668  
+        X1STU30OCC2Healthcare Practitioners and Technical Occupations  
+                                                           -0.0302980  
+                            X1STU30OCC2Healthcare Support Occupations  
+                                                            0.0869059  
+                            X1STU30OCC2Protective Service Occupations  
+                                                           -0.0524724  
+          X1STU30OCC2Food Preparation and Serving Related Occupations  
+                                                           -0.2356375  
+                     X1STU30OCC2Personal Care and Service Occupations  
+                                                            0.0982343  
+                             X1STU30OCC2Sales and Related Occupations  
+                                                            0.0434307  
+                X1STU30OCC2Farming, Fishing, and Forestry Occupations  
+                                                            0.1171752  
+                   X1STU30OCC2Construction and Extraction Occupations  
+                                                            0.0705477  
+         X1STU30OCC2Installation, Maintenance, and Repair Occupations  
+                                                            0.1269173  
+                                    X1STU30OCC2Production Occupations  
+                                                            0.1494096  
+            X1STU30OCC2Transportation and Material Moving Occupations  
+                                                            0.1271622  
+                             X1STU30OCC2Military Specific Occupations  
+                                                           -0.1665261  
+                                                           X3TGPAACAD  
+                                                            0.6807046  
+                        X4ENTRYMAJ23Computer and information sciences  
+                                                           -0.0041207  
+                   X4ENTRYMAJ23Engineering and engineering technology  
+                                                            0.0002693  
+            X4ENTRYMAJ23Biological and physical science, science tech  
+                                                            0.0805061  
+                                              X4ENTRYMAJ23Mathematics  
+                                                            0.0729173  
+                        X4ENTRYMAJ23Agriculture and natural resources  
+                                                            0.1474664  
+                                X4ENTRYMAJ23General studies and other  
+                                                            0.1499260  
+                                          X4ENTRYMAJ23Social sciences  
+                                                            0.1688093  
+                                               X4ENTRYMAJ23Psychology  
+                                                            0.1377309  
+                                               X4ENTRYMAJ23Humanities  
+                                                            0.2607402  
+                                                  X4ENTRYMAJ23History  
+                                                            0.1475859  
+                           X4ENTRYMAJ23Personal and consumer services  
+                                                            0.1386387  
+      X4ENTRYMAJ23Manufacturing, construction, repair, transportation  
+                                                            0.4337423  
+              X4ENTRYMAJ23Military technology and protective services  
+                                                            0.1482326  
+                                       X4ENTRYMAJ23Health care fields  
+                                                            0.1591009  
+                                                 X4ENTRYMAJ23Business  
+                                                            0.1194903  
+                                                X4ENTRYMAJ23Education  
+                                                            0.2294671  
+                                             X4ENTRYMAJ23Architecture  
+                                                            0.2198331  
+                                           X4ENTRYMAJ23Communications  
+                                                            0.2830411  
+                 X4ENTRYMAJ23Public administration and human services  
+                                                            0.1670796  
+                                  X4ENTRYMAJ23Design and applied arts  
+                                                            0.2517047  
+                                    X4ENTRYMAJ23Law and legal studies  
+                                                            0.2328264  
+                         X4ENTRYMAJ23Theology and religious vocations  
+                                                            0.3499678  
+                    X1FAMINCOMEFamily income &gt; $15,000 and &lt;= $35,000  
+                                                            0.0097161  
+                    X1FAMINCOMEFamily income &gt; $35,000 and &lt;= $55,000  
+                                                            0.0542806  
+                    X1FAMINCOMEFamily income &gt; $55,000 and &lt;= $75,000  
+                                                            0.1061207  
+                    X1FAMINCOMEFamily income &gt; $75,000 and &lt;= $95,000  
+                                                            0.0811145  
+                   X1FAMINCOMEFamily income &gt; $95,000 and &lt;= $115,000  
+                                                            0.1507057  
+                  X1FAMINCOMEFamily income &gt; $115,000 and &lt;= $135,000  
+                                                            0.1707281  
+                  X1FAMINCOMEFamily income &gt; $135,000 and &lt;= $155,000  
+                                                            0.1262002  
+                   X1FAMINCOMEFamily income &gt; $155,000 and &lt;=$175,000  
+                                                            0.0952562  
+                  X1FAMINCOMEFamily income &gt; $175,000 and &lt;= $195,000  
+                                                            0.1803418  
+                  X1FAMINCOMEFamily income &gt; $195,000 and &lt;= $215,000  
+                                                            0.2102978  
+                  X1FAMINCOMEFamily income &gt; $215,000 and &lt;= $235,000  
+                                                            0.1432016  
+                                  X1FAMINCOMEFamily income &gt; $235,000  
+                                                            0.1595624  
+                                                          X3TCREDAPIB  
+                                                            0.0292806  
+                                   X1CONTROLCatholic or other private  
+                                                            0.0861247  </code></pre>
 </div>
 </div>
+<ul>
+<li>Stepwise selection did not remove any variables</li>
+</ul>
 </section>
 <section id="diagnostic-tools" class="slide level2">
 <h2>Diagnostic Tools</h2>

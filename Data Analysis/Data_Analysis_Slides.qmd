@@ -237,7 +237,7 @@ summary(MLR_all.reg) |>
 
 
 
-## Lack of Fit Test: Remove Urbanicity & School Belonging?
+## Remove Urbanicity & School Belonging?
 
 - Urbanicity (X1LOCALE): Betas for all 4 categories (City, Rural, Suburb, & Town) are insignificant at alpha = 0.10
 - School Belonging (X1SCHOOLBEL): P-value for beta is 0.80
@@ -262,15 +262,18 @@ anova(MLR_all.reg.reduced,MLR_all.reg)
 
 ## Variable Selection
 
-- New MLR Model: $College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4family\_income + \beta_5credits + \beta_6school\_type + \epsilon$.
+- New MLR Model: $$College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4family\_income + \beta_5credits + \beta_6school\_type + \epsilon$$.
 
 
 - Stepwise selection in both directions
 
 ```{r}
-step(MLR_all.reg.reduced, direction="both")
+step(MLR_all.reg.reduced,
+     direction="both",
+     scope = list(lower = ~ X5GPAALL ~ X1STU30OCC2)) # force inclusion of Planned occupation (X1STU30OCC2)
+
 ```
-- Stepwise selection removed 
+- Stepwise selection did not remove any variables
 
 
 ## Diagnostic Tools
