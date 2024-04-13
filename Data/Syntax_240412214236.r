@@ -23,8 +23,11 @@
 # Change working directory
 # setwd("C:/OnlineCodebook/HSLS")
 
-# Load R Data File (change the )
-load("HSLS_17_STUDENT_PETS_SR_v1_0.rdata")
+# Load R Data File (KF: this file is hidden from the remote repo )
+# load("hsls_17_student_pets_sr_v1_0.rdata")
+load("/Users/kristinafrazier/Documents/AU/DATA_615/Project/STAT615/Data/hsls_17_student_pets_sr_v1_0.rdata")
+
+HSLS_Data <- hsls_17_student_pets_sr_v1_0
 
 # Create vector of selected variables
 keepvars <- c(
@@ -63,10 +66,14 @@ keepvars <- c(
 )
 
 # Create new object containing only selected variables
-HSLS_17_STUDENT_PETS_SR_v1_0_240412214236 <- HSLS_17_STUDENT_PETS_SR_v1_0[keepvars]
+HSLS_Data <- HSLS_Data[keepvars]
 
 # Save dataset
-save(HSLS_17_STUDENT_PETS_SR_v1_0_240412214236, file="HSLS_17_STUDENT_PETS_SR_v1_0_240412214236.rdata")
+# save(HSLS_Data, file="/Users/kristinafrazier/Documents/AU/DATA_615/Project/STAT615/Data/HSLS_Data.rdata")
+
+
+
+
 
 # Set the working dataset
 attach(HSLS_17_STUDENT_PETS_SR_v1_0_240412214236)

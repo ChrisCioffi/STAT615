@@ -180,9 +180,6 @@ summary(SLR_GPA_Job_reg) |>
 
 ## Multiple Linear Regression
 
-```{r}
-HSLS_Data$X1LOCALE
-```
 
 
 ```{r}
