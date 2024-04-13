@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Mike McHenry">
+
+<title>Project Exploratory Data Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Project_EDA_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Project_EDA_files/libs/quarto-html/quarto.js"></script>
+<script src="Project_EDA_files/libs/quarto-html/popper.min.js"></script>
+<script src="Project_EDA_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Project_EDA_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Project_EDA_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Project_EDA_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Project_EDA_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Project_EDA_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Project_EDA_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Project Exploratory Data Analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Mike McHenry </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="load-data-and-libraries" class="level1">
+<h1>Load Data and Libraries</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:/Users/micsm/OneDrive/Documents/MSDS2/STAT 615/Project"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"./Data/HSLS_Data.rdata"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="investigate-response-and-predictor-variables" class="level1">
+<h1>Investigate Response and Predictor Variables</h1>
+<section id="major-considering-upon-postsecondary-entry" class="level2">
+<h2 class="anchored" data-anchor-id="major-considering-upon-postsecondary-entry">Major considering upon postsecondary entry</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>HSLS_Data <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(X4ENTRYMAJ23) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">|&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 26 × 2
+# Groups:   X4ENTRYMAJ23 [26]
+   X4ENTRYMAJ23                                      n
+   &lt;fct&gt;                                         &lt;int&gt;
+ 1 Unit non-response                              6168
+ 2 Item legitimate skip/NA                        4281
+ 3 Health care fields                             2266
+ 4 Business                                       1728
+ 5 Biological and physical science, science tech  1347
+ 6 Engineering and engineering technology         1166
+ 7 Education                                       760
+ 8 Undeclared/undecided                            695
+ 9 Humanities                                      643
+10 Psychology                                      535
+# ℹ 16 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>HSLS_Data <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(X5GPAALL) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(X5GPAALL)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 44 × 2
+# Groups:   X5GPAALL [44]
+   X5GPAALL     n
+      &lt;dbl&gt; &lt;int&gt;
+ 1     -9     345
+ 2     -8    4178
+ 3     -7     227
+ 4     -6    6165
+ 5      0     343
+ 6      0.2    61
+ 7      0.3    41
+ 8      0.4    48
+ 9      0.5    66
+10      0.6    65
+# ℹ 34 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>HSLS_Data <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(X1RACE) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 2
+# Groups:   X1RACE [9]
+  X1RACE                                             n
+  &lt;fct&gt;                                          &lt;int&gt;
+1 White, non-Hispanic                            12082
+2 Hispanic, race specified                        3375
+3 Black/African-American, non-Hispanic            2450
+4 Asian, non-Hispanic                             1952
+5 More than one race, non-Hispanic                1941
+6 Missing                                         1006
+7 Hispanic, no race specified                      422
+8 Amer. Indian/Alaska Native, non-Hispanic         165
+9 Native Hawaiian/Pacific Islander, non-Hispanic   110</code></pre>
+</div>
+</div>
+<p>Need to drop out about 10,000 observations with missing values.</p>
+<p>Let’s make the reference group for the regressions the major with the lowest GPA on average.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build df</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>SLR_GPA_Major <span class="ot">&lt;-</span> HSLS_Data <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X5GPAALL <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>         X4ENTRYMAJ23 <span class="sc">!=</span> <span class="st">"Unit non-response"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X4ENTRYMAJ23 <span class="sc">!=</span> <span class="st">"Item legitimate skip/NA"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X4ENTRYMAJ23 <span class="sc">!=</span> <span class="st">"Missing"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(X5GPAALL, X4ENTRYMAJ23)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># set reference group</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>SLR_GPA_Major<span class="sc">$</span>X4ENTRYMAJ23 <span class="ot">&lt;-</span> <span class="fu">relevel</span>(SLR_GPA_Major<span class="sc">$</span>X4ENTRYMAJ23, <span class="at">ref =</span> <span class="st">"Undeclared/undecided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Conveniently, that is undeclared/undecided, which is a good comparison.</p>
+<p>Let’s look at relationship between high school GPA and college GPA organized by prospective major.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>HSLS_Data <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X5GPAALL <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>         X3TGPAACAD <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>         X4ENTRYMAJ23 <span class="sc">!=</span> <span class="st">"Unit non-response"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X4ENTRYMAJ23 <span class="sc">!=</span> <span class="st">"Item legitimate skip/NA"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X4ENTRYMAJ23 <span class="sc">!=</span> <span class="st">"Missing"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(X5GPAALL, X3TGPAACAD, X4ENTRYMAJ23) <span class="sc">|&gt;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> X3TGPAACAD, <span class="at">y =</span> X5GPAALL, <span class="at">color =</span> X4ENTRYMAJ23)) <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Project_EDA_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Positive association for all majors.</p>
+</section>
+<section id="job-wanted-in-the-base-year" class="level2">
+<h2 class="anchored" data-anchor-id="job-wanted-in-the-base-year">Job Wanted in the Base Year</h2>
+<p>This variable provides information on what job students wanted or expected they’d have when they were 30 years old. This was recorded in the base year of the survey, when the students were in 9th grade.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>HSLS_Data <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(X1STU30OCC2) <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">|&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 25 × 2
+# Groups:   X1STU30OCC2 [25]
+   X1STU30OCC2                                                    n
+   &lt;fct&gt;                                                      &lt;int&gt;
+ 1 Don't know                                                  6056
+ 2 Healthcare Practitioners and Technical Occupations          4348
+ 3 Arts, Design, Entertainment, Sports, and Media Occupations  2610
+ 4 Unit non-response                                           2059
+ 5 Life, Physical, and Social Science Occupations              1055
+ 6 Architecture and Engineering Occupations                    1035
+ 7 Legal Occupations                                            821
+ 8 Education, Training, and Library Occupations                 770
+ 9 Protective Service Occupations                               597
+10 Military Specific Occupations                                576
+# ℹ 15 more rows</code></pre>
+</div>
+</div>
+<p>22 prospective occupations (25 but we drop non-responses, missing and uncodeable values)</p>
+<p>Let’s look at relationship between high school GPA and college GPA organized by prospective occupation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>HSLS_Data <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X5GPAALL <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>         X3TGPAACAD <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>         X1STU30OCC2 <span class="sc">!=</span> <span class="st">"Unit non-response"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X1STU30OCC2 <span class="sc">!=</span> <span class="st">"Uncodeable"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X1STU30OCC2 <span class="sc">!=</span> <span class="st">"Missing"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(X5GPAALL, X3TGPAACAD, X1STU30OCC2) <span class="sc">|&gt;</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> X3TGPAACAD, <span class="at">y =</span> X5GPAALL, <span class="at">color =</span> X1STU30OCC2)) <span class="sc">+</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Project_EDA_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Positive association for all jobs.</p>
+</section>
+</section>
+<section id="preliminary-regressions" class="level1">
+<h1>Preliminary Regressions</h1>
+<section id="slr-of-college-gpa-on-prospective-major" class="level2">
+<h2 class="anchored" data-anchor-id="slr-of-college-gpa-on-prospective-major">SLR of College GPA on Prospective Major</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>SLR_GPA_Major_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> SLR_GPA_Major, X5GPAALL<span class="sc">~</span>X4ENTRYMAJ23)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(SLR_GPA_Major_reg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = X5GPAALL ~ X4ENTRYMAJ23, data = SLR_GPA_Major)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.0040 -0.4705  0.1732  0.6660  1.5295 
+
+Coefficients:
+                                                                Estimate
+(Intercept)                                                      2.47046
+X4ENTRYMAJ23Computer and information sciences                    0.08181
+X4ENTRYMAJ23Engineering and engineering technology               0.35638
+X4ENTRYMAJ23Biological and physical science, science tech        0.52981
+X4ENTRYMAJ23Mathematics                                          0.53349
+X4ENTRYMAJ23Agriculture and natural resources                    0.37810
+X4ENTRYMAJ23General studies and other                            0.06519
+X4ENTRYMAJ23Social sciences                                      0.52954
+X4ENTRYMAJ23Psychology                                           0.33714
+X4ENTRYMAJ23Humanities                                           0.51501
+X4ENTRYMAJ23History                                              0.39001
+X4ENTRYMAJ23Personal and consumer services                       0.23333
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation  0.12727
+X4ENTRYMAJ23Military technology and protective services          0.02165
+X4ENTRYMAJ23Health care fields                                   0.26353
+X4ENTRYMAJ23Business                                             0.26120
+X4ENTRYMAJ23Education                                            0.39480
+X4ENTRYMAJ23Architecture                                         0.44464
+X4ENTRYMAJ23Communications                                       0.46299
+X4ENTRYMAJ23Public administration and human services             0.23169
+X4ENTRYMAJ23Design and applied arts                              0.34829
+X4ENTRYMAJ23Law and legal studies                                0.19026
+X4ENTRYMAJ23Theology and religious vocations                     0.59772
+                                                                Std. Error
+(Intercept)                                                        0.03950
+X4ENTRYMAJ23Computer and information sciences                      0.05945
+X4ENTRYMAJ23Engineering and engineering technology                 0.04920
+X4ENTRYMAJ23Biological and physical science, science tech          0.04749
+X4ENTRYMAJ23Mathematics                                            0.10884
+X4ENTRYMAJ23Agriculture and natural resources                      0.07797
+X4ENTRYMAJ23General studies and other                              0.07197
+X4ENTRYMAJ23Social sciences                                        0.06164
+X4ENTRYMAJ23Psychology                                             0.05798
+X4ENTRYMAJ23Humanities                                             0.05545
+X4ENTRYMAJ23History                                                0.10320
+X4ENTRYMAJ23Personal and consumer services                         0.06345
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation    0.07747
+X4ENTRYMAJ23Military technology and protective services            0.06134
+X4ENTRYMAJ23Health care fields                                     0.04484
+X4ENTRYMAJ23Business                                               0.04616
+X4ENTRYMAJ23Education                                              0.05371
+X4ENTRYMAJ23Architecture                                           0.12771
+X4ENTRYMAJ23Communications                                         0.06502
+X4ENTRYMAJ23Public administration and human services               0.09983
+X4ENTRYMAJ23Design and applied arts                                0.08756
+X4ENTRYMAJ23Law and legal studies                                  0.12458
+X4ENTRYMAJ23Theology and religious vocations                       0.19259
+                                                                t value
+(Intercept)                                                      62.543
+X4ENTRYMAJ23Computer and information sciences                     1.376
+X4ENTRYMAJ23Engineering and engineering technology                7.244
+X4ENTRYMAJ23Biological and physical science, science tech        11.157
+X4ENTRYMAJ23Mathematics                                           4.902
+X4ENTRYMAJ23Agriculture and natural resources                     4.849
+X4ENTRYMAJ23General studies and other                             0.906
+X4ENTRYMAJ23Social sciences                                       8.590
+X4ENTRYMAJ23Psychology                                            5.815
+X4ENTRYMAJ23Humanities                                            9.287
+X4ENTRYMAJ23History                                               3.779
+X4ENTRYMAJ23Personal and consumer services                        3.677
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation   1.643
+X4ENTRYMAJ23Military technology and protective services           0.353
+X4ENTRYMAJ23Health care fields                                    5.877
+X4ENTRYMAJ23Business                                              5.659
+X4ENTRYMAJ23Education                                             7.350
+X4ENTRYMAJ23Architecture                                          3.482
+X4ENTRYMAJ23Communications                                        7.120
+X4ENTRYMAJ23Public administration and human services              2.321
+X4ENTRYMAJ23Design and applied arts                               3.978
+X4ENTRYMAJ23Law and legal studies                                 1.527
+X4ENTRYMAJ23Theology and religious vocations                      3.104
+                                                                Pr(&gt;|t|)    
+(Intercept)                                                      &lt; 2e-16 ***
+X4ENTRYMAJ23Computer and information sciences                   0.168795    
+X4ENTRYMAJ23Engineering and engineering technology              4.67e-13 ***
+X4ENTRYMAJ23Biological and physical science, science tech        &lt; 2e-16 ***
+X4ENTRYMAJ23Mathematics                                         9.65e-07 ***
+X4ENTRYMAJ23Agriculture and natural resources                   1.26e-06 ***
+X4ENTRYMAJ23General studies and other                           0.365053    
+X4ENTRYMAJ23Social sciences                                      &lt; 2e-16 ***
+X4ENTRYMAJ23Psychology                                          6.25e-09 ***
+X4ENTRYMAJ23Humanities                                           &lt; 2e-16 ***
+X4ENTRYMAJ23History                                             0.000158 ***
+X4ENTRYMAJ23Personal and consumer services                      0.000237 ***
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation 0.100458    
+X4ENTRYMAJ23Military technology and protective services         0.724076    
+X4ENTRYMAJ23Health care fields                                  4.31e-09 ***
+X4ENTRYMAJ23Business                                            1.57e-08 ***
+X4ENTRYMAJ23Education                                           2.14e-13 ***
+X4ENTRYMAJ23Architecture                                        0.000500 ***
+X4ENTRYMAJ23Communications                                      1.15e-12 ***
+X4ENTRYMAJ23Public administration and human services            0.020312 *  
+X4ENTRYMAJ23Design and applied arts                             7.01e-05 ***
+X4ENTRYMAJ23Law and legal studies                               0.126737    
+X4ENTRYMAJ23Theology and religious vocations                    0.001917 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.8841 on 9948 degrees of freedom
+Multiple R-squared:  0.03014,   Adjusted R-squared:  0.028 
+F-statistic: 14.05 on 22 and 9948 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="mlr-of-college-gpa-on-prospective-major-and-hs-gpa" class="level2">
+<h2 class="anchored" data-anchor-id="mlr-of-college-gpa-on-prospective-major-and-hs-gpa">MLR of College GPA on Prospective Major and HS GPA</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build df</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>MLR_GPA_Major <span class="ot">&lt;-</span> HSLS_Data <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X5GPAALL <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>         X3TGPAACAD <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>         X4ENTRYMAJ23 <span class="sc">!=</span> <span class="st">"Unit non-response"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X4ENTRYMAJ23 <span class="sc">!=</span> <span class="st">"Item legitimate skip/NA"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X4ENTRYMAJ23 <span class="sc">!=</span> <span class="st">"Missing"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(X5GPAALL, X3TGPAACAD, X4ENTRYMAJ23)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co"># set reference group</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>MLR_GPA_Major<span class="sc">$</span>X4ENTRYMAJ23 <span class="ot">&lt;-</span> <span class="fu">relevel</span>(MLR_GPA_Major<span class="sc">$</span>X4ENTRYMAJ23, <span class="at">ref =</span> <span class="st">"Undeclared/undecided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>MLR_GPA_Major_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> MLR_GPA_Major, X5GPAALL<span class="sc">~</span>X3TGPAACAD<span class="sc">+</span>X4ENTRYMAJ23)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(MLR_GPA_Major_reg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = X5GPAALL ~ X3TGPAACAD + X4ENTRYMAJ23, data = MLR_GPA_Major)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.1764 -0.3560  0.1095  0.4585  2.8329 
+
+Coefficients:
+                                                                Estimate
+(Intercept)                                                      0.43239
+X3TGPAACAD                                                       0.72753
+X4ENTRYMAJ23Computer and information sciences                    0.04208
+X4ENTRYMAJ23Engineering and engineering technology               0.07730
+X4ENTRYMAJ23Biological and physical science, science tech        0.15513
+X4ENTRYMAJ23Mathematics                                          0.16273
+X4ENTRYMAJ23Agriculture and natural resources                    0.19515
+X4ENTRYMAJ23General studies and other                            0.18044
+X4ENTRYMAJ23Social sciences                                      0.24294
+X4ENTRYMAJ23Psychology                                           0.19765
+X4ENTRYMAJ23Humanities                                           0.30345
+X4ENTRYMAJ23History                                              0.23968
+X4ENTRYMAJ23Personal and consumer services                       0.19643
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation  0.47533
+X4ENTRYMAJ23Military technology and protective services          0.14570
+X4ENTRYMAJ23Health care fields                                   0.15777
+X4ENTRYMAJ23Business                                             0.17557
+X4ENTRYMAJ23Education                                            0.24396
+X4ENTRYMAJ23Architecture                                         0.15974
+X4ENTRYMAJ23Communications                                       0.32827
+X4ENTRYMAJ23Public administration and human services             0.16480
+X4ENTRYMAJ23Design and applied arts                              0.28782
+X4ENTRYMAJ23Law and legal studies                                0.25280
+X4ENTRYMAJ23Theology and religious vocations                     0.38865
+                                                                Std. Error
+(Intercept)                                                        0.04549
+X3TGPAACAD                                                         0.01101
+X4ENTRYMAJ23Computer and information sciences                      0.05034
+X4ENTRYMAJ23Engineering and engineering technology                 0.04185
+X4ENTRYMAJ23Biological and physical science, science tech          0.04061
+X4ENTRYMAJ23Mathematics                                            0.09279
+X4ENTRYMAJ23Agriculture and natural resources                      0.06622
+X4ENTRYMAJ23General studies and other                              0.06150
+X4ENTRYMAJ23Social sciences                                        0.05270
+X4ENTRYMAJ23Psychology                                             0.04919
+X4ENTRYMAJ23Humanities                                             0.04717
+X4ENTRYMAJ23History                                                0.08716
+X4ENTRYMAJ23Personal and consumer services                         0.05412
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation    0.06508
+X4ENTRYMAJ23Military technology and protective services            0.05191
+X4ENTRYMAJ23Health care fields                                     0.03804
+X4ENTRYMAJ23Business                                               0.03917
+X4ENTRYMAJ23Education                                              0.04563
+X4ENTRYMAJ23Architecture                                           0.11001
+X4ENTRYMAJ23Communications                                         0.05524
+X4ENTRYMAJ23Public administration and human services               0.08342
+X4ENTRYMAJ23Design and applied arts                                0.07432
+X4ENTRYMAJ23Law and legal studies                                  0.10991
+X4ENTRYMAJ23Theology and religious vocations                       0.16727
+                                                                t value
+(Intercept)                                                       9.505
+X3TGPAACAD                                                       66.089
+X4ENTRYMAJ23Computer and information sciences                     0.836
+X4ENTRYMAJ23Engineering and engineering technology                1.847
+X4ENTRYMAJ23Biological and physical science, science tech         3.820
+X4ENTRYMAJ23Mathematics                                           1.754
+X4ENTRYMAJ23Agriculture and natural resources                     2.947
+X4ENTRYMAJ23General studies and other                             2.934
+X4ENTRYMAJ23Social sciences                                       4.610
+X4ENTRYMAJ23Psychology                                            4.018
+X4ENTRYMAJ23Humanities                                            6.433
+X4ENTRYMAJ23History                                               2.750
+X4ENTRYMAJ23Personal and consumer services                        3.629
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation   7.304
+X4ENTRYMAJ23Military technology and protective services           2.807
+X4ENTRYMAJ23Health care fields                                    4.148
+X4ENTRYMAJ23Business                                              4.483
+X4ENTRYMAJ23Education                                             5.346
+X4ENTRYMAJ23Architecture                                          1.452
+X4ENTRYMAJ23Communications                                        5.942
+X4ENTRYMAJ23Public administration and human services              1.976
+X4ENTRYMAJ23Design and applied arts                               3.873
+X4ENTRYMAJ23Law and legal studies                                 2.300
+X4ENTRYMAJ23Theology and religious vocations                      2.324
+                                                                Pr(&gt;|t|)    
+(Intercept)                                                      &lt; 2e-16 ***
+X3TGPAACAD                                                       &lt; 2e-16 ***
+X4ENTRYMAJ23Computer and information sciences                   0.403265    
+X4ENTRYMAJ23Engineering and engineering technology              0.064753 .  
+X4ENTRYMAJ23Biological and physical science, science tech       0.000134 ***
+X4ENTRYMAJ23Mathematics                                         0.079516 .  
+X4ENTRYMAJ23Agriculture and natural resources                   0.003215 ** 
+X4ENTRYMAJ23General studies and other                           0.003355 ** 
+X4ENTRYMAJ23Social sciences                                     4.08e-06 ***
+X4ENTRYMAJ23Psychology                                          5.91e-05 ***
+X4ENTRYMAJ23Humanities                                          1.31e-10 ***
+X4ENTRYMAJ23History                                             0.005970 ** 
+X4ENTRYMAJ23Personal and consumer services                      0.000286 ***
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation 3.02e-13 ***
+X4ENTRYMAJ23Military technology and protective services         0.005011 ** 
+X4ENTRYMAJ23Health care fields                                  3.39e-05 ***
+X4ENTRYMAJ23Business                                            7.45e-06 ***
+X4ENTRYMAJ23Education                                           9.19e-08 ***
+X4ENTRYMAJ23Architecture                                        0.146493    
+X4ENTRYMAJ23Communications                                      2.91e-09 ***
+X4ENTRYMAJ23Public administration and human services            0.048232 *  
+X4ENTRYMAJ23Design and applied arts                             0.000108 ***
+X4ENTRYMAJ23Law and legal studies                               0.021464 *  
+X4ENTRYMAJ23Theology and religious vocations                    0.020171 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.7328 on 9509 degrees of freedom
+Multiple R-squared:  0.3357,    Adjusted R-squared:  0.3341 
+F-statistic: 208.9 on 23 and 9509 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="mlr-of-college-gpa-on-prospective-major-hs-gpa-and-student-race" class="level2">
+<h2 class="anchored" data-anchor-id="mlr-of-college-gpa-on-prospective-major-hs-gpa-and-student-race">MLR of College GPA on Prospective Major, HS GPA, and Student Race</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build df</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>MLR_GPA_Major <span class="ot">&lt;-</span> HSLS_Data <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X5GPAALL <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>         X3TGPAACAD <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>         X4ENTRYMAJ23 <span class="sc">!=</span> <span class="st">"Unit non-response"</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>         X1RACE <span class="sc">!=</span> <span class="st">"Missing"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X4ENTRYMAJ23 <span class="sc">!=</span> <span class="st">"Item legitimate skip/NA"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X4ENTRYMAJ23 <span class="sc">!=</span> <span class="st">"Missing"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(X5GPAALL, X3TGPAACAD, X4ENTRYMAJ23, X1RACE)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># set reference group prospective major</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>MLR_GPA_Major<span class="sc">$</span>X4ENTRYMAJ23 <span class="ot">&lt;-</span> <span class="fu">relevel</span>(MLR_GPA_Major<span class="sc">$</span>X4ENTRYMAJ23, <span class="at">ref =</span> <span class="st">"Undeclared/undecided"</span>)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="co"># set reference group for race</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>MLR_GPA_Major<span class="sc">$</span>X1RACE <span class="ot">&lt;-</span> <span class="fu">relevel</span>(MLR_GPA_Major<span class="sc">$</span>X1RACE, <span class="at">ref =</span> <span class="st">"White, non-Hispanic"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>MLR_GPA_Major_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> MLR_GPA_Major, X5GPAALL<span class="sc">~</span>X1RACE<span class="sc">+</span>X3TGPAACAD<span class="sc">+</span>X4ENTRYMAJ23)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(MLR_GPA_Major_reg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = X5GPAALL ~ X1RACE + X3TGPAACAD + X4ENTRYMAJ23, data = MLR_GPA_Major)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.2172 -0.3556  0.1114  0.4511  2.8295 
+
+Coefficients:
+                                                                Estimate
+(Intercept)                                                      0.56545
+X1RACEAmer. Indian/Alaska Native, non-Hispanic                  -0.02665
+X1RACEAsian, non-Hispanic                                        0.03120
+X1RACEBlack/African-American, non-Hispanic                      -0.26657
+X1RACEHispanic, no race specified                               -0.07291
+X1RACEHispanic, race specified                                  -0.05858
+X1RACEMore than one race, non-Hispanic                          -0.11451
+X1RACENative Hawaiian/Pacific Islander, non-Hispanic            -0.09552
+X3TGPAACAD                                                       0.69569
+X4ENTRYMAJ23Computer and information sciences                    0.01484
+X4ENTRYMAJ23Engineering and engineering technology               0.06709
+X4ENTRYMAJ23Biological and physical science, science tech        0.15520
+X4ENTRYMAJ23Mathematics                                          0.14717
+X4ENTRYMAJ23Agriculture and natural resources                    0.17592
+X4ENTRYMAJ23General studies and other                            0.16363
+X4ENTRYMAJ23Social sciences                                      0.26049
+X4ENTRYMAJ23Psychology                                           0.21687
+X4ENTRYMAJ23Humanities                                           0.30702
+X4ENTRYMAJ23History                                              0.24613
+X4ENTRYMAJ23Personal and consumer services                       0.20681
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation  0.43818
+X4ENTRYMAJ23Military technology and protective services          0.14459
+X4ENTRYMAJ23Health care fields                                   0.16319
+X4ENTRYMAJ23Business                                             0.17011
+X4ENTRYMAJ23Education                                            0.23825
+X4ENTRYMAJ23Architecture                                         0.18212
+X4ENTRYMAJ23Communications                                       0.34062
+X4ENTRYMAJ23Public administration and human services             0.18277
+X4ENTRYMAJ23Design and applied arts                              0.29171
+X4ENTRYMAJ23Law and legal studies                                0.24539
+X4ENTRYMAJ23Theology and religious vocations                     0.38003
+                                                                Std. Error
+(Intercept)                                                        0.04823
+X1RACEAmer. Indian/Alaska Native, non-Hispanic                     0.10502
+X1RACEAsian, non-Hispanic                                          0.02597
+X1RACEBlack/African-American, non-Hispanic                         0.02814
+X1RACEHispanic, no race specified                                  0.07252
+X1RACEHispanic, race specified                                     0.02411
+X1RACEMore than one race, non-Hispanic                             0.02828
+X1RACENative Hawaiian/Pacific Islander, non-Hispanic               0.13159
+X3TGPAACAD                                                         0.01160
+X4ENTRYMAJ23Computer and information sciences                      0.05121
+X4ENTRYMAJ23Engineering and engineering technology                 0.04247
+X4ENTRYMAJ23Biological and physical science, science tech          0.04129
+X4ENTRYMAJ23Mathematics                                            0.09379
+X4ENTRYMAJ23Agriculture and natural resources                      0.06689
+X4ENTRYMAJ23General studies and other                              0.06291
+X4ENTRYMAJ23Social sciences                                        0.05347
+X4ENTRYMAJ23Psychology                                             0.05002
+X4ENTRYMAJ23Humanities                                             0.04797
+X4ENTRYMAJ23History                                                0.08938
+X4ENTRYMAJ23Personal and consumer services                         0.05529
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation    0.06571
+X4ENTRYMAJ23Military technology and protective services            0.05270
+X4ENTRYMAJ23Health care fields                                     0.03854
+X4ENTRYMAJ23Business                                               0.03980
+X4ENTRYMAJ23Education                                              0.04639
+X4ENTRYMAJ23Architecture                                           0.11296
+X4ENTRYMAJ23Communications                                         0.05605
+X4ENTRYMAJ23Public administration and human services               0.08336
+X4ENTRYMAJ23Design and applied arts                                0.07605
+X4ENTRYMAJ23Law and legal studies                                  0.11073
+X4ENTRYMAJ23Theology and religious vocations                       0.16673
+                                                                t value
+(Intercept)                                                      11.725
+X1RACEAmer. Indian/Alaska Native, non-Hispanic                   -0.254
+X1RACEAsian, non-Hispanic                                         1.201
+X1RACEBlack/African-American, non-Hispanic                       -9.472
+X1RACEHispanic, no race specified                                -1.005
+X1RACEHispanic, race specified                                   -2.430
+X1RACEMore than one race, non-Hispanic                           -4.048
+X1RACENative Hawaiian/Pacific Islander, non-Hispanic             -0.726
+X3TGPAACAD                                                       59.960
+X4ENTRYMAJ23Computer and information sciences                     0.290
+X4ENTRYMAJ23Engineering and engineering technology                1.579
+X4ENTRYMAJ23Biological and physical science, science tech         3.759
+X4ENTRYMAJ23Mathematics                                           1.569
+X4ENTRYMAJ23Agriculture and natural resources                     2.630
+X4ENTRYMAJ23General studies and other                             2.601
+X4ENTRYMAJ23Social sciences                                       4.872
+X4ENTRYMAJ23Psychology                                            4.336
+X4ENTRYMAJ23Humanities                                            6.400
+X4ENTRYMAJ23History                                               2.754
+X4ENTRYMAJ23Personal and consumer services                        3.740
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation   6.668
+X4ENTRYMAJ23Military technology and protective services           2.744
+X4ENTRYMAJ23Health care fields                                    4.234
+X4ENTRYMAJ23Business                                              4.275
+X4ENTRYMAJ23Education                                             5.136
+X4ENTRYMAJ23Architecture                                          1.612
+X4ENTRYMAJ23Communications                                        6.077
+X4ENTRYMAJ23Public administration and human services              2.193
+X4ENTRYMAJ23Design and applied arts                               3.836
+X4ENTRYMAJ23Law and legal studies                                 2.216
+X4ENTRYMAJ23Theology and religious vocations                      2.279
+                                                                Pr(&gt;|t|)    
+(Intercept)                                                      &lt; 2e-16 ***
+X1RACEAmer. Indian/Alaska Native, non-Hispanic                  0.799656    
+X1RACEAsian, non-Hispanic                                       0.229608    
+X1RACEBlack/African-American, non-Hispanic                       &lt; 2e-16 ***
+X1RACEHispanic, no race specified                               0.314752    
+X1RACEHispanic, race specified                                  0.015121 *  
+X1RACEMore than one race, non-Hispanic                          5.20e-05 ***
+X1RACENative Hawaiian/Pacific Islander, non-Hispanic            0.467895    
+X3TGPAACAD                                                       &lt; 2e-16 ***
+X4ENTRYMAJ23Computer and information sciences                   0.771932    
+X4ENTRYMAJ23Engineering and engineering technology              0.114267    
+X4ENTRYMAJ23Biological and physical science, science tech       0.000172 ***
+X4ENTRYMAJ23Mathematics                                         0.116661    
+X4ENTRYMAJ23Agriculture and natural resources                   0.008553 ** 
+X4ENTRYMAJ23General studies and other                           0.009307 ** 
+X4ENTRYMAJ23Social sciences                                     1.12e-06 ***
+X4ENTRYMAJ23Psychology                                          1.47e-05 ***
+X4ENTRYMAJ23Humanities                                          1.63e-10 ***
+X4ENTRYMAJ23History                                             0.005904 ** 
+X4ENTRYMAJ23Personal and consumer services                      0.000185 ***
+X4ENTRYMAJ23Manufacturing, construction, repair, transportation 2.74e-11 ***
+X4ENTRYMAJ23Military technology and protective services         0.006087 ** 
+X4ENTRYMAJ23Health care fields                                  2.32e-05 ***
+X4ENTRYMAJ23Business                                            1.93e-05 ***
+X4ENTRYMAJ23Education                                           2.86e-07 ***
+X4ENTRYMAJ23Architecture                                        0.106936    
+X4ENTRYMAJ23Communications                                      1.27e-09 ***
+X4ENTRYMAJ23Public administration and human services            0.028362 *  
+X4ENTRYMAJ23Design and applied arts                             0.000126 ***
+X4ENTRYMAJ23Law and legal studies                               0.026711 *  
+X4ENTRYMAJ23Theology and religious vocations                    0.022669 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.7298 on 9124 degrees of freedom
+Multiple R-squared:  0.3434,    Adjusted R-squared:  0.3413 
+F-statistic: 159.1 on 30 and 9124 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="slr-of-college-gpa-on-school-engagement" class="level2">
+<h2 class="anchored" data-anchor-id="slr-of-college-gpa-on-school-engagement">SLR of College GPA on School Engagement</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>HSLS_Data <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(X1SCHOOLENG) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 195 × 2
+# Groups:   X1SCHOOLENG [195]
+   X1SCHOOLENG     n
+         &lt;dbl&gt; &lt;int&gt;
+ 1        1.39  2177
+ 2       -8     2059
+ 3        1.01  1886
+ 4        0.71  1435
+ 5       -0.2   1195
+ 6        0.59   586
+ 7        1.09   584
+ 8        0.1    554
+ 9       -0.58   550
+10       -9      542
+# ℹ 185 more rows</code></pre>
+</div>
+</div>
+<p>Not sure what the scale is here but this could be a cool variable to add as a covariate.</p>
+<p><strong>Can we think about how to model the effect of graduating with the prospective major listed? Interaction effect?</strong></p>
+</section>
+<section id="slr-of-college-gpa-on-prospective-job" class="level2">
+<h2 class="anchored" data-anchor-id="slr-of-college-gpa-on-prospective-job">SLR of College GPA on Prospective Job</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build df</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>SLR_GPA_Job <span class="ot">&lt;-</span> HSLS_Data <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X5GPAALL <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>         X1STU30OCC2 <span class="sc">!=</span> <span class="st">"Unit non-response"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X1STU30OCC2 <span class="sc">!=</span> <span class="st">"Uncodeable"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X1STU30OCC2 <span class="sc">!=</span> <span class="st">"Missing"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(X5GPAALL, X1STU30OCC2)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Set reference group to "Don't know"</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>SLR_GPA_Job<span class="sc">$</span>X1STU30OCC2 <span class="ot">&lt;-</span> <span class="fu">relevel</span>(SLR_GPA_Job<span class="sc">$</span>X1STU30OCC2, <span class="at">ref =</span> <span class="st">"Don't know"</span>)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Regression</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>SLR_GPA_Job_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(X5GPAALL<span class="sc">~</span>X1STU30OCC2, <span class="at">data =</span> SLR_GPA_Job)</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(SLR_GPA_Job_reg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = X5GPAALL ~ X1STU30OCC2, data = SLR_GPA_Job)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.9124 -0.5202  0.2038  0.7038  1.6376 
+
+Coefficients:
+                                                                       Estimate
+(Intercept)                                                            2.720211
+X1STU30OCC2Management Occupations                                     -0.093467
+X1STU30OCC2Business and Financial Operations Occupations              -0.004329
+X1STU30OCC2Computer and Mathematical Occupations                      -0.051790
+X1STU30OCC2Architecture and Engineering Occupations                   -0.023999
+X1STU30OCC2Life, Physical, and Social Science Occupations              0.011552
+X1STU30OCC2Community and Social Services Occupations                  -0.007599
+X1STU30OCC2Legal Occupations                                          -0.092992
+X1STU30OCC2Education, Training, and Library Occupations                0.192190
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations -0.109249
+X1STU30OCC2Healthcare Practitioners and Technical Occupations          0.040491
+X1STU30OCC2Healthcare Support Occupations                              0.096455
+X1STU30OCC2Protective Service Occupations                             -0.317313
+X1STU30OCC2Food Preparation and Serving Related Occupations           -0.329302
+X1STU30OCC2Personal Care and Service Occupations                      -0.170611
+X1STU30OCC2Sales and Related Occupations                              -0.199841
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                 -0.026094
+X1STU30OCC2Construction and Extraction Occupations                    -0.291264
+X1STU30OCC2Installation, Maintenance, and Repair Occupations          -0.271374
+X1STU30OCC2Production Occupations                                     -0.168211
+X1STU30OCC2Transportation and Material Moving Occupations             -0.067904
+X1STU30OCC2Military Specific Occupations                              -0.357780
+                                                                      Std. Error
+(Intercept)                                                             0.016967
+X1STU30OCC2Management Occupations                                       0.061414
+X1STU30OCC2Business and Financial Operations Occupations                0.074666
+X1STU30OCC2Computer and Mathematical Occupations                        0.070841
+X1STU30OCC2Architecture and Engineering Occupations                     0.040617
+X1STU30OCC2Life, Physical, and Social Science Occupations               0.040668
+X1STU30OCC2Community and Social Services Occupations                    0.091571
+X1STU30OCC2Legal Occupations                                            0.045395
+X1STU30OCC2Education, Training, and Library Occupations                 0.045356
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations   0.030324
+X1STU30OCC2Healthcare Practitioners and Technical Occupations           0.024835
+X1STU30OCC2Healthcare Support Occupations                               0.224102
+X1STU30OCC2Protective Service Occupations                               0.059535
+X1STU30OCC2Food Preparation and Serving Related Occupations             0.087841
+X1STU30OCC2Personal Care and Service Occupations                        0.086477
+X1STU30OCC2Sales and Related Occupations                                0.130125
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                   0.230562
+X1STU30OCC2Construction and Extraction Occupations                      0.154728
+X1STU30OCC2Installation, Maintenance, and Repair Occupations            0.103630
+X1STU30OCC2Production Occupations                                       0.190368
+X1STU30OCC2Transportation and Material Moving Occupations               0.118809
+X1STU30OCC2Military Specific Occupations                                0.072482
+                                                                      t value
+(Intercept)                                                           160.320
+X1STU30OCC2Management Occupations                                      -1.522
+X1STU30OCC2Business and Financial Operations Occupations               -0.058
+X1STU30OCC2Computer and Mathematical Occupations                       -0.731
+X1STU30OCC2Architecture and Engineering Occupations                    -0.591
+X1STU30OCC2Life, Physical, and Social Science Occupations               0.284
+X1STU30OCC2Community and Social Services Occupations                   -0.083
+X1STU30OCC2Legal Occupations                                           -2.049
+X1STU30OCC2Education, Training, and Library Occupations                 4.237
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations  -3.603
+X1STU30OCC2Healthcare Practitioners and Technical Occupations           1.630
+X1STU30OCC2Healthcare Support Occupations                               0.430
+X1STU30OCC2Protective Service Occupations                              -5.330
+X1STU30OCC2Food Preparation and Serving Related Occupations            -3.749
+X1STU30OCC2Personal Care and Service Occupations                       -1.973
+X1STU30OCC2Sales and Related Occupations                               -1.536
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                  -0.113
+X1STU30OCC2Construction and Extraction Occupations                     -1.882
+X1STU30OCC2Installation, Maintenance, and Repair Occupations           -2.619
+X1STU30OCC2Production Occupations                                      -0.884
+X1STU30OCC2Transportation and Material Moving Occupations              -0.572
+X1STU30OCC2Military Specific Occupations                               -4.936
+                                                                      Pr(&gt;|t|)
+(Intercept)                                                            &lt; 2e-16
+X1STU30OCC2Management Occupations                                     0.128055
+X1STU30OCC2Business and Financial Operations Occupations              0.953766
+X1STU30OCC2Computer and Mathematical Occupations                      0.464746
+X1STU30OCC2Architecture and Engineering Occupations                   0.554618
+X1STU30OCC2Life, Physical, and Social Science Occupations             0.776380
+X1STU30OCC2Community and Social Services Occupations                  0.933867
+X1STU30OCC2Legal Occupations                                          0.040531
+X1STU30OCC2Education, Training, and Library Occupations               2.28e-05
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations 0.000316
+X1STU30OCC2Healthcare Practitioners and Technical Occupations         0.103040
+X1STU30OCC2Healthcare Support Occupations                             0.666907
+X1STU30OCC2Protective Service Occupations                             1.00e-07
+X1STU30OCC2Food Preparation and Serving Related Occupations           0.000179
+X1STU30OCC2Personal Care and Service Occupations                      0.048531
+X1STU30OCC2Sales and Related Occupations                              0.124624
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                 0.909894
+X1STU30OCC2Construction and Extraction Occupations                    0.059803
+X1STU30OCC2Installation, Maintenance, and Repair Occupations          0.008839
+X1STU30OCC2Production Occupations                                     0.376925
+X1STU30OCC2Transportation and Material Moving Occupations             0.567648
+X1STU30OCC2Military Specific Occupations                              8.08e-07
+                                                                         
+(Intercept)                                                           ***
+X1STU30OCC2Management Occupations                                        
+X1STU30OCC2Business and Financial Operations Occupations                 
+X1STU30OCC2Computer and Mathematical Occupations                         
+X1STU30OCC2Architecture and Engineering Occupations                      
+X1STU30OCC2Life, Physical, and Social Science Occupations                
+X1STU30OCC2Community and Social Services Occupations                     
+X1STU30OCC2Legal Occupations                                          *  
+X1STU30OCC2Education, Training, and Library Occupations               ***
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations ***
+X1STU30OCC2Healthcare Practitioners and Technical Occupations            
+X1STU30OCC2Healthcare Support Occupations                                
+X1STU30OCC2Protective Service Occupations                             ***
+X1STU30OCC2Food Preparation and Serving Related Occupations           ***
+X1STU30OCC2Personal Care and Service Occupations                      *  
+X1STU30OCC2Sales and Related Occupations                                 
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                    
+X1STU30OCC2Construction and Extraction Occupations                    .  
+X1STU30OCC2Installation, Maintenance, and Repair Occupations          ** 
+X1STU30OCC2Production Occupations                                        
+X1STU30OCC2Transportation and Material Moving Occupations                
+X1STU30OCC2Military Specific Occupations                              ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.9481 on 11324 degrees of freedom
+Multiple R-squared:  0.01168,   Adjusted R-squared:  0.009851 
+F-statistic: 6.375 on 21 and 11324 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="mlr-of-college-gpa-on-prospective-job-and-hs-gpa" class="level2">
+<h2 class="anchored" data-anchor-id="mlr-of-college-gpa-on-prospective-job-and-hs-gpa">MLR of College GPA on Prospective Job and HS GPA</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build df</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>MLR_GPA_Job <span class="ot">&lt;-</span> HSLS_Data <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X5GPAALL <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>         X3TGPAACAD <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>         X1STU30OCC2 <span class="sc">!=</span> <span class="st">"Unit non-response"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X1STU30OCC2 <span class="sc">!=</span> <span class="st">"Uncodeable"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X1STU30OCC2 <span class="sc">!=</span> <span class="st">"Missing"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(X5GPAALL, X3TGPAACAD, X1STU30OCC2)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Set reference group to "Don't know"</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>MLR_GPA_Job<span class="sc">$</span>X1STU30OCC2 <span class="ot">&lt;-</span> <span class="fu">relevel</span>(MLR_GPA_Job<span class="sc">$</span>X1STU30OCC2, <span class="at">ref =</span> <span class="st">"Don't know"</span>)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Regression</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>MLR_GPA_Job_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(X5GPAALL<span class="sc">~</span> X3TGPAACAD <span class="sc">+</span> X1STU30OCC2, <span class="at">data =</span> MLR_GPA_Job)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(MLR_GPA_Job_reg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = X5GPAALL ~ X3TGPAACAD + X1STU30OCC2, data = MLR_GPA_Job)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.1312 -0.3930  0.1167  0.4948  3.2872 
+
+Coefficients:
+                                                                      Estimate
+(Intercept)                                                            0.54912
+X3TGPAACAD                                                             0.73773
+X1STU30OCC2Management Occupations                                      0.05800
+X1STU30OCC2Business and Financial Operations Occupations               0.01450
+X1STU30OCC2Computer and Mathematical Occupations                      -0.05044
+X1STU30OCC2Architecture and Engineering Occupations                   -0.09487
+X1STU30OCC2Life, Physical, and Social Science Occupations             -0.04666
+X1STU30OCC2Community and Social Services Occupations                   0.03525
+X1STU30OCC2Legal Occupations                                          -0.06858
+X1STU30OCC2Education, Training, and Library Occupations                0.08330
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations -0.02073
+X1STU30OCC2Healthcare Practitioners and Technical Occupations         -0.03813
+X1STU30OCC2Healthcare Support Occupations                              0.18554
+X1STU30OCC2Protective Service Occupations                             -0.10106
+X1STU30OCC2Food Preparation and Serving Related Occupations           -0.16708
+X1STU30OCC2Personal Care and Service Occupations                       0.13105
+X1STU30OCC2Sales and Related Occupations                              -0.11069
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                  0.20297
+X1STU30OCC2Construction and Extraction Occupations                     0.09687
+X1STU30OCC2Installation, Maintenance, and Repair Occupations           0.09357
+X1STU30OCC2Production Occupations                                      0.03044
+X1STU30OCC2Transportation and Material Moving Occupations              0.01540
+X1STU30OCC2Military Specific Occupations                              -0.04939
+                                                                      Std. Error
+(Intercept)                                                              0.03424
+X3TGPAACAD                                                               0.01056
+X1STU30OCC2Management Occupations                                        0.05241
+X1STU30OCC2Business and Financial Operations Occupations                 0.06334
+X1STU30OCC2Computer and Mathematical Occupations                         0.06010
+X1STU30OCC2Architecture and Engineering Occupations                      0.03447
+X1STU30OCC2Life, Physical, and Social Science Occupations                0.03447
+X1STU30OCC2Community and Social Services Occupations                     0.07760
+X1STU30OCC2Legal Occupations                                             0.03851
+X1STU30OCC2Education, Training, and Library Occupations                  0.03865
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations    0.02583
+X1STU30OCC2Healthcare Practitioners and Technical Occupations            0.02105
+X1STU30OCC2Healthcare Support Occupations                                0.19094
+X1STU30OCC2Protective Service Occupations                                0.05058
+X1STU30OCC2Food Preparation and Serving Related Occupations              0.07433
+X1STU30OCC2Personal Care and Service Occupations                         0.07469
+X1STU30OCC2Sales and Related Occupations                                 0.10982
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                    0.19678
+X1STU30OCC2Construction and Extraction Occupations                       0.13176
+X1STU30OCC2Installation, Maintenance, and Repair Occupations             0.08653
+X1STU30OCC2Production Occupations                                        0.16434
+X1STU30OCC2Transportation and Material Moving Occupations                0.10154
+X1STU30OCC2Military Specific Occupations                                 0.06207
+                                                                      t value
+(Intercept)                                                            16.038
+X3TGPAACAD                                                             69.865
+X1STU30OCC2Management Occupations                                       1.107
+X1STU30OCC2Business and Financial Operations Occupations                0.229
+X1STU30OCC2Computer and Mathematical Occupations                       -0.839
+X1STU30OCC2Architecture and Engineering Occupations                    -2.752
+X1STU30OCC2Life, Physical, and Social Science Occupations              -1.354
+X1STU30OCC2Community and Social Services Occupations                    0.454
+X1STU30OCC2Legal Occupations                                           -1.781
+X1STU30OCC2Education, Training, and Library Occupations                 2.155
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations  -0.803
+X1STU30OCC2Healthcare Practitioners and Technical Occupations          -1.811
+X1STU30OCC2Healthcare Support Occupations                               0.972
+X1STU30OCC2Protective Service Occupations                              -1.998
+X1STU30OCC2Food Preparation and Serving Related Occupations            -2.248
+X1STU30OCC2Personal Care and Service Occupations                        1.755
+X1STU30OCC2Sales and Related Occupations                               -1.008
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                   1.031
+X1STU30OCC2Construction and Extraction Occupations                      0.735
+X1STU30OCC2Installation, Maintenance, and Repair Occupations            1.081
+X1STU30OCC2Production Occupations                                       0.185
+X1STU30OCC2Transportation and Material Moving Occupations               0.152
+X1STU30OCC2Military Specific Occupations                               -0.796
+                                                                      Pr(&gt;|t|)
+(Intercept)                                                            &lt; 2e-16
+X3TGPAACAD                                                             &lt; 2e-16
+X1STU30OCC2Management Occupations                                      0.26851
+X1STU30OCC2Business and Financial Operations Occupations               0.81891
+X1STU30OCC2Computer and Mathematical Occupations                       0.40133
+X1STU30OCC2Architecture and Engineering Occupations                    0.00593
+X1STU30OCC2Life, Physical, and Social Science Occupations              0.17587
+X1STU30OCC2Community and Social Services Occupations                   0.64968
+X1STU30OCC2Legal Occupations                                           0.07500
+X1STU30OCC2Education, Training, and Library Occupations                0.03116
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations  0.42221
+X1STU30OCC2Healthcare Practitioners and Technical Occupations          0.07015
+X1STU30OCC2Healthcare Support Occupations                              0.33123
+X1STU30OCC2Protective Service Occupations                              0.04575
+X1STU30OCC2Food Preparation and Serving Related Occupations            0.02461
+X1STU30OCC2Personal Care and Service Occupations                       0.07936
+X1STU30OCC2Sales and Related Occupations                               0.31355
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                  0.30236
+X1STU30OCC2Construction and Extraction Occupations                     0.46223
+X1STU30OCC2Installation, Maintenance, and Repair Occupations           0.27956
+X1STU30OCC2Production Occupations                                      0.85306
+X1STU30OCC2Transportation and Material Moving Occupations              0.87946
+X1STU30OCC2Military Specific Occupations                               0.42615
+                                                                         
+(Intercept)                                                           ***
+X3TGPAACAD                                                            ***
+X1STU30OCC2Management Occupations                                        
+X1STU30OCC2Business and Financial Operations Occupations                 
+X1STU30OCC2Computer and Mathematical Occupations                         
+X1STU30OCC2Architecture and Engineering Occupations                   ** 
+X1STU30OCC2Life, Physical, and Social Science Occupations                
+X1STU30OCC2Community and Social Services Occupations                     
+X1STU30OCC2Legal Occupations                                          .  
+X1STU30OCC2Education, Training, and Library Occupations               *  
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations    
+X1STU30OCC2Healthcare Practitioners and Technical Occupations         .  
+X1STU30OCC2Healthcare Support Occupations                                
+X1STU30OCC2Protective Service Occupations                             *  
+X1STU30OCC2Food Preparation and Serving Related Occupations           *  
+X1STU30OCC2Personal Care and Service Occupations                      .  
+X1STU30OCC2Sales and Related Occupations                                 
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                    
+X1STU30OCC2Construction and Extraction Occupations                       
+X1STU30OCC2Installation, Maintenance, and Repair Occupations             
+X1STU30OCC2Production Occupations                                        
+X1STU30OCC2Transportation and Material Moving Occupations                
+X1STU30OCC2Military Specific Occupations                                 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.785 on 10790 degrees of freedom
+Multiple R-squared:  0.3195,    Adjusted R-squared:  0.3182 
+F-statistic: 230.3 on 22 and 10790 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="mlr-of-college-gpa-on-prospective-job-hs-gpa-and-race" class="level2">
+<h2 class="anchored" data-anchor-id="mlr-of-college-gpa-on-prospective-job-hs-gpa-and-race">MLR of College GPA on Prospective Job, HS GPA, and Race</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build df</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>MLR_GPA_Job <span class="ot">&lt;-</span> HSLS_Data <span class="sc">|&gt;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X5GPAALL <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>         X3TGPAACAD <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>         X1STU30OCC2 <span class="sc">!=</span> <span class="st">"Unit non-response"</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>         X1RACE <span class="sc">!=</span> <span class="st">"Missing"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X1STU30OCC2 <span class="sc">!=</span> <span class="st">"Uncodeable"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X1STU30OCC2 <span class="sc">!=</span> <span class="st">"Missing"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(X5GPAALL, X3TGPAACAD, X1STU30OCC2, X1RACE)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Set reference group to "Don't know"</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>MLR_GPA_Job<span class="sc">$</span>X1STU30OCC2 <span class="ot">&lt;-</span> <span class="fu">relevel</span>(MLR_GPA_Job<span class="sc">$</span>X1STU30OCC2, <span class="at">ref =</span> <span class="st">"Don't know"</span>)</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a><span class="co"># set reference group for race</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>MLR_GPA_Job<span class="sc">$</span>X1RACE <span class="ot">&lt;-</span> <span class="fu">relevel</span>(MLR_GPA_Job<span class="sc">$</span>X1RACE, <span class="at">ref =</span> <span class="st">"White, non-Hispanic"</span>)</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Regression</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>MLR_GPA_Job_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(X5GPAALL<span class="sc">~</span> X1RACE <span class="sc">+</span> X3TGPAACAD <span class="sc">+</span> X1STU30OCC2, <span class="at">data =</span> MLR_GPA_Job)</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(MLR_GPA_Job_reg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = X5GPAALL ~ X1RACE + X3TGPAACAD + X1STU30OCC2, data = MLR_GPA_Job)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.1485 -0.3863  0.1202  0.4905  3.1553 
+
+Coefficients:
+                                                                       Estimate
+(Intercept)                                                            0.669972
+X1RACEAmer. Indian/Alaska Native, non-Hispanic                        -0.081719
+X1RACEAsian, non-Hispanic                                              0.039797
+X1RACEBlack/African-American, non-Hispanic                            -0.260623
+X1RACEHispanic, no race specified                                     -0.365009
+X1RACEHispanic, race specified                                        -0.062355
+X1RACEMore than one race, non-Hispanic                                -0.115666
+X1RACENative Hawaiian/Pacific Islander, non-Hispanic                  -0.134599
+X3TGPAACAD                                                             0.708144
+X1STU30OCC2Management Occupations                                      0.085201
+X1STU30OCC2Business and Financial Operations Occupations               0.023709
+X1STU30OCC2Computer and Mathematical Occupations                      -0.039207
+X1STU30OCC2Architecture and Engineering Occupations                   -0.092225
+X1STU30OCC2Life, Physical, and Social Science Occupations             -0.038986
+X1STU30OCC2Community and Social Services Occupations                   0.048353
+X1STU30OCC2Legal Occupations                                          -0.033922
+X1STU30OCC2Education, Training, and Library Occupations                0.085349
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations -0.002356
+X1STU30OCC2Healthcare Practitioners and Technical Occupations         -0.029597
+X1STU30OCC2Healthcare Support Occupations                              0.200348
+X1STU30OCC2Protective Service Occupations                             -0.092614
+X1STU30OCC2Food Preparation and Serving Related Occupations           -0.149263
+X1STU30OCC2Personal Care and Service Occupations                       0.140118
+X1STU30OCC2Sales and Related Occupations                              -0.081733
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                  0.166244
+X1STU30OCC2Construction and Extraction Occupations                     0.096702
+X1STU30OCC2Installation, Maintenance, and Repair Occupations           0.094259
+X1STU30OCC2Production Occupations                                      0.045013
+X1STU30OCC2Transportation and Material Moving Occupations              0.008185
+X1STU30OCC2Military Specific Occupations                              -0.059876
+                                                                      Std. Error
+(Intercept)                                                             0.036551
+X1RACEAmer. Indian/Alaska Native, non-Hispanic                          0.102369
+X1RACEAsian, non-Hispanic                                               0.026723
+X1RACEBlack/African-American, non-Hispanic                              0.027463
+X1RACEHispanic, no race specified                                       0.097775
+X1RACEHispanic, race specified                                          0.023273
+X1RACEMore than one race, non-Hispanic                                  0.027245
+X1RACENative Hawaiian/Pacific Islander, non-Hispanic                    0.115749
+X3TGPAACAD                                                              0.010908
+X1STU30OCC2Management Occupations                                       0.052260
+X1STU30OCC2Business and Financial Operations Occupations                0.063046
+X1STU30OCC2Computer and Mathematical Occupations                        0.059823
+X1STU30OCC2Architecture and Engineering Occupations                     0.034309
+X1STU30OCC2Life, Physical, and Social Science Occupations               0.034353
+X1STU30OCC2Community and Social Services Occupations                    0.077240
+X1STU30OCC2Legal Occupations                                            0.038479
+X1STU30OCC2Education, Training, and Library Occupations                 0.038554
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations   0.025808
+X1STU30OCC2Healthcare Practitioners and Technical Occupations           0.020975
+X1STU30OCC2Healthcare Support Occupations                               0.190000
+X1STU30OCC2Protective Service Occupations                               0.050380
+X1STU30OCC2Food Preparation and Serving Related Occupations             0.074006
+X1STU30OCC2Personal Care and Service Occupations                        0.074369
+X1STU30OCC2Sales and Related Occupations                                0.109317
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                   0.195888
+X1STU30OCC2Construction and Extraction Occupations                      0.131256
+X1STU30OCC2Installation, Maintenance, and Repair Occupations            0.086100
+X1STU30OCC2Production Occupations                                       0.163724
+X1STU30OCC2Transportation and Material Moving Occupations               0.101037
+X1STU30OCC2Military Specific Occupations                                0.061834
+                                                                      t value
+(Intercept)                                                            18.330
+X1RACEAmer. Indian/Alaska Native, non-Hispanic                         -0.798
+X1RACEAsian, non-Hispanic                                               1.489
+X1RACEBlack/African-American, non-Hispanic                             -9.490
+X1RACEHispanic, no race specified                                      -3.733
+X1RACEHispanic, race specified                                         -2.679
+X1RACEMore than one race, non-Hispanic                                 -4.245
+X1RACENative Hawaiian/Pacific Islander, non-Hispanic                   -1.163
+X3TGPAACAD                                                             64.918
+X1STU30OCC2Management Occupations                                       1.630
+X1STU30OCC2Business and Financial Operations Occupations                0.376
+X1STU30OCC2Computer and Mathematical Occupations                       -0.655
+X1STU30OCC2Architecture and Engineering Occupations                    -2.688
+X1STU30OCC2Life, Physical, and Social Science Occupations              -1.135
+X1STU30OCC2Community and Social Services Occupations                    0.626
+X1STU30OCC2Legal Occupations                                           -0.882
+X1STU30OCC2Education, Training, and Library Occupations                 2.214
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations  -0.091
+X1STU30OCC2Healthcare Practitioners and Technical Occupations          -1.411
+X1STU30OCC2Healthcare Support Occupations                               1.054
+X1STU30OCC2Protective Service Occupations                              -1.838
+X1STU30OCC2Food Preparation and Serving Related Occupations            -2.017
+X1STU30OCC2Personal Care and Service Occupations                        1.884
+X1STU30OCC2Sales and Related Occupations                               -0.748
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                   0.849
+X1STU30OCC2Construction and Extraction Occupations                      0.737
+X1STU30OCC2Installation, Maintenance, and Repair Occupations            1.095
+X1STU30OCC2Production Occupations                                       0.275
+X1STU30OCC2Transportation and Material Moving Occupations               0.081
+X1STU30OCC2Military Specific Occupations                               -0.968
+                                                                      Pr(&gt;|t|)
+(Intercept)                                                            &lt; 2e-16
+X1RACEAmer. Indian/Alaska Native, non-Hispanic                         0.42473
+X1RACEAsian, non-Hispanic                                              0.13645
+X1RACEBlack/African-American, non-Hispanic                             &lt; 2e-16
+X1RACEHispanic, no race specified                                      0.00019
+X1RACEHispanic, race specified                                         0.00739
+X1RACEMore than one race, non-Hispanic                                 2.2e-05
+X1RACENative Hawaiian/Pacific Islander, non-Hispanic                   0.24491
+X3TGPAACAD                                                             &lt; 2e-16
+X1STU30OCC2Management Occupations                                      0.10306
+X1STU30OCC2Business and Financial Operations Occupations               0.70688
+X1STU30OCC2Computer and Mathematical Occupations                       0.51223
+X1STU30OCC2Architecture and Engineering Occupations                    0.00720
+X1STU30OCC2Life, Physical, and Social Science Occupations              0.25646
+X1STU30OCC2Community and Social Services Occupations                   0.53132
+X1STU30OCC2Legal Occupations                                           0.37803
+X1STU30OCC2Education, Training, and Library Occupations                0.02687
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations  0.92727
+X1STU30OCC2Healthcare Practitioners and Technical Occupations          0.15825
+X1STU30OCC2Healthcare Support Occupations                              0.29169
+X1STU30OCC2Protective Service Occupations                              0.06605
+X1STU30OCC2Food Preparation and Serving Related Occupations            0.04373
+X1STU30OCC2Personal Care and Service Occupations                       0.05958
+X1STU30OCC2Sales and Related Occupations                               0.45467
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                  0.39608
+X1STU30OCC2Construction and Extraction Occupations                     0.46130
+X1STU30OCC2Installation, Maintenance, and Repair Occupations           0.27365
+X1STU30OCC2Production Occupations                                      0.78337
+X1STU30OCC2Transportation and Material Moving Occupations              0.93543
+X1STU30OCC2Military Specific Occupations                               0.33290
+                                                                         
+(Intercept)                                                           ***
+X1RACEAmer. Indian/Alaska Native, non-Hispanic                           
+X1RACEAsian, non-Hispanic                                                
+X1RACEBlack/African-American, non-Hispanic                            ***
+X1RACEHispanic, no race specified                                     ***
+X1RACEHispanic, race specified                                        ** 
+X1RACEMore than one race, non-Hispanic                                ***
+X1RACENative Hawaiian/Pacific Islander, non-Hispanic                     
+X3TGPAACAD                                                            ***
+X1STU30OCC2Management Occupations                                        
+X1STU30OCC2Business and Financial Operations Occupations                 
+X1STU30OCC2Computer and Mathematical Occupations                         
+X1STU30OCC2Architecture and Engineering Occupations                   ** 
+X1STU30OCC2Life, Physical, and Social Science Occupations                
+X1STU30OCC2Community and Social Services Occupations                     
+X1STU30OCC2Legal Occupations                                             
+X1STU30OCC2Education, Training, and Library Occupations               *  
+X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations    
+X1STU30OCC2Healthcare Practitioners and Technical Occupations            
+X1STU30OCC2Healthcare Support Occupations                                
+X1STU30OCC2Protective Service Occupations                             .  
+X1STU30OCC2Food Preparation and Serving Related Occupations           *  
+X1STU30OCC2Personal Care and Service Occupations                      .  
+X1STU30OCC2Sales and Related Occupations                                 
+X1STU30OCC2Farming, Fishing, and Forestry Occupations                    
+X1STU30OCC2Construction and Extraction Occupations                       
+X1STU30OCC2Installation, Maintenance, and Repair Occupations             
+X1STU30OCC2Production Occupations                                        
+X1STU30OCC2Transportation and Material Moving Occupations                
+X1STU30OCC2Military Specific Occupations                                 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.781 on 10783 degrees of freedom
+Multiple R-squared:  0.327, Adjusted R-squared:  0.3251 
+F-statistic: 180.6 on 29 and 10783 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>I like this version of the regression. The results imply that career choice when in 9th grade has little implication for college GPA, except in a few select fields. The only positive boost to college GPA is for kids wanting a job in education. I think it makes sense that kids with higher grades would want to be involved in education in the future because they are already successful in that environment.</p>
+<p>I think school engagement might be correlated with college GPA, particularly among kids who want a career in education.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>HSLS_Data <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X5GPAALL <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>         X3TGPAACAD <span class="sc">&gt;=</span> <span class="dv">0</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>         X1SCHOOLENG <span class="sc">&gt;</span> <span class="sc">-</span><span class="dv">8</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Education_Job =</span> <span class="fu">ifelse</span>(X1STU30OCC2 <span class="sc">==</span> <span class="st">"Education, Training, and Library Occupations"</span>, <span class="st">"Education"</span>, <span class="st">"Other"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(X5GPAALL, X3TGPAACAD, X1SCHOOLENG, Education_Job) <span class="sc">|&gt;</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> X1SCHOOLENG, <span class="at">y =</span> X5GPAALL, <span class="at">color =</span> Education_Job)) <span class="sc">+</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Project_EDA_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>That’s pretty interesting. Kids who want a job in education have a big level shift up in GDP but the slope is not quite as large as the slope for everyone else. Looks like kids who want a job in education tend to have a higher GPA and higher school engagement score as is.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

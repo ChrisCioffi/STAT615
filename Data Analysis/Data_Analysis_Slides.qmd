@@ -7,44 +7,47 @@ editor: visual
 
 ## Overview
 
-1) Introduction and Question
-2) Background and Related Literature
-3) Data
-4) Exploratory Analysis
-5) Modeling
-6) Diagnostic Tools
-7) Remedial Measures
-8) Conclusion
+1)  Introduction and Question
+2)  Background and Related Literature
+3)  Data
+4)  Exploratory Analysis
+5)  Modeling
+6)  Diagnostic Tools
+7)  Remedial Measures
+8)  Conclusion
 
 ## What Do You Want to Be When You Grow Up?
 
-- Decisions made at a young age may have a profound and lasting impact on individuals for many years into the future.
+-   Decisions made at a young age may have a profound and lasting impact on individuals for many years into the future.
 
-- We investigate what factors in high school impact future academic performance.
-  
-- In particular, we ask: how is college GPA impacted by thoughts about prospective career path in high school and what drives decisions about future occupation?
-  - Originally considered using earnings as our response variable.
+-   We investigate what factors in high school impact future academic performance.
+
+-   In particular, we ask: how is college GPA impacted by thoughts about prospective career path in high school and what drives decisions about future occupation?
+
+    -   Originally considered using earnings as our response variable.
 
 ## Literature Review/Background
 
 ## Data
 
-- High School Longitudinal Study of 2009 (HSLS:09) from the National Center for Education Statistics.
-  - Interviewed 9th graders across the United States in 2009.
-  - Followed up with subjects in three subsequent interview rounds.
-  - Offers a variety of information on students, parents, and school.
+-   High School Longitudinal Study of 2009 (HSLS:09) from the National Center for Education Statistics.
+    -   Interviewed 9th graders across the United States in 2009.
+    -   Followed up with subjects in three subsequent interview rounds.
+    -   Offers a variety of information on students, parents, and school.
 
 ## Key Variables
 
-- Response Variable: College GPA
+-   Response Variable: College GPA
 
-- Predictor of Interest: Desired occupation at age 30.
-  - A categorical variable with 22 occupation groups.
-  
-- Additional predictors:
-  - Academic: High school GPA, credits earned for AP/IB courses, School engagement, Stem/non-stem desired occupation
-  - Demographic: Student race, Family Income
-  - School Features: High School urbanicity, High School type
+-   Predictor of Interest: Desired occupation at age 30.
+
+    -   A categorical variable with 22 occupation groups.
+
+-   Additional predictors:
+
+    -   Academic: High school GPA, credits earned for AP/IB courses, School engagement, Stem/non-stem desired occupation
+    -   Demographic: Student race, Family Income
+    -   School Features: High School urbanicity, High School type
 
 ## A Look at Desired Occupation
 
@@ -72,6 +75,7 @@ HSLS_Data |>
 
 # NOTE: Try to sort this by Median GPA
 ```
+
 ## Desired Occupation and Academic Performance
 
 ```{r}
@@ -96,13 +100,13 @@ HSLS_Data |>
 
 ## Model: Simple Linear Regression
 
-- Set reference group to those students who answered "Don't Know".
+-   Set reference group to those students who answered "Don't Know".
 
-- Model takes the form of $College\_GPA = \beta_0 + \beta_1future\_job + \epsilon$.
+-   Model takes the form of $College\_GPA = \beta_0 + \beta_1future\_job + \epsilon$.
 
 ## Results: Simple Linear Regression
 
-- Showing only results with a p-value < 0.10.
+-   Showing only results with a p-value \< 0.10.
 
 ```{r}
 #| echo: false
@@ -126,7 +130,7 @@ summary(SLR_GPA_Job_reg) |> broom::tidy() |>
 # For the sake of reducing the output, just show results that are significant at alpha = 0.10.
 ```
 
-- Adjusted $R^2$ is less than 1%.
+-   Adjusted $R^2$ is less than 1%.
 
 ## Additional Variables to Add
 
@@ -142,12 +146,4 @@ summary(SLR_GPA_Job_reg) |> broom::tidy() |>
 
 ## Slide for Additional Ideas
 
-- If our model assumptions are violated we could try bootstrapping or quantile regression?
-
-
-
-
-
-
-
-
+-   If our model assumptions are violated we could try bootstrapping or quantile regression?
