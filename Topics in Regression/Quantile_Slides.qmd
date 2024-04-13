@@ -35,21 +35,25 @@ df_rnd |>
        y = "") +
   theme_bw()
 ```
+
 ## Example of Linear and Quantile Trend Lines
 
 ```{r}
 set.seed(16)
-eps <- rnorm(500,0,2)
-df_trends <- tibble(x = rnorm(500), y = 2*x + eps)
+eps <- rnorm(100,0,2)
+df_trends <- tibble(x = rnorm(100), y = 1.5*x + eps)
 
 df_trends |>
   ggplot(aes(x, y)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
-  #geom_quantile(quantiles = 0.25, y~x,data = df_trends) +
+  stat_quantile(quantiles = 0.15, color = "red", linetype = "dashed") +
+  stat_quantile(quantiles = 0.85, color = "red", linetype = "dashed") +
+  annotate(geom="text", x=2.1, y=2.5, label="Linear\nregression", color = "blue", size = 3.5) +
+  annotate(geom="text", x=2.1, y=7, label="Quantile\nregression\nat 0.85", color = "red", size = 3.5) +
+  annotate(geom="text", x=2.1, y=-1, label="Quantile\nregression\n at 0.15", color = "red", size = 3.5) +
   theme_bw()
 ```
-
 
 ## Why Use Quantile Regression?
 
@@ -65,19 +69,19 @@ df_trends |>
 
 -   $Q_\tau(Y) = \beta_0(\tau) + \beta_1(\tau)X_1 + ... + \beta_p(\tau)X_p$
 
-  -   Where $\tau$ is a specific quantile value.
+-   Where $\tau$ is a specific quantile value.
 
 -   The objective of quantile regression is to minimize the median absolute deviations (Quantile Loss).
 
-  -   Rather than minimizing the sum of squares in OLS.
+-   Rather than minimizing the sum of squares in OLS.
 
 ## Model Assumptions
 
-- Large sample size.
+-   Large sample size.
 
-- Response variable is continuous.
+-   Response variable is continuous.
 
-- No strict distribution to adhere to.
+-   No strict distribution to adhere to.
 
 ## Quantreg
 
