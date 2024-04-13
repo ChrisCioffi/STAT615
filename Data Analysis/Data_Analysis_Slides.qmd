@@ -45,8 +45,7 @@ format:
 -   Additional predictors:
 
     -   Academic: High school GPA, credits earned for AP/IB courses, School engagement, Stem/non-stem desired occupation
-    -   Demographic: Student race, Family Income
-    -   School Features: High School urbanicity, High School type
+    -   Geographic and Socioeconomic Factors: Family Income, High School urbanicity, High School type
 
 ## A Look at Desired Occupation
 
@@ -66,16 +65,20 @@ load("../Data/HSLS_Data.rdata")
 
 
 HSLS_Data |>
-  filter(X5GPAALL >= 0,
-         X1STU30OCC2 != "Unit non-response") |>
+  filter(
+    X5GPAALL >= 0,
+    X1STU30OCC2 != "Unit non-response"
+  ) |>
   filter(X1STU30OCC2 != "Uncodeable") |>
   filter(X1STU30OCC2 != "Missing") |>
   select(X5GPAALL, X1STU30OCC2) |>
   ggplot(aes(x = X5GPAALL, y = X1STU30OCC2)) +
   geom_boxplot() +
-  labs(title = "College GPA by Desired Occupation",
-       x = "College GPA",
-       y = "Desired Occupation") +
+  labs(
+    title = "College GPA by Desired Occupation",
+    x = "College GPA",
+    y = "Desired Occupation"
+  ) +
   theme_bw()
 
 # NOTE: Try to sort this by Median GPA
@@ -89,9 +92,11 @@ HSLS_Data |>
 # X3TGPAACAD: GPA for all academic courses
 
 HSLS_Data |>
-  filter(X5GPAALL >= 0,
-         X3TGPAACAD >= 0,
-         X1STU30OCC2 != "Unit non-response") |>
+  filter(
+    X5GPAALL >= 0,
+    X3TGPAACAD >= 0,
+    X1STU30OCC2 != "Unit non-response"
+  ) |>
   filter(X1STU30OCC2 != "Uncodeable") |>
   filter(X1STU30OCC2 != "Missing") |>
   select(X5GPAALL, X3TGPAACAD, X1STU30OCC2) |>
@@ -99,9 +104,11 @@ HSLS_Data |>
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
   theme(legend.position = "none") +
-  labs(title = "HS GPA vs. College GPA",
-       x = "High School GPA",
-       y = "College GPA") +
+  labs(
+    title = "HS GPA vs. College GPA",
+    x = "High School GPA",
+    y = "College GPA"
+  ) +
   theme_bw() +
   theme(legend.position = "none")
 ```
@@ -109,13 +116,15 @@ HSLS_Data |>
 ```{r}
 #| echo: false
 HSLS_Data |>
-  filter(X5GPAALL >= 0,
-         X3TGPAACAD >= 0,
-         X1STU30OCC2 != "Unit non-response") |>
+  filter(
+    X5GPAALL >= 0,
+    X3TGPAACAD >= 0,
+    X1STU30OCC2 != "Unit non-response"
+  ) |>
   filter(X1STU30OCC2 != "Uncodeable") |>
   filter(X1STU30OCC2 != "Missing") |>
-  rename(College_GPA = X5GPAALL,  HS_GPA = X3TGPAACAD) |> 
-  select(College_GPA, HS_GPA) |> 
+  rename(College_GPA = X5GPAALL, HS_GPA = X3TGPAACAD) |>
+  select(College_GPA, HS_GPA) |>
   cor()
 ```
 
@@ -135,8 +144,10 @@ HSLS_Data |>
 #| echo: false
 # Build df
 SLR_GPA_Job <- HSLS_Data |>
-  filter(X5GPAALL >= 0,
-         X1STU30OCC2 != "Unit non-response") |>
+  filter(
+    X5GPAALL >= 0,
+    X1STU30OCC2 != "Unit non-response"
+  ) |>
   filter(X1STU30OCC2 != "Uncodeable") |>
   filter(X1STU30OCC2 != "Missing") |>
   select(X5GPAALL, X1STU30OCC2)
@@ -145,8 +156,9 @@ SLR_GPA_Job <- HSLS_Data |>
 SLR_GPA_Job$X1STU30OCC2 <- relevel(SLR_GPA_Job$X1STU30OCC2, ref = "Don't know")
 
 # Regression
-SLR_GPA_Job_reg <- lm(X5GPAALL~X1STU30OCC2, data = SLR_GPA_Job)
-summary(SLR_GPA_Job_reg) |> broom::tidy() |>
+SLR_GPA_Job_reg <- lm(X5GPAALL ~ X1STU30OCC2, data = SLR_GPA_Job)
+summary(SLR_GPA_Job_reg) |>
+  broom::tidy() |>
   filter(p.value <= 0.01) |>
   mutate(term = str_remove(term, "X1STU30OCC2"))
 
@@ -157,15 +169,12 @@ summary(SLR_GPA_Job_reg) |> broom::tidy() |>
 
 ## Additional Variables to Add
 
-**(KF going to clean up this slide)**
-
-- X4ENTRYMAJ23: Major considering upon postsecondary entry- 23 categories
-- X1LOCALE: School locale (urbanicity)
-- X1RACE: Student’s race/ethnicity-composite
-- X1FAMINCOME # Total family income from all sources 2008 
-- X3TCREDAPIB #X3 Credits earned in: AP/IB combined - in Carnegie units 
-- X1CONTROL #identifies the base year school as being a Public, Catholic, or Other Private School
-- X1SCHOOLBEL: Scale of student’s sense of school belonging
+- College Major Considering (X4ENTRYMAJ23) (23 categories)
+- Urbanicity (X1LOCALE)
+- Total family income from all sources 2008 (X1FAMINCOME)
+- Credits earned in: AP/IB combined (X3TCREDAPIB)
+- Public, Catholic, or Other Private School (X1CONTROL)
+- Scale of student’s sense of school belonging (X1SCHOOLBEL)
 
 ## Multiple Linear Regression
 
@@ -173,17 +182,32 @@ summary(SLR_GPA_Job_reg) |> broom::tidy() |>
 #| echo: false
 
 MLR_all <- HSLS_Data |>
-  filter(X5GPAALL >= 0,
-         X3TGPAACAD >= 0,
-         X1STU30OCC2 != "Unit non-response") |>
-  filter(X1STU30OCC2 != "Uncodeable") |>
-  filter(X1STU30OCC2 != "Missing") |>
+  filter(
+    X5GPAALL >= 0,
+    X3TGPAACAD >= 0,
+    X1STU30OCC2 != "Unit non-response",
+    X1STU30OCC2 != "Uncodeable",
+    X1STU30OCC2 != "Missing",
+    X4ENTRYMAJ23 != "Missing",
+    X4ENTRYMAJ23 != "Unit non-response",
+    X4ENTRYMAJ23 != "Item legitimate skip/NA"
+  )
+
 
 # Reset reference groups
-MLR_all$X1STU30OCC2 <- relevel(SLR_GPA_Job$X1STU30OCC2, ref = "Don't know")
-MLR_all$X4ENTRYMAJ23 <- relevel(df$X4ENTRYMAJ23, ref = "Undeclared/undecided")
-
+MLR_all$X1STU30OCC2 <- relevel(MLR_all$X1STU30OCC2, ref = "Don't know")
+MLR_all$X4ENTRYMAJ23 <- relevel(MLR_all$X4ENTRYMAJ23, ref = "Undeclared/undecided")
 ```
+
+```{r}
+MLR_all.reg <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1LOCALE + X1FAMINCOME + X3TCREDAPIB + X1CONTROL + X1SCHOOLBEL, data = MLR_all)
+
+summary(MLR_all.reg) |> 
+  broom::tidy()
+```
+
+
+
 
 
 ## Variable Selection

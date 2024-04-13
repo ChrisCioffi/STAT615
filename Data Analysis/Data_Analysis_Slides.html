@@ -382,8 +382,7 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 <li><p>Additional predictors:</p>
 <ul>
 <li>Academic: High school GPA, credits earned for AP/IB courses, School engagement, Stem/non-stem desired occupation</li>
-<li>Demographic: Student race, Family Income</li>
-<li>School Features: High School urbanicity, High School type</li>
+<li>Geographic and Socioeconomic Factors: Family Income, High School urbanicity, High School type</li>
 </ul></li>
 </ul>
 </section>
@@ -435,17 +434,34 @@ HS_GPA        0.5630064 1.0000000</code></pre>
 <section id="additional-variables-to-add" class="slide level2">
 <h2>Additional Variables to Add</h2>
 <ul>
-<li>X4ENTRYMAJ23: Major considering upon postsecondary entry- 23 categories</li>
-<li>X1LOCALE: School locale (urbanicity)</li>
-<li>X1RACE: Student’s race/ethnicity-composite</li>
-<li>X1FAMINCOME # Total family income from all sources 2008</li>
-<li>X3TCREDAPIB #X3 Credits earned in: AP/IB combined - in Carnegie units</li>
-<li>X1CONTROL #identifies the base year school as being a Public, Catholic, or Other Private School</li>
-<li>X1SCHOOLBEL: Scale of student’s sense of school belonging</li>
+<li>College Major Considering (X4ENTRYMAJ23) (23 categories)</li>
+<li>Urbanicity (X1LOCALE)</li>
+<li>Total family income from all sources 2008 (X1FAMINCOME)</li>
+<li>Credits earned in: AP/IB combined (X3TCREDAPIB)</li>
+<li>Public, Catholic, or Other Private School (X1CONTROL)</li>
+<li>Scale of student’s sense of school belonging (X1SCHOOLBEL)</li>
 </ul>
 </section>
 <section id="multiple-linear-regression" class="slide level2">
 <h2>Multiple Linear Regression</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 64 × 5
+   term                                    estimate std.error statistic  p.value
+   &lt;chr&gt;                                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1 (Intercept)                              0.449      0.0609     7.37  1.92e-13
+ 2 X1STU30OCC2Management Occupations        0.0899     0.0542     1.66  9.71e- 2
+ 3 X1STU30OCC2Business and Financial Oper…  0.0248     0.0677     0.366 7.14e- 1
+ 4 X1STU30OCC2Computer and Mathematical O… -0.0312     0.0618    -0.504 6.14e- 1
+ 5 X1STU30OCC2Architecture and Engineerin… -0.0555     0.0363    -1.53  1.27e- 1
+ 6 X1STU30OCC2Life, Physical, and Social … -0.0139     0.0355    -0.392 6.95e- 1
+ 7 X1STU30OCC2Community and Social Servic…  0.116      0.0833     1.40  1.62e- 1
+ 8 X1STU30OCC2Legal Occupations            -0.0705     0.0407    -1.73  8.34e- 2
+ 9 X1STU30OCC2Education, Training, and Li…  0.0749     0.0405     1.85  6.43e- 2
+10 X1STU30OCC2Arts, Design, Entertainment…  0.00697    0.0273     0.255 7.98e- 1
+# ℹ 54 more rows</code></pre>
+</div>
+</div>
 </section>
 <section id="variable-selection" class="slide level2">
 <h2>Variable Selection</h2>
