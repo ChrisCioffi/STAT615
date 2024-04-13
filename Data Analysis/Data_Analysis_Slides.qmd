@@ -3,7 +3,7 @@ title: "Career Choice and Academic Performance"
 author: "Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry"
 format:
   revealjs:
-    theme: "league"
+    theme: "night"
 ---
 
 ## Overview
@@ -181,6 +181,7 @@ summary(SLR_GPA_Job_reg) |>
 ```{r}
 #| echo: false
 
+# Remove missing values
 MLR_all <- HSLS_Data |>
   filter(
     X5GPAALL >= 0,
@@ -190,20 +191,64 @@ MLR_all <- HSLS_Data |>
     X1STU30OCC2 != "Missing",
     X4ENTRYMAJ23 != "Missing",
     X4ENTRYMAJ23 != "Unit non-response",
-    X4ENTRYMAJ23 != "Item legitimate skip/NA"
+    X4ENTRYMAJ23 != "Item legitimate skip/NA",
+    X1LOCALE != "Item legitimate skip/NA",
+    X1LOCALE != "Unit non-response",
+    X1LOCALE != "Missing",
+    X1FAMINCOME != "Item legitimate skip/NA",
+    X1FAMINCOME != "Unit non-response",
+    X1FAMINCOME != "Missing"
   )
 
 
 # Reset reference groups
 MLR_all$X1STU30OCC2 <- relevel(MLR_all$X1STU30OCC2, ref = "Don't know")
 MLR_all$X4ENTRYMAJ23 <- relevel(MLR_all$X4ENTRYMAJ23, ref = "Undeclared/undecided")
+MLR_all$X1LOCALE <- relevel(MLR_all$X1LOCALE, ref = "Rural")
 ```
+
+```{r}
+#| echo: false
+# unique(MLR_all$X5GPAALL)
+# unique(MLR_all$X1STU30OCC2)
+# unique(MLR_all$X3TGPAACAD)
+# unique(MLR_all$X4ENTRYMAJ23)
+# unique(MLR_all$X1LOCALE)
+# unique(MLR_all$X1FAMINCOME)
+# unique(MLR_all$X3TCREDAPIB)
+# unique(MLR_all$X1CONTROL)
+# unique(MLR_all$X1SCHOOLBEL)
+```
+
+
+
+- MLR Model: $College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4urbanicity + \beta_5family\_income + \beta_6credits + \beta_7school\_type + \beta_8school\_belonging + \epsilon$.
+
 
 ```{r}
 MLR_all.reg <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1LOCALE + X1FAMINCOME + X3TCREDAPIB + X1CONTROL + X1SCHOOLBEL, data = MLR_all)
 
 summary(MLR_all.reg) |> 
-  broom::tidy()
+  broom::tidy() |> 
+  select(term,p.value) |> 
+  mutate(p.value = sprintf("%.2f", p.value))
+# filter(p.value >= 0.01)
+```
+
+
+
+## Lack of Fit Test: Remove Urbanicity & School Belonging?
+
+- Urbanicity (X1LOCALE): Betas for all 4 categories (City, Rural, Suburb, & Town) are insignificant at alpha = 0.10
+- School Belonging (X1SCHOOLBEL): P-value for beta is 0.80
+
+**Lack of Fit Test**
+
+- Null Hypothesis: $\beta_4urbanicity$ = $\beta_8school\_belonging$ = 0
+- Alternative hypothesis: either of the betas for these variables is a non-zero value
+
+```{r}
+
 ```
 
 
@@ -212,7 +257,16 @@ summary(MLR_all.reg) |>
 
 ## Variable Selection
 
+- Stepwise selection in both directions
+
+```{r}
+step(MLR_all.reg, direction="both")
+```
+
+
+
 ## Diagnostic Tools
+
 
 ## Remedial Measures
 
