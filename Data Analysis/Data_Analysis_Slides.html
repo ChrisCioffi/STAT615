@@ -468,6 +468,9 @@ HS_GPA        0.5630064 1.0000000</code></pre>
 <li><p>Alternative hypothesis: either of the betas for these variables is a non-zero value</p></li>
 <li><p>Use alpha = 0.10</p></li>
 </ul>
+</section>
+<section id="remove-urbanicity-school-belonging-1" class="slide level2">
+<h2>Remove Urbanicity &amp; School Belonging?</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
@@ -482,16 +485,15 @@ Model 2: X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1LOCALE +
 </div>
 </div>
 <ul>
-<li><p>Anova table comparing the reduced model removing Urbanicity &amp; School Belonging results in a p-value of 0.331. This value confirms insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.</p></li>
+<li><p>P-value of 0.331, confirms insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.</p></li>
 <li><p>In any case, the lack of significant relationship between Urbanicity &amp; School Belonging was previously seen in earlier plots as well</p></li>
 </ul>
 </section>
 <section id="variable-selection" class="slide level2">
 <h2>Variable Selection</h2>
-<ul>
-<li>New MLR Model: <span class="math display">\[College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4family\_income + \beta_5credits + \beta_6school\_type + \epsilon\]</span>.</li>
-<li>Stepwise selection did not remove additional variables</li>
-</ul>
+<p>New MLR Model: <span class="math display">\[College\_GPA = \\
+\beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \\ \beta_4family\_income + \beta_5credits + \beta_6school\_type + \epsilon\]</span></p>
+<p>Stepwise selection did not remove additional variables</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Start:  AIC=-5110.25
@@ -638,8 +640,11 @@ X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations
 </ul>
 </section>
 <section id="diagnostics" class="slide level2">
-<h2>Diagnostics:</h2>
-<p>Linearity</p>
+<h2>Diagnostics</h2>
+<p><em>Linearity</em></p>
+<ul>
+<li>F-statistic: 71.1 on 58 and 7290 DF, p-value: &lt; 2.2e-16</li>
+</ul>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -961,13 +966,15 @@ F-statistic:  71.1 on 58 and 7290 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
-<section id="diagnostics-constant-variance" class="slide level2">
-<h2>Diagnostics: Constant Variance</h2>
+<section id="diagnostics-1" class="slide level2">
+<h2>Diagnostics</h2>
+<p><em>Constant Variance</em></p>
 <p>Very obvious pattern here</p>
 
 <img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
-<section id="diagnostics-normality" class="slide level2">
-<h2>Diagnostics: Normality</h2>
+<section id="diagnostics-2" class="slide level2">
+<h2>Diagnostics:</h2>
+<p><em>Normality</em></p>
 
 <img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
 <section id="remedial-measures" class="slide level2">

@@ -371,13 +371,15 @@ summary(MLR_all.reg)
 
 - Use alpha = 0.10
 
+## Remove Urbanicity & School Belonging?
+
 ```{r}
 #| echo: false
 MLR_all.reg.reduced <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all)
 anova(MLR_all.reg.reduced, MLR_all.reg)
 ```
 
-- Anova table comparing the reduced model removing Urbanicity & School Belonging results in a p-value of 0.331. This value confirms insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.
+- P-value of 0.331, confirms insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.
 
 - In any case, the lack of significant relationship between Urbanicity & School Belonging was previously seen in earlier plots as well
 
@@ -386,8 +388,11 @@ anova(MLR_all.reg.reduced, MLR_all.reg)
 
 ## Variable Selection
 
-- New MLR Model: $$College\_GPA = \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \beta_4family\_income + \beta_5credits + \beta_6school\_type + \epsilon$$.
-- Stepwise selection did not remove additional variables
+New MLR Model: 
+$$College\_GPA = \\
+\beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \\ \beta_4family\_income + \beta_5credits + \beta_6school\_type + \epsilon$$
+
+Stepwise selection did not remove additional variables
 
 ```{r}
 step(MLR_all.reg.reduced,
@@ -395,18 +400,24 @@ step(MLR_all.reg.reduced,
   scope = list(lower = ~X5GPAALL ~ X1STU30OCC2)
 ) # force inclusion of Planned occupation (X1STU30OCC2)
 ```
+
 - Stepwise selection did not remove additional variables
 
-## Diagnostics: 
+## Diagnostics
 
-Linearity
+*Linearity*
+
+- F-statistic:  71.1 on 58 and 7290 DF,  p-value: < 2.2e-16
 
 ```{r}
-
+#| echo: false
 summary(MLR_all.reg.reduced)
-
 ```
-## Diagnostics: Constant Variance
+
+
+## Diagnostics
+
+*Constant Variance*
 
 Very obvious pattern here
 
@@ -422,9 +433,9 @@ plot(predicted, residuals,
 abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
 ```
 
+## Diagnostics
 
-## Diagnostics: Normality
-
+*Normality*
 
 ```{r}
 par(mfrow = c(1, 2))
