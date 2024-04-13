@@ -157,14 +157,34 @@ summary(SLR_GPA_Job_reg) |> broom::tidy() |>
 
 ## Additional Variables to Add
 
+**(KF going to clean up this slide)**
+
 - X4ENTRYMAJ23: Major considering upon postsecondary entry- 23 categories
 - X1LOCALE: School locale (urbanicity)
 - X1RACE: Student’s race/ethnicity-composite
 - X1FAMINCOME # Total family income from all sources 2008 
 - X3TCREDAPIB #X3 Credits earned in: AP/IB combined - in Carnegie units 
-- X1CONTROL #identifies the base year school as being a Public, Catholic, or Other Private School 
+- X1CONTROL #identifies the base year school as being a Public, Catholic, or Other Private School
+- X1SCHOOLBEL: Scale of student’s sense of school belonging
 
 ## Multiple Linear Regression
+
+```{r}
+#| echo: false
+
+MLR_all <- HSLS_Data |>
+  filter(X5GPAALL >= 0,
+         X3TGPAACAD >= 0,
+         X1STU30OCC2 != "Unit non-response") |>
+  filter(X1STU30OCC2 != "Uncodeable") |>
+  filter(X1STU30OCC2 != "Missing") |>
+
+# Reset reference groups
+MLR_all$X1STU30OCC2 <- relevel(SLR_GPA_Job$X1STU30OCC2, ref = "Don't know")
+MLR_all$X4ENTRYMAJ23 <- relevel(df$X4ENTRYMAJ23, ref = "Undeclared/undecided")
+
+```
+
 
 ## Variable Selection
 
