@@ -162,6 +162,8 @@ predict(rqfit50, newdata=new_data, interval="confidence", level=.9)
 
 -   Using the same income scores, we can see that a person with different income scores have different life expectancies in any quantile. But comparing the 25 quantile to the 75 quantile and the 99 quantile, it's easy to see how different the life expectancy for those people would be depending on their income. But especially what how wealthy the country they live in is, regardless of their personal income.
 
+## 1q vs 3q Results
+
 ```{r}
 predict(rqfit25, newdata=new_data, interval="confidence", level=.9) 
 predict(rqfit75, newdata=new_data, interval="confidence", level=.9) 
