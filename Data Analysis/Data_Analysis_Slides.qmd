@@ -23,7 +23,7 @@ format:
 
 -   We investigate what factors in high school may be related to future academic performance.
 
--   Research Question: How is college GPA related to thoughts about prospective career path in high school? How are other characteristics about a student's background and high school enviroment related to their college GPA?
+-   Question: How is college GPA related to prospective career path in high school? How are other characteristics about a student's background and high school environment related to their college GPA?
 
 ## Literature Review/Background
 
@@ -360,8 +360,8 @@ summary(MLR_all.reg)
 
 ## Remove Urbanicity & School Belonging?
 
-- Urbanicity (X1LOCALE): Betas for all 4 categories (City, Rural, Suburb, & Town) are insignificant at alpha = 0.10
-- School Belonging (X1SCHOOLBEL): P-value for beta is 0.80
+- Urbanicity: Betas for all 4 categories (City, Rural, Suburb, & Town) are insignificant at alpha = 0.10
+- School Belonging: P-value for beta is 0.80
 
 **Lack of Fit Test**
 
@@ -379,9 +379,9 @@ MLR_all.reg.reduced <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X
 anova(MLR_all.reg.reduced, MLR_all.reg)
 ```
 
-- P-value of 0.331, confirms insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.
+- P-value of 0.331, insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.
 
-- In any case, the lack of significant relationship between Urbanicity & School Belonging was previously seen in earlier plots as well
+- The lack of significant relationship between Urbanicity & School Belonging was seen in earlier plots.
 
 
 
@@ -395,6 +395,7 @@ $$College\_GPA = \\
 Stepwise selection did not remove additional variables
 
 ```{r}
+#| include: false
 step(MLR_all.reg.reduced,
   direction = "both",
   scope = list(lower = ~X5GPAALL ~ X1STU30OCC2)
@@ -449,8 +450,12 @@ qqline(MLR_all.reg.reduced$resi)
 
 - Need to address non-constant variance first, and then recheck normality assumption
 
-## MLR Results
+## MLR Results After Remedial Measures
 
-## Slide for Additional Ideas
+## Potential Next Steps
 
--   If our model assumptions are violated we could try bootstrapping or quantile regression?
+-   If our model assumptions are violated we could try bootstrapping or quantile regression.
+
+-   Try transformations on response and predictors.
+
+-   Recheck model diagnostics.

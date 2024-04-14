@@ -354,7 +354,7 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 <ul>
 <li><p>During high school, young adults are often asked to make decisions regarding post-secondary education that can have a profound and lasting impact on their lives in the future.</p></li>
 <li><p>We investigate what factors in high school may be related to future academic performance.</p></li>
-<li><p>Research Question: How is college GPA related to thoughts about prospective career path in high school? How are other characteristics about a student’s background and high school enviroment related to their college GPA?</p></li>
+<li><p>Question: How is college GPA related to prospective career path in high school? How are other characteristics about a student’s background and high school environment related to their college GPA?</p></li>
 </ul>
 </section>
 <section id="literature-reviewbackground" class="slide level2">
@@ -459,8 +459,8 @@ HS_GPA        0.5630064 1.0000000</code></pre>
 <section id="remove-urbanicity-school-belonging" class="slide level2">
 <h2>Remove Urbanicity &amp; School Belonging?</h2>
 <ul>
-<li>Urbanicity (X1LOCALE): Betas for all 4 categories (City, Rural, Suburb, &amp; Town) are insignificant at alpha = 0.10</li>
-<li>School Belonging (X1SCHOOLBEL): P-value for beta is 0.80</li>
+<li>Urbanicity: Betas for all 4 categories (City, Rural, Suburb, &amp; Town) are insignificant at alpha = 0.10</li>
+<li>School Belonging: P-value for beta is 0.80</li>
 </ul>
 <p><strong>Lack of Fit Test</strong></p>
 <ul>
@@ -485,8 +485,8 @@ Model 2: X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1LOCALE +
 </div>
 </div>
 <ul>
-<li><p>P-value of 0.331, confirms insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.</p></li>
-<li><p>In any case, the lack of significant relationship between Urbanicity &amp; School Belonging was previously seen in earlier plots as well</p></li>
+<li><p>P-value of 0.331, insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.</p></li>
+<li><p>The lack of significant relationship between Urbanicity &amp; School Belonging was seen in earlier plots.</p></li>
 </ul>
 </section>
 <section id="variable-selection" class="slide level2">
@@ -494,147 +494,6 @@ Model 2: X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1LOCALE +
 <p>New MLR Model: <span class="math display">\[College\_GPA = \\
 \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \\ \beta_4family\_income + \beta_5credits + \beta_6school\_type + \epsilon\]</span></p>
 <p>Stepwise selection did not remove additional variables</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Start:  AIC=-5110.25
-X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + 
-    X3TCREDAPIB + X1CONTROL
-
-               Df Sum of Sq    RSS     AIC
-&lt;none&gt;                      3608.0 -5110.2
-- X1CONTROL     1      9.22 3617.2 -5093.5
-- X1FAMINCOME  12     21.53 3629.5 -5090.5
-- X4ENTRYMAJ23 22     54.19 3662.1 -5044.7
-- X3TCREDAPIB   1     35.54 3643.5 -5040.2
-- X3TGPAACAD    1   1225.29 4833.2 -2963.6</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + 
-    X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all)
-
-Coefficients:
-                                                          (Intercept)  
-                                                            0.4541565  
-                                    X1STU30OCC2Management Occupations  
-                                                            0.0153304  
-             X1STU30OCC2Business and Financial Operations Occupations  
-                                                            0.0782835  
-                     X1STU30OCC2Computer and Mathematical Occupations  
-                                                           -0.0370277  
-                  X1STU30OCC2Architecture and Engineering Occupations  
-                                                           -0.0585375  
-            X1STU30OCC2Life, Physical, and Social Science Occupations  
-                                                           -0.0304988  
-                 X1STU30OCC2Community and Social Services Occupations  
-                                                            0.1392815  
-                                         X1STU30OCC2Legal Occupations  
-                                                           -0.0737682  
-              X1STU30OCC2Education, Training, and Library Occupations  
-                                                            0.0670447  
-X1STU30OCC2Arts, Design, Entertainment, Sports, and Media Occupations  
-                                                           -0.0050668  
-        X1STU30OCC2Healthcare Practitioners and Technical Occupations  
-                                                           -0.0302980  
-                            X1STU30OCC2Healthcare Support Occupations  
-                                                            0.0869059  
-                            X1STU30OCC2Protective Service Occupations  
-                                                           -0.0524724  
-          X1STU30OCC2Food Preparation and Serving Related Occupations  
-                                                           -0.2356375  
-                     X1STU30OCC2Personal Care and Service Occupations  
-                                                            0.0982343  
-                             X1STU30OCC2Sales and Related Occupations  
-                                                            0.0434307  
-                X1STU30OCC2Farming, Fishing, and Forestry Occupations  
-                                                            0.1171752  
-                   X1STU30OCC2Construction and Extraction Occupations  
-                                                            0.0705477  
-         X1STU30OCC2Installation, Maintenance, and Repair Occupations  
-                                                            0.1269173  
-                                    X1STU30OCC2Production Occupations  
-                                                            0.1494096  
-            X1STU30OCC2Transportation and Material Moving Occupations  
-                                                            0.1271622  
-                             X1STU30OCC2Military Specific Occupations  
-                                                           -0.1665261  
-                                                           X3TGPAACAD  
-                                                            0.6807046  
-                        X4ENTRYMAJ23Computer and information sciences  
-                                                           -0.0041207  
-                   X4ENTRYMAJ23Engineering and engineering technology  
-                                                            0.0002693  
-            X4ENTRYMAJ23Biological and physical science, science tech  
-                                                            0.0805061  
-                                              X4ENTRYMAJ23Mathematics  
-                                                            0.0729173  
-                        X4ENTRYMAJ23Agriculture and natural resources  
-                                                            0.1474664  
-                                X4ENTRYMAJ23General studies and other  
-                                                            0.1499260  
-                                          X4ENTRYMAJ23Social sciences  
-                                                            0.1688093  
-                                               X4ENTRYMAJ23Psychology  
-                                                            0.1377309  
-                                               X4ENTRYMAJ23Humanities  
-                                                            0.2607402  
-                                                  X4ENTRYMAJ23History  
-                                                            0.1475859  
-                           X4ENTRYMAJ23Personal and consumer services  
-                                                            0.1386387  
-      X4ENTRYMAJ23Manufacturing, construction, repair, transportation  
-                                                            0.4337423  
-              X4ENTRYMAJ23Military technology and protective services  
-                                                            0.1482326  
-                                       X4ENTRYMAJ23Health care fields  
-                                                            0.1591009  
-                                                 X4ENTRYMAJ23Business  
-                                                            0.1194903  
-                                                X4ENTRYMAJ23Education  
-                                                            0.2294671  
-                                             X4ENTRYMAJ23Architecture  
-                                                            0.2198331  
-                                           X4ENTRYMAJ23Communications  
-                                                            0.2830411  
-                 X4ENTRYMAJ23Public administration and human services  
-                                                            0.1670796  
-                                  X4ENTRYMAJ23Design and applied arts  
-                                                            0.2517047  
-                                    X4ENTRYMAJ23Law and legal studies  
-                                                            0.2328264  
-                         X4ENTRYMAJ23Theology and religious vocations  
-                                                            0.3499678  
-                    X1FAMINCOMEFamily income &gt; $15,000 and &lt;= $35,000  
-                                                            0.0097161  
-                    X1FAMINCOMEFamily income &gt; $35,000 and &lt;= $55,000  
-                                                            0.0542806  
-                    X1FAMINCOMEFamily income &gt; $55,000 and &lt;= $75,000  
-                                                            0.1061207  
-                    X1FAMINCOMEFamily income &gt; $75,000 and &lt;= $95,000  
-                                                            0.0811145  
-                   X1FAMINCOMEFamily income &gt; $95,000 and &lt;= $115,000  
-                                                            0.1507057  
-                  X1FAMINCOMEFamily income &gt; $115,000 and &lt;= $135,000  
-                                                            0.1707281  
-                  X1FAMINCOMEFamily income &gt; $135,000 and &lt;= $155,000  
-                                                            0.1262002  
-                   X1FAMINCOMEFamily income &gt; $155,000 and &lt;=$175,000  
-                                                            0.0952562  
-                  X1FAMINCOMEFamily income &gt; $175,000 and &lt;= $195,000  
-                                                            0.1803418  
-                  X1FAMINCOMEFamily income &gt; $195,000 and &lt;= $215,000  
-                                                            0.2102978  
-                  X1FAMINCOMEFamily income &gt; $215,000 and &lt;= $235,000  
-                                                            0.1432016  
-                                  X1FAMINCOMEFamily income &gt; $235,000  
-                                                            0.1595624  
-                                                          X3TCREDAPIB  
-                                                            0.0292806  
-                                   X1CONTROLCatholic or other private  
-                                                            0.0861247  </code></pre>
-</div>
-</div>
 <ul>
 <li>Stepwise selection did not remove additional variables</li>
 </ul>
@@ -973,7 +832,7 @@ F-statistic:  71.1 on 58 and 7290 DF,  p-value: &lt; 2.2e-16</code></pre>
 
 <img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
 <section id="diagnostics-2" class="slide level2">
-<h2>Diagnostics:</h2>
+<h2>Diagnostics</h2>
 <p><em>Normality</em></p>
 
 <img data-src="Data_Analysis_Slides_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
@@ -983,13 +842,15 @@ F-statistic:  71.1 on 58 and 7290 DF,  p-value: &lt; 2.2e-16</code></pre>
 <li>Need to address non-constant variance first, and then recheck normality assumption</li>
 </ul>
 </section>
-<section id="mlr-results" class="slide level2">
-<h2>MLR Results</h2>
+<section id="mlr-results-after-remedial-measures" class="slide level2">
+<h2>MLR Results After Remedial Measures</h2>
 </section>
-<section id="slide-for-additional-ideas" class="slide level2">
-<h2>Slide for Additional Ideas</h2>
+<section id="potential-next-steps" class="slide level2">
+<h2>Potential Next Steps</h2>
 <ul>
-<li>If our model assumptions are violated we could try bootstrapping or quantile regression?</li>
+<li><p>If our model assumptions are violated we could try bootstrapping or quantile regression.</p></li>
+<li><p>Try transformations on response and predictors.</p></li>
+<li><p>Recheck model diagnostics.</p></li>
 </ul>
 <div class="footer footer-default">
 
