@@ -91,7 +91,7 @@ df_trends |>
 
 -   Demo: estimate the conditional quantiles, considering the predictors, and here we can use quantreg to compare world nations' life expectancies to its so-called income index.
 
--   The dataset is maintained by the World Health Organization and looks at a variety of public health and income factors for world nations. We're using a Kaggle version, which can be easily downloaded following this link: https://gist.github.com/aishwarya8615/89d9f36fc014dea62487f7347864d16a
+-   The dataset is maintained by the World Health Organization and looks at a variety of public health and income factors for world nations. We're using a Kaggle version, which can be easily downloaded [here](https://gist.github.com/aishwarya8615/89d9f36fc014dea62487f7347864d16a).
 
 -   \*Demo adapted from examples found on Medium and R-bloggers
 
@@ -105,14 +105,15 @@ life_exp_narm <- read_csv("Life_Expectancy_Data.csv")
 #let's remove all with income index around 0 and just pull in the life expectancy and income score columns for the purposes of this exercise.
 life_exp_narm <- life_exp_narm |> 
   filter(Income_composition_of_resources>0) |>
-  select(Income_composition_of_resources, Life_expectancy)
+  select(Income_composition_of_resources, Life_expectancy,Status)
 
 #summary statistics for the 
 
 #plot the data 
 ggplot(life_exp_narm, aes(x=Income_composition_of_resources, 
                           y=Life_expectancy, col=Status)) + geom_point() +
-  xlab("Income index") + ylab("Life expectancy")
+  xlab("Income index") + ylab("Life expectancy") +
+  theme_bw()
 ```
 
 ## Quantile regression vs Linear Regression
@@ -127,7 +128,8 @@ ggplot(life_exp_narm, aes(x=Income_composition_of_resources,
                           y=Life_expectancy, col=Status)) + geom_point() +
   geom_smooth(method = lm, se = FALSE, color = "red", size = 1) + # linear model
   geom_quantile(color = "blue", quantiles = 0.5, size=1) + # median quantile regression model with tau = 0.5 -- 50%
-  labs(title = "Life expectancy ~ income index - lm mean (red), quantreg median (blue)", y = "Life Expectancy", x = "Income Index")
+  labs(title = "Life expectancy ~ income index - lm mean (red), quantreg median (blue)", y = "Life Expectancy", x = "Income Index") +
+  theme_bw()
 ```
 
 ## Quantreg for quantiles
@@ -141,10 +143,10 @@ rqfit50 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.50, dat
 rqfit75 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.75, data = life_exp_narm)
 rqfit99 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.99, data = life_exp_narm)
 ```
-## comparing the mean and median  
+
+## comparing the mean and median
 
 -   pulling the 1q, median and 3q income scores, comparing the median regression rougly aligns with the lm() mean regression
-
 
 ```{r}
 summary(life_exp_narm)
@@ -155,7 +157,6 @@ predict(notrqfit, newdata=new_data,  interval="confidence", level=.9)
 predict(rqfit50, newdata=new_data, interval="confidence", level=.9) 
 
 ```
-
 
 ## 1q vs 3q
 
@@ -168,8 +169,6 @@ predict(rqfit75, newdata=new_data, interval="confidence", level=.9)
 predict(rqfit99, newdata=new_data, interval="confidence", level=.9) 
 
 ```
-
-
 
 ## References
 
