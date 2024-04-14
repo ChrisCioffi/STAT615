@@ -102,9 +102,10 @@ df_trends |>
 ```{r}
 #import data 
 life_exp_narm <- read_csv("Life_Expectancy_Data.csv")
-#let's remove all with income index around 0 for the purposes of this exercise.
+#let's remove all with income index around 0 and just pull in the life expectancy and income score columns for the purposes of this exercise.
 life_exp_narm <- life_exp_narm |> 
-  filter(Income_composition_of_resources>0) 
+  filter(Income_composition_of_resources>0) |>
+  select(Income_composition_of_resources, Life_expectancy)
 
 #summary statistics for the 
 
@@ -131,20 +132,44 @@ ggplot(life_exp_narm, aes(x=Income_composition_of_resources,
 
 ## Quantreg for quantiles
 
--   In addition to comparing the mean to the median, we can also look at the top and bottom quantiles to compare the confidence intervals for life expectancies.
+-   In addition to comparing the mean to the median, we can also look at the top and bottom quantiles to compare the confidence intervals for life expectancies. First run the different models
 
 ```{r}
+notrqfit<- lm(Life_expectancy ~ Income_composition_of_resources, data = life_exp_narm)
+rqfit25 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.25, data = life_exp_narm)
+rqfit50 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.50, data = life_exp_narm)
+rqfit75 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.75, data = life_exp_narm)
+rqfit99 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.99, data = life_exp_narm)
+```
+## comparing the mean and median  
 
-rqfit <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.25, data = life_exp_narm)
+-   pulling the 1q, median and 3q income scores, comparing the median regression rougly aligns with the lm() mean regression
 
-summary(rqfit)
+
+```{r}
+summary(life_exp_narm)
+#data pulled from the 1q, median and 3q results from original data
+new_data<-data.frame(Income_composition_of_resources=c(.525,0.695,0.793))
+#comparing the median and mean 
+predict(notrqfit, newdata=new_data,  interval="confidence", level=.9) 
+predict(rqfit50, newdata=new_data, interval="confidence", level=.9) 
 
 ```
 
-## When you click the **Render** button a document will be generated that includes:
 
--   Content authored with markdown
--   Output from executable code
+## 1q vs 3q
+
+-   Using the same income scores, we can see that a person with different income scores have different life expectancies in any quantile. But comparing the 25 quantile to the 75 quantile and the 99 quantile, it's easy to see how different the life expectancy for those people would be depending on their income. But especially what how wealthy the country they live in is, regardless of their personal income.
+
+```{r}
+predict(rqfit25, newdata=new_data, interval="confidence", level=.9) 
+predict(rqfit75, newdata=new_data, interval="confidence", level=.9) 
+#even more extreme in the 99percentile
+predict(rqfit99, newdata=new_data, interval="confidence", level=.9) 
+
+```
+
+
 
 ## References
 
