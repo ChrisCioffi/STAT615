@@ -23,9 +23,12 @@ format:
 
 -   We investigate what factors in high school may be related to future academic performance.
 
+## Research Question
+
 -   Question: How is college GPA related to prospective career path in high school? How are other characteristics about a student's background and high school environment related to their college GPA?
 
-## Literature Review/Background
+-   This study aims to investigate whether students who have a desired future career path in the 9th grade perform better than students who do not, and if choice of career path matters.
+
 
 ## Data
 
@@ -104,7 +107,7 @@ HSLS_Data |>
   geom_smooth(method = "lm", se = FALSE) +
   theme(legend.position = "none") +
   labs(
-    title = "HS GPA vs. College GPA",
+    title = "HS GPA vs. College GPA by Desired Education",
     x = "High School GPA",
     y = "College GPA"
   ) +
@@ -459,3 +462,5 @@ qqline(MLR_all.reg.reduced$resi)
 -   Try transformations on response and predictors.
 
 -   Recheck model diagnostics.
+
+-   Add some additional models to test if there is a general effect of knowing your desired career path vs. not knowing.
