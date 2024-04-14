@@ -86,7 +86,7 @@ HSLS_Data |>
 # NOTE: Try to sort this by Median GPA
 ```
 
-## Desired Occupation and Academic Performance
+## Desired Education and Academic Performance
 
 ```{r}
 #| echo: false
@@ -382,7 +382,7 @@ MLR_all.reg.reduced <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X
 anova(MLR_all.reg.reduced, MLR_all.reg)
 ```
 
-- P-value of 0.331, insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.
+- With a P-value of 0.331, there is insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.
 
 - The lack of significant relationship between Urbanicity & School Belonging was seen in earlier plots.
 
