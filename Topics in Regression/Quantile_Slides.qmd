@@ -3,6 +3,7 @@ title: "Quantile Regression"
 author: "Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry"
 format: revealjs
 editor: visual
+embed-resources: true
 ---
 
 ## Quantile Regression

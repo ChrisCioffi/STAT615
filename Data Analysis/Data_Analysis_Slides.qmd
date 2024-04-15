@@ -4,6 +4,7 @@ author: "Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry"
 format:
   revealjs:
     theme: "night"
+embed-resources: true
 ---
 
 ## Overview
