@@ -86,7 +86,7 @@ HSLS_Data |>
 # NOTE: Try to sort this by Median GPA
 ```
 
-## Desired Education and Academic Performance
+## Desired Occupation and Academic Performance
 
 ```{r}
 #| echo: false
@@ -107,7 +107,7 @@ HSLS_Data |>
   geom_smooth(method = "lm", se = FALSE) +
   theme(legend.position = "none") +
   labs(
-    title = "HS GPA vs. College GPA by Desired Education",
+    title = "HS GPA vs. College GPA by Desired Occupation",
     x = "High School GPA",
     y = "College GPA"
   ) +
@@ -395,7 +395,6 @@ New MLR Model:
 $$College\_GPA = \\
 \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \\ \beta_4family\_income + \beta_5credits + \beta_6school\_type + \epsilon$$
 
-Stepwise selection did not remove additional variables
 
 ```{r}
 #| include: false

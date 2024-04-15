@@ -118,7 +118,7 @@ ggplot(life_exp_narm, aes(x=Income_composition_of_resources,
 
 ## Quantile regression vs Linear Regression
 
--   While linear regression can give us the mean value, quantreg can allow us to find any quantile ranging from the 1 percentile to the 99 percentile. We can also easily evaluate the 50% percentile (the median) which can be more resistant to outliers than linear regression's mean.
+-   While linear regression can give us the mean value, quantreg can allow us to find any quantile ranging from the 1st percentile to the 99th percentile. We can also easily evaluate the 50th percentile (the median) which can be more resistant to outliers than linear regression's mean.
 
 ## Quantile regression vs Linear Regression
 
@@ -144,9 +144,9 @@ rqfit75 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.75, dat
 rqfit99 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.99, data = life_exp_narm)
 ```
 
-## comparing the mean and median
+## Comparing the mean and median
 
--   pulling the 1q, median and 3q income scores, comparing the median regression rougly aligns with the lm() mean regression
+-   When comparing the confidence intervals using the median quantile regression and linear regression for the mean, the values roughtly align.
 
 ```{r}
 summary(life_exp_narm)
@@ -158,11 +158,13 @@ predict(rqfit50, newdata=new_data, interval="confidence", level=.9)
 
 ```
 
-## 1q vs 3q
+## 1st Quantile vs 3rd Quantile
 
--   Using the same income scores, we can see that a person with different income scores have different life expectancies in any quantile. But comparing the 25 quantile to the 75 quantile and the 99 quantile, it's easy to see how different the life expectancy for those people would be depending on their income. But especially what how wealthy the country they live in is, regardless of their personal income.
+-   Using the same income scores from the previous slide, we can see that life expectancies are different depending on the quantile of life expectancy. Comparing the 25th quantile to the 75th quantile and the 99th quantile, it's easy to see how different the life expectancy for those people would be depending on their income. Additionallly, the wealth of an individual's country plays a factor in life expectancy, regardless of their personal income.
 
-## 1q vs 3q Results
+## 1st Quantile vs 3rd Quantile Prediction Results
+
+-   The first set of results is using the quantile regression at the 25th quantile, the second uses the 75th quantile, and the 3rd uses the 99th quantile.
 
 ```{r}
 predict(rqfit25, newdata=new_data, interval="confidence", level=.9) 
@@ -172,6 +174,16 @@ predict(rqfit99, newdata=new_data, interval="confidence", level=.9)
 
 ```
 
+## Next Steps
+
+-   Revise example
+
+-   Add more to background of quantile regression
+
 ## References
 
-https://www.voxco.com/blog/quantile-regression/ https://drkebede.medium.com/quantile-regression-tutorial-in-r-f2eec72c132b https://www.r-bloggers.com/2019/01/quantile-regression-in-r-2/
+https://www.voxco.com/blog/quantile-regression/
+
+https://drkebede.medium.com/quantile-regression-tutorial-in-r-f2eec72c132b
+
+https://www.r-bloggers.com/2019/01/quantile-regression-in-r-2/

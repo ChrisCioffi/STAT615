@@ -406,7 +406,7 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 <section id="quantile-regression-vs-linear-regression" class="slide level2">
 <h2>Quantile regression vs Linear Regression</h2>
 <ul>
-<li>While linear regression can give us the mean value, quantreg can allow us to find any quantile ranging from the 1 percentile to the 99 percentile. We can also easily evaluate the 50% percentile (the median) which can be more resistant to outliers than linear regression’s mean.</li>
+<li>While linear regression can give us the mean value, quantreg can allow us to find any quantile ranging from the 1st percentile to the 99th percentile. We can also easily evaluate the 50th percentile (the median) which can be more resistant to outliers than linear regression’s mean.</li>
 </ul>
 </section>
 <section id="quantile-regression-vs-linear-regression-1" class="slide level2">
@@ -420,9 +420,9 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 </ul>
 </section>
 <section id="comparing-the-mean-and-median" class="slide level2">
-<h2>comparing the mean and median</h2>
+<h2>Comparing the mean and median</h2>
 <ul>
-<li>pulling the 1q, median and 3q income scores, comparing the median regression rougly aligns with the lm() mean regression</li>
+<li>When comparing the confidence intervals using the median quantile regression and linear regression for the mean, the values roughtly align.</li>
 </ul>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -448,14 +448,17 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 </div>
 </div>
 </section>
-<section id="q-vs-3q" class="slide level2">
-<h2>1q vs 3q</h2>
+<section id="st-quantile-vs-3rd-quantile" class="slide level2">
+<h2>1st Quantile vs 3rd Quantile</h2>
 <ul>
-<li>Using the same income scores, we can see that a person with different income scores have different life expectancies in any quantile. But comparing the 25 quantile to the 75 quantile and the 99 quantile, it’s easy to see how different the life expectancy for those people would be depending on their income. But especially what how wealthy the country they live in is, regardless of their personal income.</li>
+<li>Using the same income scores from the previous slide, we can see that life expectancies are different depending on the quantile of life expectancy. Comparing the 25th quantile to the 75th quantile and the 99th quantile, it’s easy to see how different the life expectancy for those people would be depending on their income. Additionallly, the wealth of an individual’s country plays a factor in life expectancy, regardless of their personal income.</li>
 </ul>
 </section>
-<section id="q-vs-3q-results" class="slide level2">
-<h2>1q vs 3q Results</h2>
+<section id="st-quantile-vs-3rd-quantile-prediction-results" class="slide level2">
+<h2>1st Quantile vs 3rd Quantile Prediction Results</h2>
+<ul>
+<li>The first set of results is using the quantile regression at the 25th quantile, the second uses the 75th quantile, and the 3rd uses the 99th quantile.</li>
+</ul>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>       fit    lower   higher
@@ -477,9 +480,18 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 </div>
 </div>
 </section>
+<section id="next-steps" class="slide level2">
+<h2>Next Steps</h2>
+<ul>
+<li><p>Revise example</p></li>
+<li><p>Add more to background of quantile regression</p></li>
+</ul>
+</section>
 <section id="references" class="slide level2">
 <h2>References</h2>
-<p>https://www.voxco.com/blog/quantile-regression/ https://drkebede.medium.com/quantile-regression-tutorial-in-r-f2eec72c132b https://www.r-bloggers.com/2019/01/quantile-regression-in-r-2/</p>
+<p>https://www.voxco.com/blog/quantile-regression/</p>
+<p>https://drkebede.medium.com/quantile-regression-tutorial-in-r-f2eec72c132b</p>
+<p>https://www.r-bloggers.com/2019/01/quantile-regression-in-r-2/</p>
 <div class="footer footer-default">
 
 </div>
