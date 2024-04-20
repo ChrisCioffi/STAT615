@@ -202,14 +202,27 @@ conf_int_out_rq(conf_rq_50)
 
 ## Quantreg for quantiles
 
--   In addition to comparing the mean to the median, we can also look at the top and bottom quantiles to compare the confidence intervals for life expectancies. First run the different models
+-   In addition to comparing the mean to the median, we can also look at the top and bottom quantiles to compare the confidence intervals for life expectancies. First run the different models and obtain the coefficients at each quantile:
 
 ```{r}
-notrqfit<- lm(Life_expectancy ~ Income_composition_of_resources, data = life_exp_narm)
-rqfit25 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.25, data = life_exp_narm)
-rqfit50 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.50, data = life_exp_narm)
-rqfit75 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.75, data = life_exp_narm)
-rqfit99 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.99, data = life_exp_narm)
+#| echo: true
+notrqfit<- lm(Life_expectancy ~ Income_composition_of_resources,
+              data = life_exp_narm)
+rqfit25 <- rq(Life_expectancy ~ Income_composition_of_resources,
+              tau = 0.25, data = life_exp_narm)
+rqfit50 <- rq(Life_expectancy ~ Income_composition_of_resources,
+              tau = 0.50, data = life_exp_narm)
+rqfit75 <- rq(Life_expectancy ~ Income_composition_of_resources,
+              tau = 0.75, data = life_exp_narm)
+rqfit99 <- rq(Life_expectancy ~ Income_composition_of_resources,
+              tau = 0.99, data = life_exp_narm)
+```
+
+## Progression of the Coefficient
+
+```{r}
+myrq <- rq(Life_expectancy ~ Income_composition_of_resources, tau = c(0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90), data = life_exp_narm)
+plot(summary(myrq), parm = "Income_composition_of_resources")
 ```
 
 ## 1st Quartile vs 3rd Quartile
@@ -226,13 +239,6 @@ predict(rqfit75, newdata=new_data, interval="confidence", level=.9)
 #even more extreme in the 99percentile
 predict(rqfit99, newdata=new_data, interval="confidence", level=.9) 
 
-```
-
-## Progression of the Coefficient
-
-```{r}
-myrq <- rq(Life_expectancy ~ Income_composition_of_resources, tau = c(0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90), data = life_exp_narm)
-plot(summary(myrq), parm = "Income_composition_of_resources")
 ```
 
 ## Next Steps
