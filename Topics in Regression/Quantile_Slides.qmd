@@ -77,13 +77,13 @@ df_trends |>
 -   The objective of quantile regression is to minimize the median absolute deviations (Quantile Loss).
 
     -   Rather than minimizing the sum of squares in OLS.
-    
+
 ## Differences in Minimization
 
 -   OLS: $\sum_{i}^{N}(e_i)^2$
-  
+
 -   Quantile: $\sum_{e_i < 0} \tau |e_i| + \sum_{e_i > 0}(1-\tau) |e_i|$
-  
+
     -   $\tau |e_i|$ penalizes underprediction and $(1 - \tau) |e_i|$ penalizes overprediction
 
 ## Model Assumptions
@@ -192,7 +192,6 @@ myrq <- rq(Life_expectancy ~ Income_composition_of_resources, tau = c(0.10, 0.20
 plot(summary(myrq), parm = "Income_composition_of_resources")
 ```
 
-
 ## Next Steps
 
 -   Revise example
@@ -207,6 +206,6 @@ https://drkebede.medium.com/quantile-regression-tutorial-in-r-f2eec72c132b
 
 https://www.r-bloggers.com/2019/01/quantile-regression-in-r-2/
 
-https://www.sfu.ca/~dsignori/buec333/lecture%208.pdf 
+https://www.sfu.ca/\~dsignori/buec333/lecture%208.pdf
 
-https://www.aptech.com/blog/the-basics-of-quantile-regression/ 
+https://www.aptech.com/blog/the-basics-of-quantile-regression/
