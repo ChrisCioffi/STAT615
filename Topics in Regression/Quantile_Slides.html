@@ -1174,7 +1174,10 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 <section id="why-use-quantile-regression" class="slide level2">
 <h2>Why Use Quantile Regression?</h2>
 <ul>
-<li><p>The relationship between the predictor and response variables may vary across the distribution, making it useful to allow the estimates to change.</p></li>
+<li><p>The relationship between the predictor and response variables may vary across the distribution, making it useful to allow the estimates to change.</p>
+<ul>
+<li>A richer description of the relationship.</li>
+</ul></li>
 <li><p>More robust to outliers.</p></li>
 <li><p>If OLS assumptions are violated.</p>
 <ul>
@@ -1187,15 +1190,27 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 <ul>
 <li><p><span class="math inline">\(Q_\tau(Y) = \beta_0(\tau) + \beta_1(\tau)X_1 + ... + \beta_p(\tau)X_p\)</span></p></li>
 <li><p>Where <span class="math inline">\(\tau\)</span> is a specific quantile value.</p></li>
-<li><p>The objective of quantile regression is to minimize the median absolute deviations (Quantile Loss).</p></li>
-<li><p>Rather than minimizing the sum of squares in OLS.</p></li>
+<li><p>The objective of quantile regression is to minimize the median absolute deviations (Quantile Loss).</p>
+<ul>
+<li>Rather than minimizing the sum of squares in OLS.</li>
+</ul></li>
+</ul>
+</section>
+<section id="differences-in-minimization" class="slide level2">
+<h2>Differences in Minimization</h2>
+<ul>
+<li><p>OLS: <span class="math inline">\(\sum_{i}^{N}(e_i)^2\)</span></p></li>
+<li><p>Quantile: <span class="math inline">\(\sum_{e_i &lt; 0} \tau |e_i| + \sum_{e_i &gt; 0}(1-\tau) |e_i|\)</span></p>
+<ul>
+<li><span class="math inline">\(\tau |e_i|\)</span> penalizes underprediction and <span class="math inline">\((1 - \tau) |e_i|\)</span> penalizes overprediction</li>
+</ul></li>
 </ul>
 </section>
 <section id="model-assumptions" class="slide level2">
 <h2>Model Assumptions</h2>
 <ul>
 <li><p>Large sample size.</p></li>
-<li><p>Response variable is continuous.</p></li>
+<li><p>Response variable is continuous without a grouping of observations at one particular value.</p></li>
 <li><p>No strict distribution to adhere to.</p></li>
 </ul>
 </section>
@@ -1309,6 +1324,8 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 <p>https://www.voxco.com/blog/quantile-regression/</p>
 <p>https://drkebede.medium.com/quantile-regression-tutorial-in-r-f2eec72c132b</p>
 <p>https://www.r-bloggers.com/2019/01/quantile-regression-in-r-2/</p>
+<p>https://www.sfu.ca/~dsignori/buec333/lecture%208.pdf</p>
+<p>https://www.aptech.com/blog/the-basics-of-quantile-regression/</p>
 <div class="footer footer-default">
 
 </div>

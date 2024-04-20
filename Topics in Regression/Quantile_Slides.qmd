@@ -60,6 +60,8 @@ df_trends |>
 
 -   The relationship between the predictor and response variables may vary across the distribution, making it useful to allow the estimates to change.
 
+    -   A richer description of the relationship.
+
 -   More robust to outliers.
 
 -   If OLS assumptions are violated.
@@ -74,13 +76,21 @@ df_trends |>
 
 -   The objective of quantile regression is to minimize the median absolute deviations (Quantile Loss).
 
--   Rather than minimizing the sum of squares in OLS.
+    -   Rather than minimizing the sum of squares in OLS.
+    
+## Differences in Minimization
+
+-   OLS: $\sum_{i}^{N}(e_i)^2$
+  
+-   Quantile: $\sum_{e_i < 0} \tau |e_i| + \sum_{e_i > 0}(1-\tau) |e_i|$
+  
+    -   $\tau |e_i|$ penalizes underprediction and $(1 - \tau) |e_i|$ penalizes overprediction
 
 ## Model Assumptions
 
 -   Large sample size.
 
--   Response variable is continuous.
+-   Response variable is continuous without a grouping of observations at one particular value.
 
 -   No strict distribution to adhere to.
 
@@ -188,3 +198,7 @@ https://www.voxco.com/blog/quantile-regression/
 https://drkebede.medium.com/quantile-regression-tutorial-in-r-f2eec72c132b
 
 https://www.r-bloggers.com/2019/01/quantile-regression-in-r-2/
+
+https://www.sfu.ca/~dsignori/buec333/lecture%208.pdf 
+
+https://www.aptech.com/blog/the-basics-of-quantile-regression/ 
