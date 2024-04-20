@@ -101,6 +101,8 @@ df_trends |>
 -   The `quantreg` package can be used to easily conduct quantile regression in R.
 
     -   `rq()` is the key command in the package.
+    
+    -   Documentation available on [CRAN](https://cran.r-project.org/web/packages/quantreg/index.html).
 
 ## Quantreg and WHO data
 
