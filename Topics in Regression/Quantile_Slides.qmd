@@ -94,9 +94,13 @@ df_trends |>
 
 -   No strict distribution to adhere to.
 
-## Quantreg
+## Quantreg Package
 
--   While the lm() function allows us to use linear regression and estimate the conditional mean of the response, considering explanatory variable values, quantreg can be used to easily conduct quantile regression in R.
+-   The `lm()` function allows us to use linear regression and estimate the conditional mean of the response considering multiple explanatory variables.
+
+-   The `quantreg` package can be used to easily conduct quantile regression in R.
+
+    -   `rq()` is the key command in the package.
 
 ## Quantreg and WHO data
 
