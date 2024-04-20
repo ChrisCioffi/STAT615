@@ -101,7 +101,7 @@ df_trends |>
 -   The `quantreg` package can be used to easily conduct quantile regression in R.
 
     -   `rq()` is the key command in the package.
-    
+
     -   Documentation available on [CRAN](https://cran.r-project.org/web/packages/quantreg/index.html).
 
 ## Quantreg and WHO data
@@ -135,7 +135,7 @@ ggplot(life_exp_narm, aes(x=Income_composition_of_resources,
 
 ## Quantile regression vs Linear Regression
 
--   While linear regression can give us the mean value, quantreg can allow us to find any quantile ranging from the 1st percentile to the 99th percentile. 
+-   While linear regression can give us the mean value, quantreg can allow us to find any quantile ranging from the 1st percentile to the 99th percentile.
 
 -   We can also easily evaluate the 50th percentile (the median) which can be more resistant to outliers than linear regression's mean.
 
@@ -162,7 +162,6 @@ notrqfit<- lm(Life_expectancy ~ Income_composition_of_resources,
 rqfit50 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.50,
               data = life_exp_narm)
 ```
-
 
 ```{r}
 #summary(life_exp_narm)
@@ -240,7 +239,6 @@ rqfit75_conf <- rq(Life_expectancy ~ Income_composition_of_resources,
 rqfit99_conf <- rq(Life_expectancy ~ Income_composition_of_resources,
               tau = 0.99, data = life_exp_narm, ci = TRUE)
 ```
-
 
 ```{r}
 rqfit25_lwr_95 <- rqfit25_conf$coefficients[2,2]
