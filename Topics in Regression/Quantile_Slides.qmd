@@ -66,7 +66,7 @@ df_trends |>
 
 -   If OLS assumptions are violated.
 
-    -   Nonconstant variance, nonnormality, indpendence, nonlinearity.
+    -   Nonconstant variance, nonnormality, independence, nonlinearity.
 
 ## General Form of the Model
 
@@ -96,7 +96,7 @@ df_trends |>
 
 ## Quantreg
 
--   While the lm() function allows us to use linear regression and estimate the conditional mean of the response, considering explanatory variable values, quantreg can be used to easily conduct quantile regresion in R.
+-   While the lm() function allows us to use linear regression and estimate the conditional mean of the response, considering explanatory variable values, quantreg can be used to easily conduct quantile regression in R.
 
 ## Quantreg and WHO data
 
@@ -169,11 +169,11 @@ predict(rqfit50, newdata=new_data, interval="confidence", level=.9)
 
 ```
 
-## 1st Quantile vs 3rd Quantile
+## 1st Quartile vs 3rd Quartile
 
 -   Using the same income scores from the previous slide, we can see that life expectancies are different depending on the quantile of life expectancy. Comparing the 25th quantile to the 75th quantile and the 99th quantile, it's easy to see how different the life expectancy for those people would be depending on their income. Additionallly, the wealth of an individual's country plays a factor in life expectancy, regardless of their personal income.
 
-## 1st Quantile vs 3rd Quantile Prediction Results
+## 1st Quartile vs 3rd Quartile Prediction Results
 
 -   The first set of results is using the quantile regression at the 25th quantile, the second uses the 75th quantile, and the 3rd uses the 99th quantile.
 
@@ -184,6 +184,14 @@ predict(rqfit75, newdata=new_data, interval="confidence", level=.9)
 predict(rqfit99, newdata=new_data, interval="confidence", level=.9) 
 
 ```
+
+## Progression of the Coefficients
+
+```{r}
+myrq <- rq(Life_expectancy ~ Income_composition_of_resources, tau = c(0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90), data = life_exp_narm)
+plot(summary(myrq), parm = "Income_composition_of_resources")
+```
+
 
 ## Next Steps
 
