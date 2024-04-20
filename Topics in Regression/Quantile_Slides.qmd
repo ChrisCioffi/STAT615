@@ -135,18 +135,69 @@ ggplot(life_exp_narm, aes(x=Income_composition_of_resources,
 
 ## Quantile regression vs Linear Regression
 
--   While linear regression can give us the mean value, quantreg can allow us to find any quantile ranging from the 1st percentile to the 99th percentile. We can also easily evaluate the 50th percentile (the median) which can be more resistant to outliers than linear regression's mean.
+-   While linear regression can give us the mean value, quantreg can allow us to find any quantile ranging from the 1st percentile to the 99th percentile. 
 
-## Quantile regression vs Linear Regression
+-   We can also easily evaluate the 50th percentile (the median) which can be more resistant to outliers than linear regression's mean.
+
+## Quantile vs Linear Regression
 
 ```{r}
 
 ggplot(life_exp_narm, aes(x=Income_composition_of_resources, 
                           y=Life_expectancy, col=Status)) + geom_point() +
-  geom_smooth(method = lm, se = FALSE, color = "red", size = 1) + # linear model
-  geom_quantile(color = "blue", quantiles = 0.5, size=1) + # median quantile regression model with tau = 0.5 -- 50%
-  labs(title = "Life expectancy ~ income index - lm mean (red), quantreg median (blue)", y = "Life Expectancy", x = "Income Index") +
+  geom_smooth(method = lm, se = FALSE, color = "blue", size = 1) + # linear model
+  geom_quantile(color = "red", quantiles = 0.5, size=1) + # median quantile regression model with tau = 0.5 -- 50%
+  labs(title = "Life expectancy ~ income index - lm mean (blue), quantreg median (red)", y = "Life Expectancy", x = "Income Index") +
   theme_bw()
+```
+
+## Comparing the mean and median
+
+-   Compare confidence intervals for life expectancy using the median quantile regression and linear regression.
+
+```{r}
+#| echo: true
+notrqfit<- lm(Life_expectancy ~ Income_composition_of_resources,
+              data = life_exp_narm)
+rqfit50 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.50,
+              data = life_exp_narm)
+```
+
+
+```{r}
+#summary(life_exp_narm)
+
+# Function to report confidence intervals for lm
+conf_int_out_lm <- function(reg) {
+  reg_df <- tibble(
+    "95% Lower" = reg[,"lwr"],
+    "OLS Estimate" = reg[,"fit"],
+    "95% Upper" = reg[,"upr"]
+  )
+
+  return(reg_df)
+}
+
+# Function to report confidence intervals for quantile regression
+conf_int_out_rq <- function(reg) {
+  reg_df <- tibble(
+    "95% Lower" = reg[,"lower"],
+    "Median Quantile Estimate" = reg[,"fit"],
+    "95% Upper" = reg[,"higher"]
+  )
+
+  return(reg_df)
+}
+
+#data pulled from the 1q, median and 3q results from original data
+new_data<-data.frame(Income_composition_of_resources=c(.525,0.695,0.793))
+#comparing the median and mean 
+conf_lm <- predict(notrqfit, newdata=new_data,  interval="confidence", level=.95)
+conf_rq_50 <- predict(rqfit50, newdata=new_data, interval="confidence", level=.95)
+
+conf_int_out_lm(conf_lm)
+conf_int_out_rq(conf_rq_50)
+
 ```
 
 ## Quantreg for quantiles
@@ -159,20 +210,6 @@ rqfit25 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.25, dat
 rqfit50 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.50, data = life_exp_narm)
 rqfit75 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.75, data = life_exp_narm)
 rqfit99 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.99, data = life_exp_narm)
-```
-
-## Comparing the mean and median
-
--   When comparing the confidence intervals using the median quantile regression and linear regression for the mean, the values roughty align.
-
-```{r}
-summary(life_exp_narm)
-#data pulled from the 1q, median and 3q results from original data
-new_data<-data.frame(Income_composition_of_resources=c(.525,0.695,0.793))
-#comparing the median and mean 
-predict(notrqfit, newdata=new_data,  interval="confidence", level=.9) 
-predict(rqfit50, newdata=new_data, interval="confidence", level=.9) 
-
 ```
 
 ## 1st Quartile vs 3rd Quartile
@@ -191,7 +228,7 @@ predict(rqfit99, newdata=new_data, interval="confidence", level=.9)
 
 ```
 
-## Progression of the Coefficients
+## Progression of the Coefficient
 
 ```{r}
 myrq <- rq(Life_expectancy ~ Income_composition_of_resources, tau = c(0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90), data = life_exp_narm)
