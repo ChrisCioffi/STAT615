@@ -423,7 +423,9 @@ summary(MLR_all.reg.reduced)
 
 *Constant Variance*
 
-Very obvious pattern here
+- Very obvious pattern here
+
+- Because the response variable is bound.
 
 ```{r}
 residuals <- residuals(MLR_all.reg.reduced)
@@ -464,3 +466,62 @@ qqline(MLR_all.reg.reduced$resi)
 -   Recheck model diagnostics.
 
 -   Add some additional models to test if there is a general effect of knowing your desired career path vs. not knowing.
+
+## Try Box-Cox Transformation
+
+Need to get rid of all 0.0 GPAs
+
+```{r}
+# Get rid of 0.0 GPA
+MLR_all_no_0 <- MLR_all |>
+  filter(X5GPAALL > 0)
+
+MLR_all.reg.reduced.logy <- lm(log(X5GPAALL) ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all_no_0)
+```
+
+## Box-Cox Residual Variance
+
+Still a pattern
+
+```{r}
+residuals <- residuals(MLR_all.reg.reduced.logy)
+predicted <- predict(MLR_all.reg.reduced.logy)
+
+# Plot residuals vs predicted values
+plot(predicted, residuals,
+  pch = 19, col = "blue", xlab = "Predicted Values (Y-Hat)", ylab = "Residuals",
+  main = "Residuals vs Predicted Values"
+)
+abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
+```
+
+## Make Predictor "Don't Know" vs. "Know" Future Occupation
+
+```{r}
+MLR_all <- MLR_all |>
+  mutate(career = ifelse(X1STU30OCC2 == "Don't know", 0, 1), .after = X1STU30OCC2)
+
+#reg_career <- lm(X5GPAALL ~ career + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all)
+reg_career <- lm(X5GPAALL ~ career + X3TGPAACAD, data = MLR_all)
+```
+
+
+## 0-1 Career Residual Variance
+
+Still a pattern
+
+```{r}
+residuals <- residuals(reg_career)
+predicted <- predict(reg_career)
+
+# Plot residuals vs predicted values
+plot(predicted, residuals,
+  pch = 19, col = "blue", xlab = "Predicted Values (Y-Hat)", ylab = "Residuals",
+  main = "Residuals vs Predicted Values"
+)
+abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
+```
+
+
+
+

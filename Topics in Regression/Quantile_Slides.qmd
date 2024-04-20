@@ -147,7 +147,7 @@ rqfit99 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.99, dat
 
 ## Comparing the mean and median
 
--   When comparing the confidence intervals using the median quantile regression and linear regression for the mean, the values roughtly align.
+-   When comparing the confidence intervals using the median quantile regression and linear regression for the mean, the values roughty align.
 
 ```{r}
 summary(life_exp_narm)
