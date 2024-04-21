@@ -88,6 +88,7 @@ HSLS_Data |>
 ```
 
 ## Desired Occupation and Academic Performance
+*Color-coded by Planned student occupation at age 30*
 
 ```{r}
 #| echo: false
@@ -207,8 +208,8 @@ HSLS_Data |>
     X1FAMINCOME != "Missing"
   ) |>
   select(X5GPAALL, X1FAMINCOME) |>
-  mutate(X1FAMINCOME = factor(X1FAMINCOME, levels = unique(X1FAMINCOME))) |>
-  ggplot(aes(x = X5GPAALL, y = X1FAMINCOME)) +
+  #mutate(X1FAMINCOME = factor(X1FAMINCOME, levels = unique(X1FAMINCOME))) |>
+  ggplot(aes(x = X5GPAALL, y = reorder(X1FAMINCOME, X1FAMINCOME))) +
   geom_boxplot() +
   labs(title = "College GPA by Family Income",
        x = "College GPA", 
