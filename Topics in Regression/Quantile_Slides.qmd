@@ -3,6 +3,7 @@ title: "Quantile Regression"
 author: "Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry"
 format: revealjs
 editor: visual
+embed-resources: true
 ---
 
 ## Quantile Regression
@@ -59,11 +60,13 @@ df_trends |>
 
 -   The relationship between the predictor and response variables may vary across the distribution, making it useful to allow the estimates to change.
 
+    -   A richer description of the relationship.
+
 -   More robust to outliers.
 
 -   If OLS assumptions are violated.
 
-    -   Nonconstant variance, nonnormality, indpendence, nonlinearity.
+    -   Nonconstant variance, nonnormality, independence, nonlinearity.
 
 ## General Form of the Model
 
@@ -73,23 +76,259 @@ df_trends |>
 
 -   The objective of quantile regression is to minimize the median absolute deviations (Quantile Loss).
 
--   Rather than minimizing the sum of squares in OLS.
+    -   Rather than minimizing the sum of squares in OLS.
+
+## Differences in Minimization
+
+-   OLS: $\sum_{i}^{N}(e_i)^2$
+
+-   Quantile: $\sum_{e_i < 0} \tau |e_i| + \sum_{e_i > 0}(1-\tau) |e_i|$
+
+    -   $\tau |e_i|$ penalizes underprediction and $(1 - \tau) |e_i|$ penalizes overprediction
 
 ## Model Assumptions
 
 -   Large sample size.
 
--   Response variable is continuous.
+-   Response variable is continuous without a grouping of observations at one particular value.
 
 -   No strict distribution to adhere to.
 
-## Quantreg
+## Quantreg Package
 
-When you click the **Render** button a document will be generated that includes:
+-   The `lm()` function allows us to use linear regression and estimate the conditional mean of the response considering multiple explanatory variables.
 
--   Content authored with markdown
--   Output from executable code
+-   The `quantreg` package can be used to easily conduct quantile regression in R.
+
+    -   `rq()` is the key command in the package.
+
+    -   Documentation available on [CRAN](https://cran.r-project.org/web/packages/quantreg/index.html).
+
+## Quantreg and WHO data
+
+-   Demo: estimate the conditional quantiles, considering the predictors, and here we can use quantreg to compare world nations' life expectancies to its so-called income index.
+
+-   The dataset is maintained by the World Health Organization and looks at a variety of public health and income factors for world nations. We're using a Kaggle version, which can be easily downloaded [here](https://gist.github.com/aishwarya8615/89d9f36fc014dea62487f7347864d16a).
+
+-   \*Demo adapted from examples found on Medium and R-bloggers
+
+## Quantreg and WHO data
+
+-   After removing nations with incomplete information, we can see a positive relationship between developed countries and higher life expectancy.
+
+```{r}
+#import data 
+life_exp_narm <- read_csv("Life_Expectancy_Data.csv")
+#let's remove all with income index around 0 and just pull in the life expectancy and income score columns for the purposes of this exercise.
+life_exp_narm <- life_exp_narm |> 
+  filter(Income_composition_of_resources > 0) |>
+  select(Income_composition_of_resources, Life_expectancy, Status)
+
+#summary statistics for the 
+
+#plot the data 
+ggplot(life_exp_narm, aes(x=Income_composition_of_resources, 
+                          y=Life_expectancy, col=Status)) + geom_point() +
+  xlab("Income index") + ylab("Life expectancy") +
+  theme_bw()
+```
+
+## Quantile regression vs Linear Regression
+
+-   While linear regression can give us the mean value, quantreg can allow us to find any quantile ranging from the 1st percentile to the 99th percentile.
+
+-   We can also easily evaluate the 50th percentile (the median) which can be more resistant to outliers than linear regression's mean.
+
+## Quantile vs Linear Regression
+
+```{r}
+
+ggplot(life_exp_narm, aes(x=Income_composition_of_resources, 
+                          y=Life_expectancy, col=Status)) + geom_point() +
+  geom_smooth(method = lm, se = FALSE, color = "blue", size = 1) + # linear model
+  geom_quantile(color = "red", quantiles = 0.5, size=1) + # median quantile regression model with tau = 0.5 -- 50%
+  labs(title = "Life expectancy ~ income index - lm mean (blue), quantreg median (red)", y = "Life Expectancy", x = "Income Index") +
+  theme_bw()
+```
+
+## Comparing the mean and median
+
+-   Compare confidence intervals for life expectancy using the median quantile regression and linear regression.
+
+```{r}
+#| echo: true
+notrqfit<- lm(Life_expectancy ~ Income_composition_of_resources,
+              data = life_exp_narm)
+rqfit50 <- rq(Life_expectancy ~ Income_composition_of_resources, tau = 0.50,
+              data = life_exp_narm)
+```
+
+```{r}
+#summary(life_exp_narm)
+
+# Function to report confidence intervals for lm
+conf_int_out_lm <- function(reg) {
+  reg_df <- tibble(
+    "95% Lower" = reg[,"lwr"],
+    "OLS Estimate" = reg[,"fit"],
+    "95% Upper" = reg[,"upr"]
+  )
+
+  return(reg_df)
+}
+
+# Function to report confidence intervals for quantile regression
+conf_int_out_rq <- function(reg) {
+  reg_df <- tibble(
+    "95% Lower" = reg[,"lower"],
+    "Quantile Estimate" = reg[,"fit"],
+    "95% Upper" = reg[,"higher"]
+  )
+
+  return(reg_df)
+}
+
+#data pulled from the 1q, median and 3q results from original data
+new_data<-data.frame(Income_composition_of_resources=c(.525,0.695,0.793))
+#comparing the median and mean 
+conf_lm <- predict(notrqfit, newdata=new_data,  interval="confidence", level=.95)
+conf_rq_50 <- predict(rqfit50, newdata=new_data, interval="confidence", level=.95)
+
+conf_int_out_lm(conf_lm)
+conf_int_out_rq(conf_rq_50)
+
+```
+
+## Quantreg for quantiles
+
+-   In addition to comparing the mean to the median, we can also look at the top and bottom quantiles to compare the confidence intervals for life expectancies. First run the different models and obtain the coefficients at each quantile:
+
+```{r}
+#| echo: true
+notrqfit<- lm(Life_expectancy ~ Income_composition_of_resources,
+              data = life_exp_narm)
+rqfit25 <- rq(Life_expectancy ~ Income_composition_of_resources,
+              tau = 0.25, data = life_exp_narm)
+rqfit50 <- rq(Life_expectancy ~ Income_composition_of_resources,
+              tau = 0.50, data = life_exp_narm)
+rqfit75 <- rq(Life_expectancy ~ Income_composition_of_resources,
+              tau = 0.75, data = life_exp_narm)
+rqfit99 <- rq(Life_expectancy ~ Income_composition_of_resources,
+              tau = 0.99, data = life_exp_narm)
+```
+
+## Progression of the Coefficient
+
+```{r}
+myrq <- rq(Life_expectancy ~ Income_composition_of_resources, tau = seq(0.05,0.95,0.05), data = life_exp_narm)
+plot(summary(myrq), parm = "Income_composition_of_resources")
+```
+
+## Estimates at Different Quantiles
+
+```{r}
+# Get confidence intervals
+notrqfit_conf<- lm(Life_expectancy ~ Income_composition_of_resources,
+              data = life_exp_narm)
+rqfit25_conf <- rq(Life_expectancy ~ Income_composition_of_resources,
+              tau = 0.25, data = life_exp_narm, ci = TRUE)
+rqfit50_conf <- rq(Life_expectancy ~ Income_composition_of_resources,
+              tau = 0.50, data = life_exp_narm, ci = TRUE)
+rqfit75_conf <- rq(Life_expectancy ~ Income_composition_of_resources,
+              tau = 0.75, data = life_exp_narm, ci = TRUE)
+rqfit99_conf <- rq(Life_expectancy ~ Income_composition_of_resources,
+              tau = 0.99, data = life_exp_narm, ci = TRUE)
+```
+
+```{r}
+rqfit25_lwr_95 <- rqfit25_conf$coefficients[2,2]
+rqfit25_est <- rqfit25_conf$coefficients[2,1]
+rqfit25_upr_95 <- rqfit25_conf$coefficients[2,3]
+
+rqfit25_confint <- tibble(rqfit25_lwr_95, rqfit25_est, rqfit25_upr_95, quantile = c(0.25))
+colnames(rqfit25_confint) <- c("95% Lower", "Estimate", "95% Upper", "Quantile")
+
+rqfit50_lwr_95 <- rqfit50_conf$coefficients[2,2]
+rqfit50_est <- rqfit50_conf$coefficients[2,1]
+rqfit50_upr_95 <- rqfit50_conf$coefficients[2,3]
+
+rqfit50_confint <- tibble(rqfit50_lwr_95, rqfit50_est, rqfit50_upr_95, quantile = c(0.50))
+colnames(rqfit50_confint) <- c("95% Lower", "Estimate", "95% Upper", "Quantile")
+
+rq_confint <- rbind(rqfit25_confint,rqfit50_confint)
+
+rqfit75_lwr_95 <- rqfit75_conf$coefficients[2,2]
+rqfit75_est <- rqfit75_conf$coefficients[2,1]
+rqfit75_upr_95 <- rqfit75_conf$coefficients[2,3]
+
+rqfit75_confint <- tibble(rqfit75_lwr_95, rqfit75_est, rqfit75_upr_95, quantile = c(0.75))
+colnames(rqfit75_confint) <- c("95% Lower", "Estimate", "95% Upper", "Quantile")
+
+rq_confint <- rbind(rq_confint,rqfit75_confint)
+
+rqfit99_lwr_95 <- rqfit99_conf$coefficients[2,2]
+rqfit99_est <- rqfit99_conf$coefficients[2,1]
+rqfit99_upr_95 <- rqfit99_conf$coefficients[2,3]
+
+rqfit99_confint <- tibble(rqfit99_lwr_95, rqfit99_est, rqfit99_upr_95, quantile = c(0.99))
+colnames(rqfit99_confint) <- c("95% Lower", "Estimate", "95% Upper", "Quantile")
+
+rq_confint <- rbind(rq_confint,rqfit99_confint) |>
+  mutate(Quantile = as.factor(Quantile))
+
+rq_confint |>
+  ggplot() +
+  geom_point(aes(x = Quantile, y = Estimate, color = Quantile), size = 6) +
+  geom_segment(aes(x = Quantile, xend = Quantile, y = Estimate, yend = `95% Lower`, color = Quantile), size = 2) + # lower bound
+  geom_segment(aes(x = Quantile, xend = Quantile, y = Estimate, yend = `95% Upper`, color = Quantile), size = 2) + # upper bound
+  scale_y_continuous(breaks = seq(42,57,3),
+                     limits = c(42,57)) +
+  labs(title = "Quantile Regression Estimates") +
+  theme_bw() +
+  theme(title = element_text(size = 20),
+        axis.text = element_text(size = 18),
+        axis.title = element_text(size = 20),
+        legend.text = element_text(size = 18),
+        legend.title = element_text(size = 18))
+
+```
+
+## Impact at Different Quantiles
+
+-   The impact of income on life expectancy is different depending on the quantile of life expectancy.
+
+-   It is very important to note that the intercept also changes based on the quantile.
+
+    -   This can lead to counterintuitive predictions of the response variable.
+
+-   Comparing the 25th quantile to the 75th quantile and the 99th quantile, it's easy to see how different the life expectancy for those people would be depending on their income.
+
+## Prediction at Different Quantiles
+
+-   Quantile regression results at 0.25, 0.75, and 0.99.
+
+```{r}
+conf_int_out_rq(predict(rqfit25, newdata=new_data, interval="confidence", level=.95))
+conf_int_out_rq(predict(rqfit75, newdata=new_data, interval="confidence", level=.95))
+#even more extreme in the 99percentile
+conf_int_out_rq(predict(rqfit99, newdata=new_data, interval="confidence", level=.95))
+
+```
+
+## Next Steps
+
+-   Make references page look nice
+
+-   Add more to background of quantile regression
 
 ## References
 
 https://www.voxco.com/blog/quantile-regression/
+
+https://drkebede.medium.com/quantile-regression-tutorial-in-r-f2eec72c132b
+
+https://www.r-bloggers.com/2019/01/quantile-regression-in-r-2/
+
+https://www.sfu.ca/\~dsignori/buec333/lecture%208.pdf
+
+https://www.aptech.com/blog/the-basics-of-quantile-regression/

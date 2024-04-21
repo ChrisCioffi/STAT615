@@ -4,6 +4,7 @@ author: "Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry"
 format:
   revealjs:
     theme: "night"
+embed-resources: true
 ---
 
 ## Overview
@@ -23,9 +24,12 @@ format:
 
 -   We investigate what factors in high school may be related to future academic performance.
 
+## Research Question
+
 -   Question: How is college GPA related to prospective career path in high school? How are other characteristics about a student's background and high school environment related to their college GPA?
 
-## Literature Review/Background
+-   This study aims to investigate whether students who have a desired future career path in the 9th grade perform better than students who do not, and if choice of career path matters.
+
 
 - 
 
@@ -106,7 +110,7 @@ HSLS_Data |>
   geom_smooth(method = "lm", se = FALSE) +
   theme(legend.position = "none") +
   labs(
-    title = "HS GPA vs. College GPA",
+    title = "HS GPA vs. College GPA by Desired Occupation",
     x = "High School GPA",
     y = "College GPA"
   ) +
@@ -381,7 +385,7 @@ MLR_all.reg.reduced <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X
 anova(MLR_all.reg.reduced, MLR_all.reg)
 ```
 
-- P-value of 0.331, insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.
+- With a P-value of 0.331, there is insufficient evidence to reject the null hypothesis that the values for the betas of these two predictors are not zero.
 
 - The lack of significant relationship between Urbanicity & School Belonging was seen in earlier plots.
 
@@ -394,7 +398,6 @@ New MLR Model:
 $$College\_GPA = \\
 \beta_0 + \beta_1future\_job + \beta_2college\_gpa + \beta_3major\_considering + \\ \beta_4family\_income + \beta_5credits + \beta_6school\_type + \epsilon$$
 
-Stepwise selection did not remove additional variables
 
 ```{r}
 #| include: false
@@ -422,7 +425,9 @@ summary(MLR_all.reg.reduced)
 
 *Constant Variance*
 
-Very obvious pattern here
+- Very obvious pattern here
+
+- Because the response variable is bound.
 
 ```{r}
 residuals <- residuals(MLR_all.reg.reduced)
@@ -504,3 +509,64 @@ qqline(MLR_all.reg.reduced$resi)
 -   Try transformations on response and predictors.
 
 -   Recheck model diagnostics.
+
+-   Add some additional models to test if there is a general effect of knowing your desired career path vs. not knowing.
+
+## Try Box-Cox Transformation
+
+Need to get rid of all 0.0 GPAs
+
+```{r}
+# Get rid of 0.0 GPA
+MLR_all_no_0 <- MLR_all |>
+  filter(X5GPAALL > 0)
+
+MLR_all.reg.reduced.logy <- lm(log(X5GPAALL) ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all_no_0)
+```
+
+## Box-Cox Residual Variance
+
+Still a pattern
+
+```{r}
+residuals <- residuals(MLR_all.reg.reduced.logy)
+predicted <- predict(MLR_all.reg.reduced.logy)
+
+# Plot residuals vs predicted values
+plot(predicted, residuals,
+  pch = 19, col = "blue", xlab = "Predicted Values (Y-Hat)", ylab = "Residuals",
+  main = "Residuals vs Predicted Values"
+)
+abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
+```
+
+## Make Predictor "Don't Know" vs. "Know" Future Occupation
+
+```{r}
+MLR_all <- MLR_all |>
+  mutate(career = ifelse(X1STU30OCC2 == "Don't know", 0, 1), .after = X1STU30OCC2)
+
+#reg_career <- lm(X5GPAALL ~ career + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all)
+reg_career <- lm(X5GPAALL ~ career + X3TGPAACAD, data = MLR_all)
+```
+
+
+## 0-1 Career Residual Variance
+
+Still a pattern
+
+```{r}
+residuals <- residuals(reg_career)
+predicted <- predict(reg_career)
+
+# Plot residuals vs predicted values
+plot(predicted, residuals,
+  pch = 19, col = "blue", xlab = "Predicted Values (Y-Hat)", ylab = "Residuals",
+  main = "Residuals vs Predicted Values"
+)
+abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
+```
+
+
+
+
