@@ -440,6 +440,9 @@ plot(predicted, residuals,
 )
 abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
 ```
+
+
+
 ```{r, fig.show='hide'}
 
 predictor_vars_set1 <- c("X1STU30OCC2", "X3TGPAACAD", "X4ENTRYMAJ23")
@@ -484,6 +487,7 @@ for (i in seq_along(predictor_vars_set2)) {
 
 
 
+
 ## Diagnostics
 
 *Normality*
@@ -508,9 +512,15 @@ qqline(MLR_all.reg.reduced$resi)
 
 -   Try transformations on response and predictors.
 
+- Try Weighted Least Squares
+
 -   Recheck model diagnostics.
 
 -   Add some additional models to test if there is a general effect of knowing your desired career path vs. not knowing.
+
+## Weighted Least Squares: AP/IB Credits
+
+
 
 ## Try Box-Cox Transformation
 
