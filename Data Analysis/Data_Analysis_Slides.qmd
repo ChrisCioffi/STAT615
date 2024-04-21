@@ -30,9 +30,6 @@ embed-resources: true
 
 -   This study aims to investigate whether students who have a desired future career path in the 9th grade perform better than students who do not, and if choice of career path matters.
 
-
-- 
-
 ## Data
 
 -   High School Longitudinal Study of 2009 (HSLS:09) from the National Center for Education Statistics.
@@ -518,6 +515,8 @@ MLR_all_no_0 <- MLR_all |>
   filter(X5GPAALL > 0)
 
 MLR_all.reg.reduced.logy <- lm(log(X5GPAALL) ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all_no_0)
+
+MLR_all.reg.reduced.logy
 ```
 
 ## Box-Cox Residual Variance
