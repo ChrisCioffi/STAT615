@@ -27,6 +27,8 @@ format:
 
 ## Literature Review/Background
 
+- 
+
 ## Data
 
 -   High School Longitudinal Study of 2009 (HSLS:09) from the National Center for Education Statistics.
@@ -433,6 +435,49 @@ plot(predicted, residuals,
 )
 abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
 ```
+```{r, fig.show='hide'}
+
+predictor_vars_set1 <- c("X1STU30OCC2", "X3TGPAACAD", "X4ENTRYMAJ23")
+
+lm_list_set1 <- lapply(predictor_vars_set1, function(var) lm(formula = paste("X5GPAALL ~", var), data = MLR_all))
+
+par(mfrow=c(2, 2)) 
+for (i in seq_along(predictor_vars_set1)) {
+  residuals_i <- residuals(lm_list_set1[[i]])
+  predicted_i <- predict(lm_list_set1[[i]])
+  plot(predicted_i, residuals_i,
+       pch = 19, col = adjustcolor("blue", alpha.f = 0.5), xlab = "Predicted Values (Y-Hat)", ylab = "Residuals",
+       main = paste(predictor_vars_set1[i], ": Residuals vs Predicted Values"))
+  abline(h = 0, col = "red") 
+}
+
+
+```
+
+
+
+
+```{r, fig.show='hide'}
+
+predictor_vars_set2 <- c("X1FAMINCOME", "X3TCREDAPIB", "X1CONTROL")
+
+
+lm_list_set2 <- lapply(predictor_vars_set2, function(var) lm(formula = paste("X5GPAALL ~", var), data = MLR_all))
+
+
+par(mfrow=c(2, 2)) 
+for (i in seq_along(predictor_vars_set2)) {
+  residuals_i <- residuals(lm_list_set2[[i]])
+  predicted_i <- predict(lm_list_set2[[i]])
+  plot(predicted_i, residuals_i,
+       pch = 19, col = adjustcolor("blue", alpha.f = 0.5), xlab = "Predicted Values (Y-Hat)", ylab = "Residuals",
+       main = paste(predictor_vars_set2[i], ": Residuals vs Predicted Values"))
+  abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
+}
+
+```
+
+
 
 ## Diagnostics
 
