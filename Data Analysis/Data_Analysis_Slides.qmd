@@ -707,7 +707,13 @@ predicted <- predict(reg_career_wls_car2)
 
 
 
+## Implications & Limitations
 
+- Non-constant variance could not be addressed through transformation and other remedies given this set of predictors
+
+- Perhaps other predictors not captured by the High School Longitudinal Study are more reliably related to College GPA and choice of future career 
+
+- Additionally, other regression approaches, such as Quantile regression, may be useful for exploring the significance of this relationship
 
 
 
