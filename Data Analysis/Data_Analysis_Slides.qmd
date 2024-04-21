@@ -705,6 +705,18 @@ predicted <- predict(reg_career_wls_car2)
 ```
 
 
+```{r, fig.show='hide'}
+## Credits vs GPA Non-Constant Variance
+credits.reg <- lm(X5GPAALL ~ X3TCREDAPIB, data = MLR_all)
+plot(MLR_all$X3TCREDAPIB, credits.reg$resi)
+```
+
+```{r, fig.show='hide'}
+# No strong trend here so cannot be sure that there is a relationship between the variance of the error term and credits predictor variable
+plot(MLR_all$X3TCREDAPIB, (credits.reg$resi)^2)
+lines(lowess((credits.reg$resi)^2~MLR_all$X3TCREDAPIB), col=2)
+```
+
 
 ## Implications & Limitations
 
