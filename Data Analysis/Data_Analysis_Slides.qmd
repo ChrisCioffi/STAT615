@@ -58,6 +58,7 @@ library(tidyverse)
 library(broom)
 library(patchwork)
 library(lmtest)
+library(patchwork)
 load("../Data/HSLS_Data.rdata")
 ```
 
@@ -512,9 +513,7 @@ qqline(MLR_all.reg.reduced$resi)
 -   Recheck model diagnostics.
 
 
-## Try Box-Cox Transformation
-
-Need to get rid of all 0.0 GPAs
+## Box-Cox Residual Variance
 
 ```{r}
 # Get rid of 0.0 GPA
@@ -522,11 +521,7 @@ MLR_all_no_0 <- MLR_all |>
   filter(X5GPAALL > 0)
 
 MLR_all.reg.reduced.logy <- lm(log(X5GPAALL) ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all_no_0)
-
-MLR_all.reg.reduced.logy
 ```
-
-## Box-Cox Residual Variance
 
 Still a pattern
 
@@ -542,7 +537,7 @@ plot(predicted, residuals,
 abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
 ```
 
-## Weighted Least Squares on Full Model
+## Weighted Least Squares
 
 Can't reach coefficient convergence.
 
@@ -638,32 +633,46 @@ abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
 
 ```
 
-## Make Predictor "Don't Know" vs. "Know" Future Occupation
+## Additional Remedial Measures
 
 ```{r}
 MLR_all <- MLR_all |>
   mutate(career = ifelse(X1STU30OCC2 == "Don't know", 0, 1), .after = X1STU30OCC2)
 
-#reg_career <- lm(X5GPAALL ~ career + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all)
-reg_career <- lm(X5GPAALL ~ career + X3TGPAACAD, data = MLR_all)
+reg_career <- lm(X5GPAALL ~ career + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all)
+#reg_career <- lm(X5GPAALL ~ career + X3TGPAACAD, data = MLR_all)
 
-summary(reg_career)
 ```
 
-## 0-1 Career Residual Variance
-
-Still a pattern.
-
 ```{r}
-residuals <- rstandard(reg_career)
-predicted <- predict(reg_career)
+car_plot_df <- MLR_all
+car_plot_df$residuals <- rstandard(reg_career)
+car_plot_df$predicted <- predict(reg_career)
 
 # Plot residuals vs predicted values
-plot(predicted, residuals,
-  pch = 19, col = "blue", xlab = "Predicted Values (Y-Hat)", ylab = "Residuals",
-  main = "Residuals vs Predicted Values"
-)
-abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
+career_plot <- ggplot(aes(x = predicted, y = residuals), data = car_plot_df) +
+  geom_point(color = "blue") +
+  geom_hline(yintercept = 0, color = "red") +
+  labs(title = "Career Dummy Variable") +
+  theme_bw()
+
+## Credits vs GPA Non-Constant Variance
+credits.reg <- lm(X5GPAALL ~ X3TCREDAPIB, data = MLR_all)
+
+# No strong trend here so cannot be sure that there is a relationship between the variance of the error term and credits predictor variable
+credit_plot_df <- MLR_all
+credit_plot_df$residual_sq <- (credits.reg$resi)^2
+
+credit_var_plot <- ggplot(aes(x = X3TCREDAPIB, y = residual_sq), data = credit_plot_df) +
+  geom_point(color = "blue") +
+  geom_smooth(method = "loess", color = "red", se = FALSE) +
+  labs(title = "Predictor and Error Relation?",
+       x = "AP/IB Credits",
+       y = "Squared Residuals") +
+  theme_bw()
+
+career_plot | credit_var_plot
+
 ```
 
 ```{r}
@@ -716,15 +725,15 @@ plot(MLR_all$X3TCREDAPIB, credits.reg$resi)
 plot(MLR_all$X3TCREDAPIB, (credits.reg$resi)^2)
 lines(lowess((credits.reg$resi)^2~MLR_all$X3TCREDAPIB), col=2)
 ```
-
-
 ## Implications & Limitations
 
-- Non-constant variance could not be addressed through transformation and other remedies given this set of predictors
+- Non-constant variance could not be addressed through transformation and other remedies given this set of predictors.
 
-- Perhaps other predictors not captured by the High School Longitudinal Study are more reliably related to College GPA and choice of future career 
+- Perhaps other predictors not captured by the High School Longitudinal Study are more reliably related to College GPA and choice of future career.
 
-- Additionally, other regression approaches, such as Quantile regression, may be useful for exploring the significance of this relationship
+- Bound response variable.
+
+- Additionally, other regression approaches, such as Quantile regression, may be useful for exploring the significance of this relationship.
 
 
 
