@@ -365,8 +365,7 @@ summary(MLR_all.reg)
 
 ## Remove Urbanicity & School Belonging?
 
-- Urbanicity: Betas for all 4 categories (City, Rural, Suburb, & Town) are insignificant at alpha = 0.10
-- School Belonging: P-value for beta is 0.80
+- Urbanicity & School Belonging: All Betas are insignificant at alpha = 0.10
 
 **Lack of Fit Test**
 
