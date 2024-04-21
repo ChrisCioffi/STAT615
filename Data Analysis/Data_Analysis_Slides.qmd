@@ -422,6 +422,13 @@ summary(MLR_all.reg.reduced)
 
 - Breusch-Pagan test yields a p-value < 0.0001.
 
+```{r}
+#| include: false
+library(lmtest)
+bptest(MLR_all.reg.reduced)
+```
+
+
 - Because the response variable is bound.
 
 ```{r}
