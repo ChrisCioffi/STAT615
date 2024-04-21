@@ -388,9 +388,6 @@ anova(MLR_all.reg.reduced, MLR_all.reg)
 
 - The lack of significant relationship between Urbanicity & School Belonging was seen in earlier plots.
 
-
-
-
 ## Variable Selection
 
 New MLR Model: 
@@ -459,23 +456,13 @@ qqline(MLR_all.reg.reduced$resi)
 
 ## Remedial Measures
 
-- Need to address non-constant variance first, and then recheck normality assumption
+-   Need to address non-constant variance first, and then recheck normality assumption
 
 -   Try Box-Cox transformation
 
 -   Weighted Least Squares
 
-## MLR Results After Remedial Measures
-
-## Potential Next Steps
-
--   If our model assumptions are violated we could try bootstrapping or quantile regression.
-
--   Try transformations on response and predictors.
-
 -   Recheck model diagnostics.
-
--   Add some additional models to test if there is a general effect of knowing your desired career path vs. not knowing.
 
 ## Try Box-Cox Transformation
 
@@ -505,6 +492,102 @@ plot(predicted, residuals,
 abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
 ```
 
+## Weighted Least Squares on Full Model
+
+Can't reach coefficient convergence.
+
+```{r}
+# Obtain variance function for WLS
+MLR_all_WLS <- MLR_all
+MLR_all_WLS$residuals <- residuals(MLR_all.reg.reduced)
+var_func <- lm(residuals^2 ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all_WLS)
+
+# Obtain weights
+MLR_all_WLS <- MLR_all_WLS |>
+mutate(w1 = 1/abs(var_func$fitted))
+
+# First WLS Model
+MLR_all.reg.reduced.WLS <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, weights = w1, data = MLR_all_WLS)
+
+# Iterate
+MLR_all_WLS$residuals_wls1 <- residuals(MLR_all.reg.reduced.WLS)
+var_func_2 <- lm(residuals_wls1^2 ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all_WLS)
+
+# Obtain weights
+MLR_all_WLS <- MLR_all_WLS |>
+mutate(w2 = 1/abs(var_func_2$fitted))
+
+# Second WLS Model
+MLR_all.reg.reduced.WLS2 <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, weights = w2, data = MLR_all_WLS)
+
+# Iterate 2
+MLR_all_WLS$residuals_wls2 <- residuals(MLR_all.reg.reduced.WLS2)
+var_func_3 <- lm(residuals_wls2^2 ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all_WLS)
+
+# Obtain weights
+MLR_all_WLS <- MLR_all_WLS |>
+mutate(w3 = 1/abs(var_func_3$fitted))
+
+# Third WLS Model
+MLR_all.reg.reduced.WLS3 <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, weights = w3, data = MLR_all_WLS)
+
+# Iterate 3
+MLR_all_WLS$residuals_wls3 <- residuals(MLR_all.reg.reduced.WLS3)
+var_func_4 <- lm(residuals_wls3^2 ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all_WLS)
+
+# Obtain weights
+MLR_all_WLS <- MLR_all_WLS |>
+mutate(w4 = 1/abs(var_func_4$fitted))
+
+# Fourth WLS Model
+MLR_all.reg.reduced.WLS4 <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, weights = w4, data = MLR_all_WLS)
+
+# Iterate 4
+MLR_all_WLS$residuals_wls4 <- residuals(MLR_all.reg.reduced.WLS4)
+var_func_5 <- lm(residuals_wls4^2 ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all_WLS)
+
+# Obtain weights
+MLR_all_WLS <- MLR_all_WLS |>
+mutate(w5 = 1/abs(var_func_5$fitted))
+
+# Fifth WLS Model
+MLR_all.reg.reduced.WLS5 <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, weights = w5, data = MLR_all_WLS)
+
+# Iterate 5
+MLR_all_WLS$residuals_wls5 <- residuals(MLR_all.reg.reduced.WLS5)
+var_func_6 <- lm(residuals_wls5^2 ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all_WLS)
+
+# Obtain weights
+MLR_all_WLS <- MLR_all_WLS |>
+mutate(w6 = 1/abs(var_func_6$fitted))
+
+# Sixth WLS Model
+MLR_all.reg.reduced.WLS6 <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, weights = w6, data = MLR_all_WLS)
+
+# Iterate 6
+MLR_all_WLS$residuals_wls6 <- residuals(MLR_all.reg.reduced.WLS6)
+var_func_7 <- lm(residuals_wls6^2 ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all_WLS)
+
+# Obtain weights
+MLR_all_WLS <- MLR_all_WLS |>
+mutate(w7 = 1/abs(var_func_7$fitted))
+
+# Seventh WLS Model
+MLR_all.reg.reduced.WLS7 <- lm(X5GPAALL ~ X1STU30OCC2 + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, weights = w7, data = MLR_all_WLS)
+
+# Plot residual variance
+residuals <- rstandard(MLR_all.reg.reduced.WLS7)
+predicted <- predict(MLR_all.reg.reduced.WLS7)
+
+# Plot residuals vs predicted values
+plot(predicted, residuals,
+  pch = 19, col = "blue", xlab = "Predicted Values (Y-Hat)", ylab = "Residuals",
+  main = "Standardized Residuals vs Predicted Values"
+)
+abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
+
+```
+
 ## Make Predictor "Don't Know" vs. "Know" Future Occupation
 
 ```{r}
@@ -519,10 +602,10 @@ summary(reg_career)
 
 ## 0-1 Career Residual Variance
 
-Still a pattern
+Still a pattern.
 
 ```{r}
-residuals <- residuals(reg_career)
+residuals <- rstandard(reg_career)
 predicted <- predict(reg_career)
 
 # Plot residuals vs predicted values
@@ -533,5 +616,53 @@ plot(predicted, residuals,
 abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
 ```
 
-## Try Weighted Least Squares
+```{r}
+# Try WLS for career dummy variable
+
+# Obtain variance function for WLS
+MLR_all_WLS_car <- MLR_all
+MLR_all_WLS_car$residuals <- residuals(reg_career)
+var_func <- lm(residuals^2 ~ career + X3TGPAACAD, data = MLR_all_WLS_car)
+
+# Obtain weights
+MLR_all_WLS_car <- MLR_all_WLS_car |>
+mutate(w1 = 1/abs(var_func$fitted))
+
+# First WLS Model
+reg_career_wls_car <- lm(X5GPAALL ~ career + X3TGPAACAD, weights = w1, data = MLR_all_WLS_car)
+
+# Iterate
+MLR_all_WLS_car$residuals2 <- residuals(reg_career_wls_car)
+var_func2 <- lm(residuals2^2 ~ career + X3TGPAACAD, data = MLR_all_WLS_car)
+
+# Obtain weights
+MLR_all_WLS_car <- MLR_all_WLS_car |>
+mutate(w2 = 1/abs(var_func2$fitted))
+
+# First WLS Model
+reg_career_wls_car2 <- lm(X5GPAALL ~ career + X3TGPAACAD, weights = w2, data = MLR_all_WLS_car)
+
+residuals <- rstandard(reg_career_wls_car2)
+predicted <- predict(reg_career_wls_car2)
+
+# # Plot residuals vs predicted values
+# plot(predicted, residuals,
+#   pch = 19, col = "blue", xlab = "Predicted Values (Y-Hat)", ylab = "Residuals",
+#   main = "Residuals vs Predicted Values"
+# )
+# abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
