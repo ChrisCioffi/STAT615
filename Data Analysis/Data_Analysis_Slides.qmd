@@ -58,6 +58,7 @@ embed-resources: true
 library(tidyverse)
 library(broom)
 library(patchwork)
+library(lmtest)
 load("../Data/HSLS_Data.rdata")
 ```
 
@@ -423,7 +424,7 @@ summary(MLR_all.reg.reduced)
 
 *Constant Variance*
 
-- Very obvious pattern here
+- Breusch-Pagan test yields a p-value < 0.0001.
 
 - Because the response variable is bound.
 
@@ -438,6 +439,11 @@ plot(predicted, residuals,
 )
 abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
 ```
+
+```{r}
+bp_MLR_all.reg.reduced <- bptest(MLR_all.reg.reduced)
+```
+
 
 ## Diagnostics
 
@@ -454,6 +460,10 @@ qqline(MLR_all.reg.reduced$resi)
 ## Remedial Measures
 
 - Need to address non-constant variance first, and then recheck normality assumption
+
+-   Try Box-Cox transformation
+
+-   Weighted Least Squares
 
 ## MLR Results After Remedial Measures
 
@@ -503,8 +513,9 @@ MLR_all <- MLR_all |>
 
 #reg_career <- lm(X5GPAALL ~ career + X3TGPAACAD + X4ENTRYMAJ23 + X1FAMINCOME + X3TCREDAPIB + X1CONTROL, data = MLR_all)
 reg_career <- lm(X5GPAALL ~ career + X3TGPAACAD, data = MLR_all)
-```
 
+summary(reg_career)
+```
 
 ## 0-1 Career Residual Variance
 
@@ -522,6 +533,5 @@ plot(predicted, residuals,
 abline(h = 0, col = "red") # Add a horizontal line at y = 0 for reference
 ```
 
-
-
+## Try Weighted Least Squares
 
