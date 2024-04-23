@@ -315,12 +315,6 @@ conf_int_out_rq(predict(rqfit99, newdata=new_data, interval="confidence", level=
 
 ```
 
-## Next Steps
-
--   Make references page look nice
-
--   Add more to background of quantile regression
-
 ## References
 
 https://www.voxco.com/blog/quantile-regression/
