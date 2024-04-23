@@ -301,28 +301,36 @@ rq_confint |>
 
     -   This can lead to counterintuitive predictions of the response variable.
 
--   Comparing the 25th quantile to the 75th quantile and the 99th quantile, it's easy to see how different the life expectancy for those people would be depending on their income.
+-   Comparing the 25th quantile to the 75th quantile, it's easy to see how different the life expectancy for those people would be depending on their income.
 
 ## Prediction at Different Quantiles
 
--   Quantile regression results at 0.25, 0.75, and 0.99.
+-   Quantile regression results at 0.25 and 0.75.
 
 ```{r}
 conf_int_out_rq(predict(rqfit25, newdata=new_data, interval="confidence", level=.95))
 conf_int_out_rq(predict(rqfit75, newdata=new_data, interval="confidence", level=.95))
 #even more extreme in the 99percentile
-conf_int_out_rq(predict(rqfit99, newdata=new_data, interval="confidence", level=.95))
+#conf_int_out_rq(predict(rqfit99, newdata=new_data, interval="confidence", level=.95))
 
 ```
 
 ## References
 
-https://www.voxco.com/blog/quantile-regression/
+[Voxco Quantile Regression Blog](https://www.voxco.com/blog/quantile-regression/)
 
-https://drkebede.medium.com/quantile-regression-tutorial-in-r-f2eec72c132b
+[Medium Quantile Regression Tutorial in R](https://drkebede.medium.com/quantile-regression-tutorial-in-r-f2eec72c132b)
 
-https://www.r-bloggers.com/2019/01/quantile-regression-in-r-2/
+[R Bloggers Quantile Regression in R](https://www.r-bloggers.com/2019/01/quantile-regression-in-r-2/)
 
-https://www.sfu.ca/\~dsignori/buec333/lecture%208.pdf
+[IBM Quantile Regression Page](https://www.ibm.com/docs/en/spss-statistics/saas?topic=regression-quantile)
 
-https://www.aptech.com/blog/the-basics-of-quantile-regression/
+[UVA Getting Started with Quantile Regression](https://library.virginia.edu/data/articles/getting-started-with-quantile-regression)
+
+[APTECH The Basics of Quantile Regression](https://www.aptech.com/blog/the-basics-of-quantile-regression/)
+
+[Towards Data Science Quantile Regression](https://towardsdatascience.com/quantile-regression-ff2343c4a03)
+
+[Econometrics Academy Quantile Regression](https://www.youtube.com/watch?v=P9lMmEkXuBw)
+
+[Econometrics Academy Quantile Regression Example](https://www.youtube.com/watch?v=qrriFC_WGj8)
