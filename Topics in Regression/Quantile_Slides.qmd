@@ -201,7 +201,7 @@ conf_int_out_rq(conf_rq_50)
 
 ## Quantreg for quantiles
 
--   In addition to comparing the mean to the median, we can also look at the top and bottom quantiles to compare the confidence intervals for life our estimated parameters. First run the different models and obtain the coefficients at each quantile:
+-   In addition to comparing the mean to the median, we can also look at the top and bottom quantiles to compare the confidence intervals for our estimated parameters. First run the different models and obtain the coefficients at each quantile:
 
 ```{r}
 #| echo: true
