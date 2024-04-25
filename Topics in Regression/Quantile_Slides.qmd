@@ -82,7 +82,7 @@ df_trends |>
 
 -   OLS: $\sum_{i}^{N}(e_i)^2$
 
--   Quantile: $\sum_{e_i < 0} \tau |e_i| + \sum_{e_i > 0}(1-\tau) |e_i|$
+-   Quantile: $\sum \tau |e_i| + \sum(1-\tau) |e_i|$
 
     -   $\tau |e_i|$ penalizes underprediction and $(1 - \tau) |e_i|$ penalizes overprediction
 

@@ -1265,7 +1265,7 @@ Chris Cioffi, Kristina Frazier, Aidan Hennessy, Mike McHenry
 <h2>Differences in Minimization</h2>
 <ul>
 <li><p>OLS: <span class="math inline">\(\sum_{i}^{N}(e_i)^2\)</span></p></li>
-<li><p>Quantile: <span class="math inline">\(\sum_{e_i &lt; 0} \tau |e_i| + \sum_{e_i &gt; 0}(1-\tau) |e_i|\)</span></p>
+<li><p>Quantile: <span class="math inline">\(\sum \tau |e_i| + \sum(1-\tau) |e_i|\)</span></p>
 <ul>
 <li><span class="math inline">\(\tau |e_i|\)</span> penalizes underprediction and <span class="math inline">\((1 - \tau) |e_i|\)</span> penalizes overprediction</li>
 </ul></li>
