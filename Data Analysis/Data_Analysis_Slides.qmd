@@ -184,7 +184,7 @@ HSLS_Data |>
     X4ENTRYMAJ23 != "Item legitimate skip/NA"
   ) |>
   select(X4ENTRYMAJ23, X5GPAALL) |>
-  ggplot(aes(x = X4ENTRYMAJ23, y = X5GPAALL)) +
+  ggplot(aes(x = reorder(X4ENTRYMAJ23, X5GPAALL, FUN = median), y = X5GPAALL)) +
   geom_boxplot() +
   coord_flip() +
   labs(
@@ -233,7 +233,7 @@ HSLS_Data |>
   ) |>
   select(X5GPAALL, X1LOCALE) |>
   mutate(X1LOCALE = factor(X1LOCALE, levels = unique(X1LOCALE))) |>
-  ggplot(aes(x = X5GPAALL, y = X1LOCALE)) +
+  ggplot(aes(x = X5GPAALL, y = reorder(X1LOCALE, X5GPAALL, FUN = median))) +
   geom_boxplot() +
   coord_flip() +
   labs(title = "College GPA by Urbanicity",
@@ -424,7 +424,7 @@ summary(MLR_all.reg.reduced)
 - Breusch-Pagan test yields a p-value < 0.0001.
 
 ```{r}
-#| include: false
+
 library(lmtest)
 bptest(MLR_all.reg.reduced)
 ```
